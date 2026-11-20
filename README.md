@@ -9,3 +9,4 @@ Sicherungen des Lernplans „Klausurvorbereitung UML-Diagramme“ (Software Engi
 | Version | Datum | Stand |
 |---|---|---|
 | v1 | 20.11.2026 | Looks Nacht (warm) + Pop (dunkel-pastell), 22 Übungen, Pflichtenheft-Infokasten |
+| v2 | 20.11.2026 | Inhaltlich identisch mit v1 – Sicherungspunkt vor dem großen Ausbau (Probeklausur, Fehler finden, Dashboard …) |
