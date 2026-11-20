@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="assets/nocturne.css">
+  <script src="assets/nocturne-bundle.js"></script>
+  <style>
+    html, body { margin: 0; background: var(--color-bg); }
+    a { color: var(--color-accent); }
+    a:hover { color: var(--color-accent-300); }
+    input[type="checkbox"] { accent-color: var(--color-accent); }
+  </style>
+</helmet>
+<div style="min-height:100vh; background:radial-gradient(900px 420px at 0% 0%, color-mix(in srgb, var(--color-accent) 9%, transparent), transparent 70%), var(--color-bg); color:var(--color-text); font-family:var(--font-body);">
+  <div style="max-width:1180px; padding:48px clamp(16px, 4vw, 56px) 96px; display:flex; flex-direction:column; gap:28px;">
+
+    <header style="display:flex; flex-direction:column; gap:12px; max-width:760px;">
+      <div style="font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:var(--color-accent);">Software Engineering I · WS 2026/27 · Prof. Zimmer</div>
+      <h1 style="margin:0; font-size:clamp(30px, 4.2vw, 42px); text-wrap:balance;">Pflichtenheft abgeben, Klausur bestehen</h1>
+      <p style="margin:0; font-size:15px; line-height:1.6; color:color-mix(in srgb, var(--color-text) 70%, transparent); text-wrap:pretty;">Dein Plan vom 19.11. bis zur Klausur, verzahnt mit den UML-Übungen. Häkchen, Zähler und Quiz-Stand werden in diesem Browser gespeichert.</p>
+    </header>
+
+    <div style="display:flex; flex-wrap:wrap; gap:12px;">
+      <div style="flex:1 1 220px; display:flex; flex-direction:column; gap:6px; padding:16px 18px; border-radius:var(--radius-md); background:var(--color-surface); box-shadow:var(--shadow-sm);">
+        <div style="font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:color-mix(in srgb, var(--color-text) 62%, transparent);">Abgabe Pflichtenheft</div>
+        <div style="font-size:30px; line-height:1.1; font-weight:500; font-variant-numeric:tabular-nums;">{{ abgabeDays }}</div>
+        <div style="font-size:12px; color:color-mix(in srgb, var(--color-text) 62%, transparent);">So 17.01.2027, 22:00 · Mail an zimmer@hm.edu</div>
+      </div>
+      <div style="flex:1 1 220px; display:flex; flex-direction:column; gap:6px; padding:16px 18px; border-radius:var(--radius-md); background:var(--color-surface); box-shadow:var(--shadow-sm);">
+        <div style="font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:color-mix(in srgb, var(--color-text) 62%, transparent);">Klausur</div>
+        <div style="font-size:30px; line-height:1.1; font-weight:500; font-variant-numeric:tabular-nums;">{{ examValue }}</div>
+        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+          <input type="date" class="input" value="{{ examInput }}" onChange="{{ setExam }}" aria-label="Klausurdatum" style="width:auto; min-height:28px; padding:2px 8px; font-size:12px; color-scheme:dark;">
+          <span style="font-size:12px; color:color-mix(in srgb, var(--color-text) 62%, transparent);">{{ examHint }}</span>
+        </div>
+      </div>
+      <div style="flex:1 1 220px; display:flex; flex-direction:column; gap:6px; padding:16px 18px; border-radius:var(--radius-md); background:var(--color-surface); box-shadow:var(--shadow-sm);">
+        <div style="font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:color-mix(in srgb, var(--color-text) 62%, transparent);">Fortschritt</div>
+        <div style="font-size:30px; line-height:1.1; font-weight:500; font-variant-numeric:tabular-nums;">{{ pct }} %</div>
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <div style="height:3px; border-radius:2px; background:var(--color-neutral-800); overflow:hidden;"><div style="height:100%; width:{{ pctW }}; background:var(--color-accent);"></div></div>
+          <div style="font-size:12px; color:color-mix(in srgb, var(--color-text) 62%, transparent);">{{ doneN }} von {{ totalN }} Schritten</div>
+        </div>
+      </div>
+    </div>
+
+    <p style="margin:0; max-width:760px; font-size:13px; line-height:1.6; color:color-mix(in srgb, var(--color-text) 70%, transparent); text-wrap:pretty;"><span style="color:var(--color-accent-300);">Wichtig:</span> Laut Aufgabenblatt entsteht die Studienarbeit ohne KI-Unterstützung. Diese Seite liefert deshalb nur Struktur, Checklisten und Übungen. Die Übungen spielen bewusst nicht im Hotel-Szenario.</p>
+
+    <div class="seg" style="align-self:flex-start; display:flex; flex-wrap:nowrap; max-width:100%;">
+      <label class="seg-opt" style="position:relative; flex:none; white-space:nowrap;"><input type="radio" name="se1tab" checked="{{ isPlan }}" onChange="{{ toPlan }}">Lernplan</label>
+      <label class="seg-opt" style="position:relative; flex:none; white-space:nowrap;"><input type="radio" name="se1tab" checked="{{ isQuiz }}" onChange="{{ toQuiz }}">Notation erkennen</label>
+      <label class="seg-opt" style="position:relative; flex:none; white-space:nowrap;"><input type="radio" name="se1tab" checked="{{ isEx }}" onChange="{{ toEx }}">Übungen</label>
+    </div>
+
+    <sc-if value="{{ isPlan }}" hint-placeholder-val="{{ true }}">
+      <section style="display:flex; flex-wrap:wrap; gap:40px; align-items:flex-start;">
+        <div style="flex:999 1 560px; min-width:0; display:flex; flex-direction:column; gap:44px;">
+          <sc-for list="{{ phases }}" as="ph" hint-placeholder-count="3">
+            <div style="display:flex; flex-direction:column; gap:10px;">
+              <div style="display:flex; align-items:baseline; gap:14px; flex-wrap:wrap;">
+                <span style="font-size:25px; line-height:1; color:var(--color-accent); font-variant-numeric:tabular-nums;">{{ ph.num }}</span>
+                <h3 style="margin:0; font-size:21px;">{{ ph.title }}</h3>
+                <sc-if value="{{ ph.isCurrent }}"><span class="tag tag-accent">diese Woche</span></sc-if>
+                <span style="margin-left:auto; font-size:13px; font-variant-numeric:tabular-nums; color:color-mix(in srgb, var(--color-text) 62%, transparent);">{{ ph.doneCount }} / {{ ph.total }}</span>
+              </div>
+              <div style="display:flex; flex-wrap:wrap; gap:4px 16px; font-size:12px; color:color-mix(in srgb, var(--color-text) 62%, transparent);">
+                <span>{{ ph.range }}</span>
+                <span>{{ ph.hoursLabel }}</span>
+                <sc-if value="{{ ph.tight }}"><span style="color:var(--color-accent-300);">knapp</span></sc-if>
+              </div>
+              <div style="height:2px; border-radius:2px; background:var(--color-neutral-800); overflow:hidden;"><div style="height:100%; width:{{ ph.pctW }}; background:var(--color-accent);"></div></div>
+              <sc-if value="{{ ph.hasNote }}"><p style="margin:2px 0 0; font-size:13px; line-height:1.55; color:var(--color-accent-200); max-width:680px; text-wrap:pretty;">{{ ph.note }}</p></sc-if>
+              <div style="display:flex; flex-direction:column; gap:2px; margin-top:4px;">
+                <sc-for list="{{ ph.tasks }}" as="t" hint-placeholder-count="4">
+                  <div style="display:flex; gap:12px; align-items:flex-start; padding:10px 12px; margin:0 -12px; border-radius:var(--radius-md); background:{{ t.bg }};">
+                    <input type="checkbox" checked="{{ t.checked }}" onChange="{{ t.toggle }}" aria-label="{{ t.text }}" style="width:17px; height:17px; margin:2px 0 0; flex:none; cursor:pointer;">
+                    <div style="flex:1; min-width:0; display:flex; flex-direction:column; gap:6px;">
+                      <span style="font-size:15px; line-height:1.45; text-wrap:pretty; opacity:{{ t.opacity }}; text-decoration:{{ t.deco }};">{{ t.text }}</span>
+                      <div style="display:flex; flex-wrap:wrap; gap:6px 10px; align-items:center;">
+                        <span class="{{ t.tagClass }}">{{ t.tag }}</span>
+                        <span style="font-size:12px; color:color-mix(in srgb, var(--color-text) 62%, transparent);">{{ t.hLabel }}</span>
+                        <sc-if value="{{ t.hasDetail }}"><button class="btn btn-ghost" onClick="{{ t.toggleDetail }}" style="font-size:12px; padding:2px 6px;">{{ t.detailLabel }}</button></sc-if>
+                        <sc-if value="{{ t.hasGo }}"><button class="btn btn-ghost" onClick="{{ t.go }}" style="font-size:12px; padding:2px 6px;">{{ t.goLabel }}</button></sc-if>
+                      </div>
+                      <sc-if value="{{ t.expanded }}">
+                        <div style="display:flex; flex-direction:column; gap:6px; max-width:680px; padding-top:2px;">
+                          <p style="margin:0; font-size:14px; line-height:1.6; text-wrap:pretty; color:color-mix(in srgb, var(--color-text) 86%, transparent);">{{ t.detail }}</p>
+                          <sc-if value="{{ t.hasRef }}"><span style="font-size:12px; color:var(--color-accent-300);">Folien-PDF S. {{ t.ref }}</span></sc-if>
+                        </div>
+                      </sc-if>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+
+        <aside style="flex:1 1 280px; max-width:380px; display:flex; flex-direction:column; gap:16px; position:sticky; top:24px;">
+          <div style="display:flex; flex-direction:column; gap:12px; padding:16px; border-radius:var(--radius-md); background:var(--color-surface); box-shadow:var(--shadow-sm);">
+            <div class="card-kicker">Als Nächstes</div>
+            <sc-if value="{{ hasNext }}" hint-placeholder-val="{{ true }}">
+              <div style="display:flex; flex-direction:column; gap:10px;">
+                <sc-for list="{{ nextTasks }}" as="n" hint-placeholder-count="3">
+                  <label style="display:flex; gap:10px; align-items:flex-start; cursor:pointer;">
+                    <input type="checkbox" checked="{{ n.checked }}" onChange="{{ n.toggle }}" style="width:16px; height:16px; margin:2px 0 0; flex:none;">
+                    <span style="flex:1; font-size:13px; line-height:1.45; text-wrap:pretty;">{{ n.text }}</span>
+                    <span style="font-size:11px; color:var(--color-accent); font-variant-numeric:tabular-nums;">{{ n.num }}</span>
+                  </label>
+                </sc-for>
+              </div>
+            </sc-if>
+            <sc-if value="{{ allDone }}"><p style="margin:0; font-size:13px;">Alles abgehakt. Viel Erfolg in der Klausur!</p></sc-if>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:14px; padding:16px; border-radius:var(--radius-md); background:var(--color-surface); box-shadow:var(--shadow-sm);">
+            <div style="display:flex; flex-direction:column; gap:2px;">
+              <div class="card-kicker">Abgabe-Check · Einzelabgabe</div>
+              <div style="font-size:12px; color:color-mix(in srgb, var(--color-text) 62%, transparent);">Mindestanforderungen laut Aufgabenblatt</div>
+            </div>
+            <sc-for list="{{ counters }}" as="c" hint-placeholder-count="4">
+              <div style="display:flex; flex-direction:column; gap:6px;">
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <span style="flex:1; font-size:13px; line-height:1.3;">{{ c.label }}</span>
+                  <button class="btn btn-secondary btn-icon" onClick="{{ c.dec }}" aria-label="weniger" style="width:30px; height:30px;">−</button>
+                  <span style="min-width:46px; text-align:center; font-size:14px; font-variant-numeric:tabular-nums; color:{{ c.color }};">{{ c.value }} / {{ c.min }}</span>
+                  <button class="btn btn-secondary btn-icon" onClick="{{ c.inc }}" aria-label="mehr" style="width:30px; height:30px;">+</button>
+                </div>
+                <div style="height:2px; border-radius:2px; background:var(--color-neutral-800); overflow:hidden;"><div style="height:100%; width:{{ c.pctW }}; background:var(--color-accent);"></div></div>
+              </div>
+            </sc-for>
+            <div style="display:flex; flex-direction:column; gap:8px; padding-top:4px;">
+              <sc-for list="{{ flags }}" as="f" hint-placeholder-count="3">
+                <label style="display:flex; gap:10px; align-items:center; font-size:13px; cursor:pointer;">
+                  <input type="checkbox" checked="{{ f.checked }}" onChange="{{ f.toggle }}" style="width:16px; height:16px; margin:0; flex:none;">
+                  <span style="flex:1;">{{ f.label }}</span>
+                  <span class="{{ f.tagClass }}">{{ f.req }}</span>
+                </label>
+              </sc-for>
+            </div>
+            <p style="margin:0; font-size:12px; line-height:1.5; color:color-mix(in srgb, var(--color-text) 62%, transparent); text-wrap:pretty;">Dynamische Modelle: mind. 2 in unterschiedlichen Modellierungssprachen. Alle Anforderungen nummerieren.</p>
+          </div>
+        </aside>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ isQuiz }}">
+      <section style="display:flex; flex-direction:column; gap:18px; max-width:880px;">
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <h2 style="margin:0; font-size:25px;">Notation erkennen</h2>
+          <p style="margin:0; font-size:14px; line-height:1.55; color:color-mix(in srgb, var(--color-text) 70%, transparent); max-width:640px; text-wrap:pretty;">Ein Element, vier Antworten. Nach jeder Antwort siehst du die Erklärung und die passende Seite im Folien-PDF.</p>
+        </div>
+        <div style="display:flex; flex-wrap:wrap; gap:6px;">
+          <sc-for list="{{ chips }}" as="c" hint-placeholder-count="7">
+            <button class="{{ c.cls }}" onClick="{{ c.pick }}" style="font-size:13px; padding:6px 10px; gap:6px;">{{ c.label }} <span style="opacity:0.6; font-variant-numeric:tabular-nums;">{{ c.count }}</span></button>
+          </sc-for>
+        </div>
+        <div style="display:flex; flex-wrap:wrap; gap:6px 20px; font-size:13px; font-variant-numeric:tabular-nums; color:color-mix(in srgb, var(--color-text) 62%, transparent);">
+          <span>Element {{ qPos }} von {{ qCount }}</span>
+          <span>Richtig {{ qRight }}</span>
+          <span>Falsch {{ qWrong }}</span>
+          <span>Sicher erkannt {{ qMastered }} / {{ qTotal }}</span>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:18px; padding:20px; border-radius:var(--radius-lg); background:var(--color-surface); box-shadow:var(--shadow-sm);">
+          <div style="padding:24px 16px; border-radius:var(--radius-md); background:var(--color-bg); display:flex; justify-content:center; align-items:center; min-height:160px;">{{ qGlyph }}</div>
+          <div style="display:flex; flex-direction:column; gap:4px;">
+            <div class="card-kicker">{{ qCat }}</div>
+            <div style="font-size:18px; line-height:1.35; font-weight:500;">{{ qQuestion }}</div>
+          </div>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:8px;">
+            <sc-for list="{{ qOpts }}" as="o" hint-placeholder-count="4">
+              <button class="{{ o.cls }}" onClick="{{ o.pick }}" style="justify-content:flex-start; text-align:left; min-height:44px; padding:10px 14px; font-size:14px; line-height:1.35; white-space:normal; text-decoration:{{ o.deco }}; opacity:{{ o.op }};">{{ o.label }}</button>
+            </sc-for>
+          </div>
+          <sc-if value="{{ qAnswered }}">
+            <div style="display:flex; flex-direction:column; gap:6px; max-width:700px;">
+              <div style="font-size:14px; font-weight:500; color:{{ qVerdictColor }};">{{ qVerdict }}</div>
+              <div style="font-size:14px; line-height:1.6; text-wrap:pretty;">{{ qExplain }}</div>
+              <div style="font-size:12px; color:var(--color-accent-300);">Folien-PDF S. {{ qRef }}</div>
+            </div>
+          </sc-if>
+          <div style="display:flex; flex-wrap:wrap; gap:8px; align-items:center;">
+            <button class="btn btn-primary" onClick="{{ qNext }}">Nächstes Element →</button>
+            <button class="btn btn-ghost" onClick="{{ qReset }}" style="font-size:13px;">Statistik zurücksetzen</button>
+          </div>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ isEx }}">
+      <section style="display:flex; flex-wrap:wrap; gap:32px; align-items:flex-start;">
+        <nav style="flex:1 1 240px; max-width:320px; display:flex; flex-direction:column; gap:6px;">
+          <div style="font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:color-mix(in srgb, var(--color-text) 62%, transparent); padding:0 2px 4px;">7 Übungen · eigene Szenarien</div>
+          <sc-for list="{{ exList }}" as="e" hint-placeholder-count="7">
+            <button class="{{ e.cls }}" onClick="{{ e.select }}" style="width:100%; justify-content:flex-start; text-align:left; gap:12px; padding:10px 12px;">
+              <span style="font-variant-numeric:tabular-nums; font-size:13px;">{{ e.num }}</span>
+              <span style="flex:1; min-width:0; display:flex; flex-direction:column; gap:2px;">
+                <span style="font-size:14px; color:var(--color-text);">{{ e.title }}</span>
+                <span style="font-size:11px; color:color-mix(in srgb, var(--color-text) 62%, transparent);">{{ e.type }}</span>
+              </span>
+              <sc-if value="{{ e.done }}"><span class="tag tag-accent">erledigt</span></sc-if>
+            </button>
+          </sc-for>
+        </nav>
+        <article style="flex:999 1 520px; min-width:0; display:flex; flex-direction:column; gap:16px;">
+          <div style="display:flex; flex-direction:column; gap:6px;">
+            <div class="card-kicker">Übung {{ ex.num }} · {{ ex.type }}</div>
+            <h2 style="margin:0; font-size:28px;">{{ ex.title }}</h2>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:8px; max-width:680px;">
+            <sc-for list="{{ ex.paras }}" as="pp" hint-placeholder-count="2">
+              <p style="margin:0; font-size:15px; line-height:1.65; text-wrap:pretty;">{{ pp.t }}</p>
+            </sc-for>
+          </div>
+          <sc-if value="{{ ex.hasGiven }}">
+            <div style="display:flex; flex-direction:column; gap:8px;">
+              <div style="font-size:12px; color:color-mix(in srgb, var(--color-text) 62%, transparent);">{{ ex.givenLabel }}</div>
+              <div style="padding:20px; border-radius:var(--radius-md); background:var(--color-bg); box-shadow:var(--shadow-sm); overflow-x:auto;">{{ ex.given }}</div>
+            </div>
+          </sc-if>
+          <div style="font-size:13px; color:color-mix(in srgb, var(--color-text) 62%, transparent);">Erst auf Papier zeichnen, in der Klausur gibt es kein Tool. Dann aufdecken und mit dem Selbstcheck vergleichen.</div>
+          <div style="display:flex; flex-wrap:wrap; gap:8px;">
+            <button class="btn btn-secondary" onClick="{{ ex.toggleHint }}">{{ ex.hintLabel }}</button>
+            <button class="btn btn-primary" onClick="{{ ex.toggleSol }}">{{ ex.solLabel }}</button>
+          </div>
+          <sc-if value="{{ ex.showHint }}">
+            <ul style="margin:0; padding-left:18px; display:flex; flex-direction:column; gap:6px; max-width:680px; font-size:14px; line-height:1.55; color:var(--color-accent-200);">
+              <sc-for list="{{ ex.hints }}" as="h"><li>{{ h.t }}</li></sc-for>
+            </ul>
+          </sc-if>
+          <sc-if value="{{ ex.showSol }}">
+            <div style="display:flex; flex-direction:column; gap:16px;">
+              <div style="padding:20px; border-radius:var(--radius-md); background:var(--color-bg); box-shadow:var(--shadow-sm); overflow-x:auto;">{{ ex.sol }}</div>
+              <sc-if value="{{ ex.hasSolNote }}"><p style="margin:0; font-size:13px; line-height:1.55; color:color-mix(in srgb, var(--color-text) 70%, transparent); max-width:680px; text-wrap:pretty;">{{ ex.solNote }}</p></sc-if>
+              <div style="display:flex; flex-direction:column; gap:10px; padding:16px; border-radius:var(--radius-md); background:var(--color-surface); max-width:680px;">
+                <div class="card-kicker">Selbstcheck</div>
+                <sc-for list="{{ ex.checks }}" as="c">
+                  <label style="display:flex; gap:10px; align-items:flex-start; font-size:14px; line-height:1.45; cursor:pointer;">
+                    <input type="checkbox" checked="{{ c.checked }}" onChange="{{ c.toggle }}" style="width:16px; height:16px; margin:2px 0 0; flex:none;">
+                    <span>{{ c.label }}</span>
+                  </label>
+                </sc-for>
+                <button class="{{ ex.doneCls }}" onClick="{{ ex.toggleDone }}" style="align-self:flex-start; margin-top:6px;">{{ ex.doneLabel }}</button>
+              </div>
+            </div>
+          </sc-if>
+        </article>
+      </section>
+    </sc-if>
+
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;hoursPerWeek&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:4,&quot;min&quot;:1,&quot;max&quot;:25,&quot;unit&quot;:&quot;h&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Zeit&quot;},&quot;holidayHours&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:8,&quot;min&quot;:1,&quot;max&quot;:40,&quot;unit&quot;:&quot;h&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Zeit&quot;},&quot;detailsOpen&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Lernplan&quot;},&quot;shuffleQuiz&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Notationstrainer&quot;}}">
+class Component extends DCLogic {
+  static D = null;
+  static data() { if (!Component.D) Component.D = Component.build(); return Component.D; }
+
+  static build() {
+    const C = { s:'var(--color-neutral-400)', t:'var(--color-text)', a:'var(--color-accent)', bg:'var(--color-bg)', sf:'var(--color-surface)', m:'var(--color-neutral-500)' };
+    const esc = v => String(v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    const svg = (w,h,b) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" style="width:100%;max-width:${w}px;height:auto;display:block;font-family:var(--font-body);overflow:visible">${b}</svg>`;
+    const tx = (x,y,v,o={}) => `<text x="${x}" y="${y}" text-anchor="${o.a||'middle'}" font-size="${o.fs||12}" style="fill:${o.c||C.t};${o.u?'text-decoration:underline;':''}${o.i?'font-style:italic;':''}${o.w?'font-weight:'+o.w+';':''}">${esc(v)}</text>`;
+    const txr = (x,y,html,o={}) => `<text x="${x}" y="${y}" text-anchor="${o.a||'middle'}" font-size="${o.fs||11.5}" style="fill:${C.t}">${html}</text>`;
+    const hi = v => `<tspan style="fill:${C.a};font-weight:500">${esc(v)}</tspan>`;
+    const sk = (c,sw,d) => `stroke:${c};stroke-width:${sw};${d?'stroke-dasharray:5 4;':''}`;
+    const ln = (x1,y1,x2,y2,o={}) => `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" style="${sk(o.c||C.s,o.sw||1.4,o.d)}"/>`;
+    const pts = a => a.map(p => p.map(v => +(+v).toFixed(1)).join(',')).join(' ');
+    const pl = (a,o={}) => `<polyline points="${pts(a)}" style="fill:none;${sk(o.c||C.s,o.sw||1.4,o.d)}"/>`;
+    const pg = (a,fill,o={}) => `<polygon points="${pts(a)}" style="fill:${fill};${sk(o.c||C.s,1.4,false)}"/>`;
+    const rc = (x,y,w,h,o={}) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${o.r||0}" style="fill:${o.f||C.sf};${sk(o.c||C.s,o.sw||1.4,o.d)}"/>`;
+    const head = (x1,y1,x2,y2,type,o={}) => {
+      const an = Math.atan2(y2-y1,x2-x1), c = o.c||C.s;
+      if (type==='dfilled'||type==='dhollow') {
+        const D=16, hw=6, ca=Math.cos(an), sa=Math.sin(an), mx=x2-D/2*ca, my=y2-D/2*sa;
+        return pg([[x2,y2],[mx-sa*hw,my+ca*hw],[x2-D*ca,y2-D*sa],[mx+sa*hw,my-ca*hw]], type==='dfilled'?c:C.bg, {c});
+      }
+      const L = type==='hollow'?14:10, W = type==='hollow'?0.5:0.45;
+      const P = g => [x2-L*Math.cos(an+g), y2-L*Math.sin(an+g)];
+      if (type==='open') return pl([P(W),[x2,y2],P(-W)],{c});
+      return pg([P(W),[x2,y2],P(-W)], type==='filled'?c:C.bg, {c});
+    };
+    const ar = (x1,y1,x2,y2,type='filled',o={}) => ln(x1,y1,x2,y2,o) + head(x1,y1,x2,y2,type,o);
+    const par = (a,type='open',o={}) => { const n=a.length; return pl(a,o) + head(a[n-2][0],a[n-2][1],a[n-1][0],a[n-1][1],type,o); };
+    const cls = (x,y,w,name,attrs,ops,o={}) => {
+      const lh=15, s1=o.st?13:0, s2=o.prop?13:0, hh=24+s1+s2, only=attrs==null&&ops==null, c=o.c||C.s;
+      const ah = attrs==null?0:Math.max(10,attrs.length*lh+8), oh = ops==null?0:Math.max(10,ops.length*lh+8);
+      const h = only ? 30+s1+s2 : hh+ah+oh;
+      let s = rc(x,y,w,h,{c});
+      if (o.st) s += tx(x+w/2,y+14,'«'+o.st+'»',{fs:10,c:C.m});
+      const ny = y+(only?19:16)+s1;
+      s += tx(x+w/2,ny,name,{i:o.i,u:o.u,w:500,c:o.nc});
+      if (o.prop) s += tx(x+w/2,ny+13,o.prop,{fs:10,c:o.pc||C.m});
+      let yy = y+hh;
+      if (!only && attrs!=null) { s += ln(x,yy,x+w,yy,{c}); attrs.forEach((v,i) => { s += tx(x+8,yy+15+i*lh,v,{a:'start',fs:11.5,c:o.hl===i?C.a:C.t}); }); yy += ah; }
+      if (!only && ops!=null) { s += ln(x,yy,x+w,yy,{c}); ops.forEach((v,i) => { s += tx(x+8,yy+15+i*lh,v,{a:'start',fs:11.5}); }); }
+      return { s, x, y, w, h, cx:x+w/2, cy:y+h/2, r:x+w, b:y+h };
+    };
+    const obj = (x,y,w,name,vals,o={}) => cls(x,y,w,name,vals,null,Object.assign({},o,{u:true}));
+    const nb = (x,name,y=40,w=90,o={}) => cls(x,y,w,name,null,null,o);
+    const mini = (x,y,w,name) => rc(x,y,w,24) + tx(x+w/2,y+16,name,{fs:11});
+    const act = (cx,cy,label,w=150,o={}) => rc(cx-w/2,cy-16,w,32,{r:14,c:o.c}) + tx(cx,cy+4,label,{fs:12});
+    const onode = (cx,cy,name,stt,w=140,o={}) => rc(cx-w/2,cy-17,w,34,{c:o.c}) + tx(cx,cy-3,name,{fs:12}) + tx(cx,cy+12,stt,{fs:11,c:o.c?C.a:C.m});
+    const start = (cx,cy,o={}) => `<circle cx="${cx}" cy="${cy}" r="8" style="fill:${o.c||C.t}"/>`;
+    const end = (cx,cy,o={}) => `<circle cx="${cx}" cy="${cy}" r="11" style="fill:none;${sk(o.c||C.t,1.6)}"/><circle cx="${cx}" cy="${cy}" r="6.5" style="fill:${o.c||C.t}"/>`;
+    const fend = (cx,cy,o={}) => { const c=o.c||C.t; return `<circle cx="${cx}" cy="${cy}" r="10" style="fill:${C.bg};${sk(c,1.6)}"/>` + ln(cx-7,cy-7,cx+7,cy+7,{c,sw:1.6}) + ln(cx-7,cy+7,cx+7,cy-7,{c,sw:1.6}); };
+    const dec = (cx,cy,o={}) => pg([[cx,cy-13],[cx+13,cy],[cx,cy+13],[cx-13,cy]], C.sf, {c:o.c});
+    const bar = (x,y,w,o={}) => `<rect x="${x}" y="${y}" width="${w}" height="5" rx="1.5" style="fill:${o.c||C.t}"/>`;
+    const barV = (x,y,h,o={}) => `<rect x="${x}" y="${y}" width="5" height="${h}" rx="1.5" style="fill:${o.c||C.t}"/>`;
+    const state = (x,y,w,h,name,inner=[],o={}) => {
+      let s = rc(x,y,w,h,{r:12,c:o.c}) + tx(x+w/2,y+(inner.length?18:h/2+4),name,{w:500});
+      if (inner.length) { s += ln(x,y+26,x+w,y+26,{c:o.c}); inner.forEach((v,i) => { s += tx(x+10,y+43+i*15,v,{a:'start',fs:11.5,c:o.hl===i?C.a:C.t}); }); }
+      return s;
+    };
+    const uc = (cx,cy,rx,ry,label,o={}) => { const ls = label.split('|'); return `<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" style="fill:${C.sf};${sk(o.c||C.s,1.4)}"/>` + ls.map((v,i) => tx(cx,cy+4+(i-(ls.length-1)/2)*14,v,{fs:11.5})).join(''); };
+    const actor = (cx,y,label,o={}) => { const c=o.c||C.t; return `<circle cx="${cx}" cy="${y+7}" r="7" style="fill:none;${sk(c,1.4)}"/>` + ln(cx,y+14,cx,y+34,{c}) + ln(cx-12,y+21,cx+12,y+21,{c}) + ln(cx,y+34,cx-10,y+48,{c}) + ln(cx,y+34,cx+10,y+48,{c}) + tx(cx,y+64,label,{fs:11.5}); };
+    const pkg = (x,y,w,h,name,o={}) => { const tw = Math.min(w-20, name.length*7+24); return rc(x,y,tw,18,{c:o.c}) + rc(x,y+18,w,h-18,{c:o.c,f:o.f||'transparent'}) + tx(x+10,y+13,name,{a:'start',fs:11,w:500,c:o.c?C.a:C.t}); };
+    const life = (cx,y,name,yEnd,o={}) => { const w=o.w||110; return ln(cx,y+28,cx,yEnd,{d:true,c:C.m}) + rc(cx-w/2,y,w,28,{c:o.c}) + tx(cx,y+18,name,{u:true}); };
+    const actv = (cx,y1,y2,o={}) => rc(cx-5,y1,10,y2-y1,{c:o.c,f:o.f});
+    const msg = (x1,x2,y,label,type='filled',o={}) => ar(x1,y,x2,y,type,o) + tx((x1+x2)/2,y-6,label,{fs:11,c:o.tc});
+    const mult = (x,y,v,a='start',o={}) => tx(x,y,v,{a,fs:11,c:o.c||C.t,w:o.w});
+
+    const cats = [
+      { k:'alle', l:'Alle' }, { k:'klasse', l:'Klasse & Objekt' }, { k:'anwendungsfall', l:'Anwendungsfall' },
+      { k:'aktivitaet', l:'Aktivität' }, { k:'zustand', l:'Zustand' }, { k:'interaktion', l:'Sequenz & Kommunikation' }, { k:'paket', l:'Paket' }
+    ];
+    const M = 'Was bedeutet das markierte Element?';
+    const quiz = [];
+    const add = (id,cat,q,s,opts,ex,ref) => quiz.push({ id, cat, q, svg:s, opts, ex, ref });
+
+    { const a=nb(20,'Auftrag'), b=nb(210,'Position');
+      add('komp','klasse',M, svg(320,110, a.s+b.s+ar(b.x,55,a.r,55,'dfilled',{c:C.a})+mult(a.r+10,47,'1')+mult(b.x-6,47,'1..10','end')),
+        ['Komposition','Aggregation','Generalisierung','Abhängigkeit'],
+        'Gefüllte Raute am Ganzen: Die Position gehört genau einem Auftrag und wird mit ihm gelöscht. Die Kardinalität am Ganzen ist deshalb höchstens 1.','256–259'); }
+    { const a=nb(20,'Team'), b=nb(210,'Spieler');
+      add('aggr','klasse',M, svg(320,110, a.s+b.s+ar(b.x,55,a.r,55,'dhollow',{c:C.a})+mult(a.r+10,47,'*')+mult(b.x-6,47,'1..*','end')),
+        ['Aggregation','Komposition','Generalisierung','Assoziative Klasse'],
+        'Leere Raute am Ganzen: »besteht aus«, die Teile dürfen aber auch zu anderen Ganzen gehören (shared aggregation). Ein Spieler kann in mehreren Teams sein.','256–257'); }
+    { const a=nb(15,'Privatkunde',40,105), b=nb(215,'Kunde');
+      add('gen','klasse',M, svg(320,110, a.s+b.s+ar(a.r,55,b.x,55,'hollow',{c:C.a})),
+        ['Generalisierung / Spezialisierung','Gerichtete Assoziation','Enthält-Beziehung','Abhängigkeit'],
+        'Geschlossene, leere Pfeilspitze: Der Pfeil zeigt vom Speziellen (Privatkunde) zum Allgemeinen (Kunde). Die Unterklasse erbt Attribute, Operationen und Assoziationen.','264–265'); }
+    { const a=nb(20,'Kunde'), b=nb(210,'Auftrag');
+      add('kard1','klasse','Was bedeutet die markierte Kardinalität?', svg(320,110, a.s+b.s+ln(a.r,55,b.x,55)+mult(a.r+8,47,'1')+tx(b.x-6,47,'1..*',{a:'end',fs:13,c:C.a,w:500})),
+        ['Jeder Kunde hat mindestens einen Auftrag (Muss)','Jeder Kunde hat genau einen Auftrag','Jeder Kunde hat keinen oder einen Auftrag (Kann)','Beliebig viele, auch keiner (Kann)'],
+        '1..* heißt eine oder mehrere Beziehungen, also eine Muss-Beziehung. Gelesen wird von der anderen Seite: Jeder Kunde hat 1..* Aufträge, jeder Auftrag gehört genau einem Kunden.','245–247'); }
+    { const a=nb(10,'Mitarbeiter',40,100), b=nb(230,'PKW',40,80);
+      add('kard01','klasse','Was bedeutet die markierte Kardinalität?', svg(320,110, a.s+b.s+ln(a.r,55,b.x,55)+tx(a.r+6,47,'Fahrer',{a:'start',fs:11,c:C.m})+mult(a.r+6,70,'0..1')+tx(b.x-6,47,'Dienstwagen',{a:'end',fs:11,c:C.m})+tx(b.x-6,70,'0..1',{a:'end',fs:13,c:C.a,w:500})),
+        ['Ein Mitarbeiter hat keinen oder einen Dienstwagen','Ein Mitarbeiter hat genau einen Dienstwagen','Ein Mitarbeiter hat mindestens einen Dienstwagen','Im System gibt es höchstens einen PKW'],
+        '0..1 = null oder eine Beziehung (Kann-Beziehung). »Fahrer« und »Dienstwagen« sind Rollennamen: Sie beschreiben, welche Funktion ein Objekt in der Assoziation hat.','245, 248'); }
+    { const a=nb(100,'Angestellter',55,120);
+      add('reflex','klasse',M, svg(320,110, pl([[220,63],[262,63],[262,22],[160,22],[160,55]],{c:C.a})+a.s+tx(226,80,'Mitarbeiter  *',{a:'start',fs:11})+tx(154,46,'Chef  0..1',{a:'end',fs:11})),
+        ['Reflexive Assoziation mit Rollen','Vererbung einer Klasse von sich selbst','Komposition','Abhängigkeit'],
+        'Assoziation zwischen Objekten derselben Klasse. Rollennamen sind hier Pflicht, sonst ist unklar, wer wer ist: Ein Angestellter hat 0..1 Chef und beliebig viele Mitarbeiter.','243, 250'); }
+    { const a=nb(15,'Kunde',20,95), b=nb(210,'Veranstaltung',20,95), c=cls(110,72,100,'Buchung',['angemeldetAm'],null,{c:C.a});
+      add('assozkl','klasse',M, svg(320,125, a.s+b.s+ln(110,35,210,35)+mult(116,29,'*')+mult(204,29,'*','end')+ln(160,35,160,72,{d:true,c:C.a})+c.s),
+        ['Assoziative Klasse','Abhängigkeit zu einer Hilfsklasse','Komposition','Notiz'],
+        'Die Assoziation selbst hat Eigenschaften, z. B. das Anmeldedatum. Auflösen: Kunde 1 —— * Buchung * —— 1 Veranstaltung. Die Kardinalitäten wandern dabei.','254–255'); }
+    { const a=cls(90,6,150,'Person',['Name','Adresse'],['erstelleAufkleber()'],{i:true,prop:'{abstract}',pc:C.a,nc:C.a});
+      add('abstrakt','klasse',M, svg(320,110, a.s),
+        ['Abstrakte Klasse','Schnittstelle (Interface)','Klasse mit Eigenschaftswert','Klasse mit genau einem Objekt'],
+        'Kursiver Name und/oder {abstract}: Von dieser Klasse können keine Objekte erzeugt werden. Sie fasst Gemeinsamkeiten der Unterklassen zusammen, z. B. von Kunde und Dozent.','268–270'); }
+    { const a=cls(90,10,150,'Person',['Name','Geburtsdatum','/ Alter'],null,{hl:2});
+      add('abgeleitet','klasse',M, svg(320,95, a.s),
+        ['Abgeleitetes Attribut','Klassenattribut','Privates Attribut','Optionales Attribut'],
+        'Der Schrägstrich kennzeichnet ein abgeleitetes Attribut: Es wird aus anderen Werten berechnet, hier das Alter aus dem Geburtsdatum.','207'); }
+    { const a=cls(85,6,160,'Konto',['- saldo','# zinssatz','+ kontonummer'],['+ einzahlen()'],{hl:1});
+      add('protected','klasse','Was bedeutet das markierte # ?', svg(320,112, a.s),
+        ['protected: sichtbar für Unterklassen','private: nur in der eigenen Klasse','public: für alle Klassen sichtbar','Abgeleitetes Attribut'],
+        'Sichtbarkeiten: - private (nur die Klasse selbst), # protected (zusätzlich Unterklassen), + public (alle).','267'); }
+    { const a=obj(75,15,170,'anna : Kunde',['Name = "Anna"','Ort = "München"'],{nc:C.a,c:C.a});
+      add('objekt','klasse',M, svg(320,90, a.s),
+        ['Objekt im Objektdiagramm','Klasse mit Stereotyp','Paket','Anwendungsfall'],
+        'Unterstrichener Name in der Form objektname : Klasse, Attribute mit konkreten Werten. Anonyme Objekte heißen nur :Klasse. Ein Objektdiagramm ist ein Schnappschuss zu genau einem Zeitpunkt.','222–229'); }
+    { const a=obj(10,30,130,'anna : Kunde',['Name = "Anna"']), b=obj(190,30,120,'t1 : Ticket',['Platz = 7']);
+      add('link','klasse','Was zeigt die markierte Linie zwischen den Objekten?', svg(320,100, ln(140,54,190,54,{c:C.a,sw:2})+a.s+b.s),
+        ['Link: Verbindung zweier Objekte','Assoziation mit Kardinalität','Komposition','Nachricht'],
+        'Im Objektdiagramm verbinden Links konkrete Objekte. Sie sind Ausprägungen der Assoziationen aus dem Klassendiagramm und tragen keine Kardinalitäten.','226–227'); }
+    { const a=cls(90,4,140,'AnredeET',['Herr','Frau','Divers'],null,{st:'Enumeration',nc:C.a});
+      add('enum','klasse',M, svg(320,100, a.s),
+        ['Aufzählungstyp','Strukturierter Typ','Schnittstelle','Abstrakte Klasse'],
+        '«Enumeration» kennzeichnet einen Aufzählungstyp mit fester Wertemenge, Konvention: Name endet auf ET. Strukturierte Typen tragen «Structure» und enden auf T.','205, 208, 235'); }
+
+    add('include','anwendungsfall','Was bedeutet diese Beziehung?', svg(320,110, uc(72,55,58,26,'Buchen')+uc(250,55,58,26,'Bonität|prüfen')+ar(130,55,192,55,'open',{d:true,c:C.a})+tx(161,44,'«include»',{fs:11,c:C.a})),
+      ['Bonität prüfen ist immer Teil von Buchen','Bonität prüfen läuft nur unter einer Bedingung','Bonität prüfen ist ein Spezialfall von Buchen','Buchen ist Teil von Bonität prüfen'],
+      '«include» = Enthältbeziehung, eine unbedingte Einbindung. Der Pfeil zeigt vom einbindenden (Buchen) zum eingebundenen Anwendungsfall. So werden gleiche Teilabläufe nur einmal beschrieben.','181–182');
+    add('extend','anwendungsfall','Was bedeutet diese Beziehung?', svg(320,110, uc(72,50,58,26,'Infomaterial|versenden')+uc(250,50,58,26,'Informieren')+ar(130,50,192,50,'open',{d:true,c:C.a})+tx(161,39,'«extend»',{fs:11,c:C.a})+tx(160,100,'{Kunde wünscht Infomaterial}',{fs:11,c:C.m})),
+      ['Infomaterial versenden ergänzt Informieren nur, wenn die Bedingung gilt','Infomaterial versenden ist immer Teil von Informieren','Informieren erweitert Infomaterial versenden','Infomaterial versenden ist ein Spezialfall von Informieren'],
+      '«extend» = Erweiterungsbeziehung, eine bedingte Einbindung an einem Extension Point. Der Pfeil zeigt von der Erweiterung zum erweiterten Anwendungsfall, der auch ohne sie vollständig ist.','183–184');
+    add('gaf','anwendungsfall',M, svg(320,110, uc(160,55,90,32,'Seminar|organisieren')+ln(211,93,237,66,{c:C.a,sw:2})),
+      ['Geschäftsanwendungsfall','Systemanwendungsfall','Sekundärer Anwendungsfall','Abstrakter Anwendungsfall'],
+      'Der Schrägstrich unten rechts kennzeichnet einen Geschäftsanwendungsfall: ein geschäftlicher Ablauf ohne Blick auf die technische Umsetzung, zeitliche Unterbrechungen sind erlaubt. Sekundäre Anwendungsfälle tragen dagegen «secondary».','175–178');
+    add('systemgrenze','anwendungsfall','Was stellt der markierte Rahmen dar?', svg(320,115, rc(100,8,210,100,{c:C.a,f:'transparent'})+tx(110,24,'Webshop',{a:'start',fs:11,w:500,c:C.a})+ln(50,45,153,45)+ln(50,50,153,85)+uc(215,45,62,16,'Bestellen')+uc(215,85,62,16,'Konto anlegen')+actor(36,22,'Kunde')),
+      ['Systemgrenze','Paket','Partition','Kombiniertes Fragment'],
+      'Alles innerhalb der Systemgrenze muss das zu entwickelnde System leisten. Akteure stehen immer außerhalb.','171, 173');
+
+    add('ablaufende','aktivitaet',M, svg(320,110, act(100,55,'Mail senden',130)+ar(165,55,237,55,'open')+fend(248,55,{c:C.a})),
+      ['Ablaufende','Endknoten','Entscheidung','Objekt wird gelöscht'],
+      'Kreis mit X = Ablaufende: Es beendet nur den eigenen Kontrollfluss, parallele Abläufe laufen weiter. Der Endknoten beendet dagegen alles.','283–284');
+    add('endknoten','aktivitaet',M, svg(320,110, act(100,55,'Bezahlen',130)+ar(165,55,236,55,'open')+end(248,55,{c:C.a})),
+      ['Endknoten','Ablaufende','Startknoten','Synchronisation'],
+      'Endknoten: Sobald er erreicht wird, enden sofort alle Aktionen der Aktivität. Mindestens einer ist Pflicht, mehrere sind erlaubt.','283–284');
+    add('entscheidung','aktivitaet',M, svg(320,112, act(55,55,'Prüfen',90)+ar(100,55,135,55,'open')+par([[148,42],[148,22],[215,22]])+par([[148,68],[148,88],[215,88]])+dec(148,55,{c:C.a})+tx(155,37,'[x < 0]',{a:'start',fs:11,c:C.a})+tx(155,81,'[x >= 0]',{a:'start',fs:11,c:C.a})+act(262,22,'A',90)+act(262,88,'B',90)),
+      ['Entscheidung','Synchronisation','Aufspalten (Fork)','Ablaufende'],
+      'Raute = Entscheidung: Genau ein ausgehender Pfad wird gewählt. Bedingungen stehen in eckigen Klammern und dürfen sich nicht überlappen. Eine Raute führt alternative Pfade auch wieder zusammen (logisches ODER).','285');
+    add('fork','aktivitaet',M, svg(320,110, act(55,55,'Prüfen',90)+ar(100,55,128,55,'open')+barV(128,15,80,{c:C.a})+ar(133,30,195,30,'open')+ar(133,80,195,80,'open')+act(255,30,'Rechnung',120)+act(255,80,'Paket packen',120)),
+      ['Aufspalten (Fork)','Entscheidung','Synchronisation (Join)','Partition'],
+      'Balken mit einem eingehenden und mehreren ausgehenden Flüssen: Ab hier laufen die Abläufe nebenläufig, ihre Reihenfolge ist egal.','286');
+    add('join','aktivitaet',M, svg(320,110, act(65,30,'Rechnung',120)+act(65,80,'Paket packen',120)+ar(125,30,187,30,'open')+ar(125,80,187,80,'open')+barV(187,15,80,{c:C.a})+ar(192,55,225,55,'open')+act(270,55,'Versenden',90)),
+      ['Synchronisation (Join)','Zusammenführen (ODER)','Aufspalten (Fork)','Endknoten'],
+      'Join: Es geht erst weiter, wenn alle eingehenden Abläufe angekommen sind (logisches UND). Alternative Pfade führt man dagegen mit einer Raute zusammen.','285–286');
+    add('objektfluss','aktivitaet',M, svg(320,110, act(45,55,'Erstellen',84)+ar(87,55,112,55,'open')+onode(160,55,'Rechnung','[erstellt]',96,{c:C.a})+ar(208,55,234,55,'open')+act(276,55,'Versenden',84)),
+      ['Objektknoten mit Zustand','Zustand eines Zustandsdiagramms','Notiz','Partition'],
+      'Rechteck mit Zustand in eckigen Klammern: Objektfluss. Er dokumentiert, welches Objekt zwischen Aktionen ausgetauscht wird und in welchem Zustand es ist.','288');
+    add('partition','aktivitaet',M, svg(320,115, rc(15,8,145,100,{c:C.a,f:'transparent'})+rc(160,8,145,100,{c:C.a,f:'transparent'})+ln(15,30,305,30,{c:C.a})+tx(87,23,'Vertrieb',{fs:11,w:500,c:C.a})+tx(232,23,'Lager',{fs:11,w:500,c:C.a})+act(87,68,'Auftrag erfassen',116)+ar(145,68,177,68,'open')+act(232,68,'Ware packen',110)),
+      ['Partition (Verantwortungsbereich)','Paket','Systemgrenze','Kombiniertes Fragment'],
+      'Partitionen ordnen Aktionen einer ausführenden Einheit zu, anfangs meist Akteuren und dem System, später einzelnen Komponenten.','287');
+
+    add('entryexit','zustand','Wann wird aktion3() ausgeführt?', svg(320,105, state(75,8,170,90,'Aktiv',['entry / aktion1()','do / aktion2()','exit / aktion3()'],{hl:2})),
+      ['Beim Verlassen des Zustands','Beim Eintritt in den Zustand','Dauerhaft, solange der Zustand aktiv ist','Erst im Endzustand'],
+      'entry beim Eintritt, do dauerhaft während des Zustands, exit beim Verlassen. Die Aktionen werden durch Operationen des Objekts realisiert.','294');
+    add('guard','zustand','Was steht in den markierten eckigen Klammern?', svg(320,95, state(10,45,100,36,'Reserviert')+state(215,45,95,36,'Frei')+ar(110,63,215,63,'open')+txr(162,34,'stornieren() '+hi('[plaetze = 1]')+' / freigeben()')),
+      ['Bedingung (Guard)','Ereignis','Aktion beim Übergang','Folgezustand'],
+      'Transition: ereignis(argumente) [bedingung] / aktion. Sie schaltet nur, wenn das Ereignis eintritt und die Bedingung erfüllt ist. Danach läuft die Aktion.','295–296');
+    add('after','zustand',M, svg(320,95, state(10,45,110,36,'Ausgeliehen')+state(205,45,105,36,'Überfällig')+ar(120,63,205,63,'open')+tx(162,36,'after(28 Tage)',{fs:11.5,c:C.a,w:500})),
+      ['Zeitereignis','Aufrufereignis (Nachricht)','Bedingung (Guard)','do-Aktion'],
+      'after(Dauer) und at(Zeitpunkt) sind Zeitereignisse. Weitere Ereignisursachen: Aufruf (das Objekt erhält eine Nachricht) und Bedingung (z. B. Lagerbestand < 100).','293, 295');
+
+    add('sync','interaktion','Welche Nachrichtenart zeigt der markierte Pfeil?', svg(320,110, life(70,8,':Maske',105,{w:100})+life(250,8,':Lager',105,{w:100})+actv(70,45,95)+actv(250,60,85)+msg(75,245,60,'pruefeBestand(nr)','filled',{c:C.a,tc:C.a})),
+      ['Synchrone Nachricht','Asynchrone Nachricht','Antwort','Objekterzeugung'],
+      'Durchgezogene Linie mit gefüllter Spitze: synchron, der Sender wartet auf das Ergebnis. Asynchron hat eine offene Spitze, Antworten sind gestrichelt.','304');
+    add('antwort','interaktion','Welche Nachrichtenart zeigt der markierte Pfeil?', svg(320,110, life(70,8,':Maske',105,{w:100})+life(250,8,':Lager',105,{w:100})+actv(70,45,95)+actv(250,52,85)+msg(75,245,52,'pruefeBestand(nr)')+msg(245,75,84,'bestand','open',{d:true,c:C.a,tc:C.a})),
+      ['Antwort (Rückgabe)','Asynchrone Nachricht','Synchrone Nachricht','Objekt wird gelöscht'],
+      'Gestrichelte Linie mit offener Spitze zurück zum Aufrufer: die (optionale) Antwort auf eine synchrone Nachricht.','303–304');
+    add('async','interaktion','Welche Nachrichtenart zeigt der markierte Pfeil?', svg(320,110, life(70,8,':Shop',105,{w:100})+life(250,8,':Mailer',105,{w:100})+actv(70,45,95)+actv(250,60,80)+msg(75,245,60,'benachrichtige()','open',{c:C.a,tc:C.a})),
+      ['Asynchrone Nachricht','Synchrone Nachricht','Antwort','Objekterzeugung'],
+      'Durchgezogene Linie mit offener Spitze: asynchron, der Sender wartet nicht auf eine Antwort.','304');
+    add('create','interaktion',M, svg(320,112, life(60,8,':Maske',105,{w:100})+actv(60,40,100)+ar(65,62,205,62,'open',{d:true,c:C.a})+tx(135,56,'new()',{fs:11,c:C.a})+life(255,48,':Bestellung',105,{w:100})),
+      ['Objekterzeugung','Antwort','Asynchrone Nachricht','Löschen eines Objekts'],
+      'Gestrichelter Pfeil mit offener Spitze, der direkt auf den Kopf eines neuen Objekts zeigt: Das Objekt entsteht erst hier, seine Lebenslinie beginnt tiefer.','303–305');
+    add('fokus','interaktion',M, svg(320,110, life(170,8,':Maske',105,{w:110})+actv(170,45,95,{c:C.a,f:'var(--color-accent-800)'})+ar(40,50,165,50,'filled')+tx(100,44,'bestellen()',{fs:11})),
+      ['Steuerungsfokus (Aktivierung)','Lebenslinie','Zeitachse','Partition'],
+      'Der Balken auf der Lebenslinie zeigt, wann das Objekt aktiv ist und die Steuerung hat. Die Balkenlänge entspricht der relativen Dauer.','304–305');
+    add('delete','interaktion',M, svg(320,100, life(170,8,':Sitzung',80,{w:110})+actv(170,48,72)+ar(40,52,165,52,'filled')+tx(100,46,'delete()',{fs:11})+ln(160,72,180,88,{c:C.a,sw:2.2})+ln(160,88,180,72,{c:C.a,sw:2.2})),
+      ['Objekt wird gelöscht','Ablaufende','Endzustand','Nachricht an sich selbst'],
+      'Ein X am Ende der Lebenslinie: Das Objekt wird zerstört, z. B. nach delete().','303, 305');
+    add('alt','interaktion','Was bedeutet der markierte Rahmen?', svg(320,112, rc(15,8,290,96,{c:C.a,f:'transparent'})+pg([[15,8],[55,8],[55,18],[47,26],[15,26]],C.bg,{c:C.a})+tx(24,21,'alt',{a:'start',fs:11,w:500,c:C.a})+tx(64,21,'[Neukunde]',{a:'start',fs:11})+ar(60,44,260,44,'filled')+tx(160,39,'erfassen()',{fs:11})+ln(15,58,305,58,{d:true,c:C.a})+tx(24,74,'[else]',{a:'start',fs:11})+ar(60,90,260,90,'filled')+tx(160,85,'aktualisieren()',{fs:11})),
+      ['Alternativen (alt)','Schleife (loop)','Parallele Abläufe (par)','Partition'],
+      'Kombiniertes Fragment alt: Von den durch gestrichelte Linien getrennten Bereichen wird genau der ausgeführt, dessen Bedingung gilt.','304, 307');
+    add('iterativ','interaktion','Was bedeutet der markierte Stern?', svg(320,100, ln(130,69,200,69)+rc(20,55,110,28)+tx(75,73,':Auftrag',{u:true})+rc(200,55,110,28)+tx(255,73,':Position',{u:true})+ar(140,50,190,50,'filled')+txr(165,38,'1.1'+hi('*')+': pruefe()')),
+      ['Iterative Nachricht','Kardinalität: beliebig viele','Bedingte Nachricht','Asynchrone Nachricht'],
+      'Im Kommunikationsdiagramm wird 1.1*: nachricht() wiederholt gesendet, z. B. an jede Position. Bedingte Nachrichten haben stattdessen eine [Bedingung].','310');
+    add('nummer','interaktion','Was bedeutet die markierte Nummer 1.2?', svg(320,100, ln(130,69,200,69)+rc(20,55,110,28)+tx(75,73,':Kasse',{u:true})+rc(200,55,110,28)+tx(255,73,':Buchung',{u:true})+ar(140,50,190,50,'filled')+txr(165,38,hi('1.2')+' [ok]: buchen()')),
+      ['Zweite Nachricht innerhalb von Nachricht 1','Version 1.2 der Operation','Nachricht 1 wird zweimal gesendet','Kardinalität 1 bis 2'],
+      'Sequenzausdruck: Die hierarchische Nummerierung zeigt Reihenfolge und Verschachtelung. 1.2 ist die zweite Nachricht, die während Nachricht 1 ausgelöst wird.','309–310');
+
+    add('paket','paket',M, svg(320,110, pkg(70,12,180,88,'Handelssystem',{c:C.a})+mini(85,52,70,'Verkauf')+mini(165,52,70,'Einkauf')),
+      ['Paket','Klasse','Komponente','Systemgrenze'],
+      'Ein Paket gruppiert Modellelemente und Diagramme zu einer logischen Einheit und kann selbst Pakete enthalten.','274–275');
+    add('abhaengig','paket','Was zeigt der markierte Pfeil zwischen den Paketen?', svg(320,110, pkg(20,25,110,70,'Vertrieb')+pkg(190,25,110,70,'Lager')+ar(130,62,190,62,'open',{d:true,c:C.a})),
+      ['Abhängigkeit','Generalisierung','Komposition','Nachricht'],
+      'Gestrichelter Pfeil mit offener Spitze: Vertrieb ist von Lager abhängig, nutzt also dessen Elemente. Zwischen Paketen soll die Kopplung möglichst gering sein.','275–277');
+    add('schnitt','paket','Was ist an diesem Paketschnitt problematisch?', svg(320,112, pkg(10,10,140,95,'Kunden')+pkg(170,10,140,95,'Vertrieb')+ar(195,72,125,72,'hollow',{c:C.a})+mini(35,60,90,'Person')+mini(195,60,90,'Kunde')),
+      ['Die Vererbung wird von der Paketgrenze geschnitten','Pakete dürfen keine Klassen enthalten','Ein Paket braucht mindestens drei Klassen','Gar nichts, das ist der Idealfall'],
+      'Paketkriterien: Zu jeder Unterklasse sollen alle Oberklassen im selben Paket liegen, keine Aggregation wird durchtrennt, und über Paketgrenzen laufen möglichst wenige Assoziationen.','276–277');
+
+    // ---------- Übungen ----------
+    const k1=cls(10,20,130,'Kunde',['Name'],null), k2=cls(200,20,140,'Ticket',['Reihe','Platz','Preis'],null), k3=cls(400,20,150,'Vorstellung',['Datum','Uhrzeit','Film'],null), k4=cls(590,20,120,'Kinosaal',['Nummer','Plätze'],null);
+    const given1 = svg(720,105, ln(140,44,200,44)+mult(146,38,'1')+mult(194,38,'*','end')+ln(340,44,400,44)+mult(346,38,'*')+mult(394,38,'1','end')+ln(550,44,590,44)+mult(556,38,'*')+mult(584,38,'1','end')+k1.s+k2.s+k3.s+k4.s);
+    const o1 = [obj(10,81,130,'anna : Kunde',['Name = "Anna"']), obj(10,246,130,'ben : Kunde',['Name = "Ben"']), obj(200,10,140,'t1 : Ticket',['Reihe = 5','Platz = 7','Preis = 11 €']), obj(200,120,140,'t2 : Ticket',['Reihe = 5','Platz = 8','Preis = 11 €']), obj(200,230,140,'t3 : Ticket',['Reihe = 9','Platz = 1','Preis = 9 €']), obj(400,120,150,'dune : Vorstellung',['Datum = 12.12.2026','Uhrzeit = 20:00','Film = "Dune"']), obj(590,128,120,'saal3 : Kinosaal',['Nummer = 3','Plätze = 120'])];
+    const sol1 = svg(720,315, ln(140,104,200,48)+ln(140,104,200,158)+ln(140,269,200,268)+ln(340,48,400,145)+ln(340,158,400,158)+ln(340,268,400,172)+ln(550,159,590,159)+o1.map(b => b.s).join(''));
+
+    const sta=cls(20,20,180,'Station',['Name','Adresse'],['ermittleFreieRäder()']), ste=cls(20,270,180,'Stellplatz',['Nummer','Belegt'],['belegen()']);
+    const fa=cls(290,20,180,'Fahrrad',['Rahmennummer','Zustand'],['ausleihen()','zurückgeben()'],{i:true,prop:'{abstract}'});
+    const eb=cls(250,270,120,'EBike',['Akkustand'],['laden()']), cb=cls(410,270,120,'Citybike',['Gänge'],[]);
+    const au=cls(580,20,160,'Ausleihe',['Beginn','Ende','/ Preis'],['berechnePreis()']), ku=cls(580,270,160,'Kunde',['Kundennummer','Name'],['registrieren()']);
+    const sol2 = svg(760,365,
+      ar(110,270,110,sta.b,'dfilled')+mult(118,sta.b+16,'1')+mult(118,264,'1..*')+tx(118,195,'besteht aus',{a:'start',fs:11,c:C.m})
+      +ln(200,50,290,50)+mult(206,44,'1')+mult(284,44,'0..30','end')+tx(245,66,'steht an',{fs:11,c:C.m})
+      +pl([[310,270],[310,215],[470,215],[470,270]])+ar(380,215,380,fa.b,'hollow')
+      +ln(470,60,580,60)+mult(476,54,'1')+mult(574,54,'*','end')+tx(525,76,'betrifft',{fs:11,c:C.m})
+      +ln(660,270,660,au.b)+mult(668,au.b+16,'*')+mult(668,264,'1')+tx(668,200,'tätigt',{a:'start',fs:11,c:C.m})
+      +sta.s+ste.s+fa.s+eb.s+cb.s+au.s+ku.s);
+
+    const sol3 = svg(500,510,
+      start(200,24)+ar(200,32,200,50,'open')+act(200,66,'Bestellung aufgeben',170)
+      +ar(200,82,200,109,'open')+onode(200,126,'Bestellung','[aufgegeben]',140)
+      +ar(200,143,200,170,'open')+act(200,186,'Verfügbarkeit prüfen',170)
+      +ar(200,202,200,227,'open')+dec(200,240)
+      +ar(213,240,320,240,'open')+tx(266,232,'[nicht verfügbar]',{fs:11})+act(400,240,'Kunde benachrichtigen',160)
+      +ar(400,256,400,289,'open')+end(400,300)
+      +ar(200,253,200,290,'open')+tx(208,276,'[verfügbar]',{a:'start',fs:11})+bar(90,290,240)
+      +ar(130,295,130,325,'open')+ar(290,295,290,325,'open')+act(130,341,'Rechnung erstellen',150)+act(290,341,'Paket packen',130)
+      +ar(130,357,130,385,'open')+ar(290,357,290,385,'open')+bar(90,385,240)
+      +ar(200,390,200,420,'open')+act(200,436,'Paket versenden',150)
+      +ar(200,452,200,478,'open')+end(200,490));
+
+    const sol4 = svg(600,290,
+      start(22,85)+ar(30,85,100,85,'open')+tx(64,77,'erfassen()',{fs:11})
+      +ar(260,68,420,68,'open')+tx(340,60,'ausleihen() [nicht gesperrt]',{fs:11})
+      +ar(420,100,260,100,'open')+tx(340,116,'zurückgeben()',{fs:11})
+      +ar(495,110,495,210,'open')+tx(486,164,'after(28 Tage) / mahnungSenden()',{a:'end',fs:11})
+      +par([[420,240],[180,240],[180,120]])+tx(300,256,'zurückgeben() / gebührBerechnen()',{fs:11})
+      +par([[120,120],[120,250],[62,250]])+tx(114,190,'ausmustern()',{a:'end',fs:11})
+      +state(100,50,160,70,'Verfügbar',['entry / standortSetzen()'])+state(420,50,150,60,'Ausgeliehen')+state(420,210,150,60,'Überfällig')+end(50,250));
+
+    const sol5 = svg(640,445,
+      ln(60,82,60,430,{d:true,c:C.m})+actor(60,8,'Kunde')
+      +life(210,30,':Bestellmaske',430,{w:124})+life(380,30,':Lager',430,{w:100})+life(530,200,':Bestellung',430,{w:110})
+      +rc(30,180,595,215,{f:'transparent',c:C.m})+pg([[30,180],[68,180],[68,191],[60,199],[30,199]],C.bg,{c:C.m})+tx(38,194,'alt',{a:'start',fs:11,w:500})
+      +tx(76,194,'[bestand >= menge]',{a:'start',fs:11})
+      +ln(30,318,625,318,{d:true,c:C.m})+tx(38,334,'[else]',{a:'start',fs:11})
+      +actv(210,95,375)+actv(380,125,162)+actv(380,255,287)+actv(530,228,300)
+      +msg(62,205,95,'bestellen(artikelNr, menge)')
+      +msg(215,375,125,'pruefeBestand(artikelNr)')
+      +msg(375,215,160,'bestand','open',{d:true})
+      +msg(215,475,214,'new()','open',{d:true})
+      +msg(525,385,260,'reservieren(menge)')
+      +msg(385,525,285,'ok','open',{d:true})
+      +msg(205,62,362,'meldung("nicht lieferbar")','open',{d:true}));
+
+    const sol6 = svg(700,285,
+      ln(42,116,200,116)+ln(340,115,500,115)+ln(320,130,420,220)+ln(500,220,560,130)
+      +actor(30,95,'Kunde')+rc(200,100,140,30)+tx(270,120,':Bestellmaske',{u:true})+rc(500,100,120,30)+tx(560,120,':Lager',{u:true})
+      +rc(390,220,140,30)+tx(460,240,':Bestellung',{u:true})+tx(460,266,'{new}',{fs:10.5,c:C.m})
+      +ar(100,104,150,104,'filled')+tx(126,92,'1: bestellen(artikelNr, menge)',{fs:11})
+      +ar(395,103,445,103,'filled')+tx(420,91,'1.1: bestand = pruefeBestand(artikelNr)',{fs:11})
+      +ar(345.6,171.9,370.6,194.4,'filled')+tx(338,198,'1.2 [bestand >= menge]: new()',{a:'end',fs:11})
+      +ar(532.6,196.2,547.6,173.7,'filled')+tx(556,198,'1.2.1: reservieren(menge)',{a:'start',fs:11}));
+
+    const sol7 = svg(640,330,
+      pkg(20,20,290,135,'Kundenverwaltung')+mini(36,52,80,'Kunde')+mini(126,52,80,'Adresse')+mini(216,52,84,'Kundenkonto')+mini(120,112,86,'Privatkonto')+mini(216,112,84,'Firmenkonto')
+      +pl([[163,112],[163,98],[258,98]])+ar(258,112,258,76,'hollow')
+      +pkg(340,20,280,135,'Vertrieb')+mini(356,60,100,'Bestellung')+mini(496,60,110,'Bestellposition')+ar(496,72,456,72,'dfilled')
+      +pkg(20,190,290,130,'Sortiment & Lager')+mini(36,236,80,'Artikel')+mini(126,236,84,'Kategorie')+mini(220,236,80,'Lagerplatz')
+      +pkg(340,190,280,130,'Rechnungswesen')+mini(360,236,100,'Rechnung')+mini(480,236,100,'Zahlung')
+      +ar(340,120,310,120,'open',{d:true,c:C.a})+ar(380,155,270,190,'open',{d:true,c:C.a})+ar(480,190,480,155,'open',{d:true,c:C.a}));
+
+    const exercises = [
+      { id:'ex1', num:'01', title:'Kinoabend', type:'Objektdiagramm',
+        paras:['Gegeben ist das Klassendiagramm unten. Zeichne ein Objektdiagramm für diese Situation:', 'Am 12.12.2026 läuft um 20:00 Uhr „Dune“ in Saal 3 mit 120 Plätzen. Anna hat zwei Tickets (Reihe 5, Platz 7 und 8, je 11 €), Ben hat eines (Reihe 9, Platz 1, 9 €).'],
+        given:given1, givenLabel:'Gegebenes Klassendiagramm',
+        hints:['Wie viele Vorstellung-Objekte brauchst du, wenn alle drei Tickets für dieselbe Vorstellung gelten?', 'Objekte tragen Werte, keine Typen. Links tragen keine Kardinalitäten.'],
+        sol:sol1, solNote:'Objektnamen wie t1 sind frei wählbar. Anonyme Objekte (:Ticket) wären ebenfalls korrekt.',
+        checks:['Objektnamen unterstrichen, Form name : Klasse', 'Konkrete Attributwerte statt Typen', 'Genau ein Objekt für die Vorstellung und eins für den Saal', 'Jedes Ticket ist mit genau einem Kunden und einer Vorstellung verbunden', 'Links ohne Kardinalitäten und Rauten'] },
+      { id:'ex2', num:'02', title:'Fahrradverleih', type:'Klassendiagramm',
+        paras:['Ein Fahrradverleih betreibt mehrere Stationen. Jede Station besteht aus mindestens einem Stellplatz; Stellplätze existieren nicht ohne ihre Station. An einer Station stehen 0 bis 30 Fahrräder, jedes Fahrrad ist genau einer Station zugeordnet.', 'Fahrräder sind entweder E-Bikes (mit Akkustand) oder Citybikes (mit Anzahl Gänge). Ein Kunde kann beliebig viele Ausleihen tätigen. Eine Ausleihe betrifft genau ein Fahrrad und genau einen Kunden und speichert Beginn, Ende und Preis.', 'Erstelle ein Klassendiagramm in der Analyse mit Kardinalitäten, 2–3 Assoziationsnamen sowie sinnvollen Attributen und Operationen.'],
+        hints:['Welche Teile können ohne ihr Ganzes nicht existieren?', 'Gibt es Fahrräder, die weder E-Bike noch Citybike sind?', 'Die Ausleihe verbindet Kunde und Fahrrad und hat eigene Daten.'],
+        sol:sol2, solNote:'Ausleihe könnte auch als assoziative Klasse an einer Assoziation Kunde * —— * Fahrrad hängen. Aufgelöst entsteht genau diese Form mit 1 —— * auf beiden Seiten.',
+        checks:['Komposition Station ◆—— Stellplatz, Raute am Ganzen, 1 an der Station', '0..30 an Fahrrad, 1 an Station', 'Fahrrad abstrakt, Generalisierungspfeile zeigen zur Oberklasse', 'Ausleihe als eigene Klasse mit 1 —— * zu Kunde und zu Fahrrad', 'Keine Navigationspfeile (Analyse: bidirektional)', 'Assoziationsnamen, Attribute und Operationen vorhanden'] },
+      { id:'ex3', num:'03', title:'Online-Bestellung', type:'Aktivitätsdiagramm',
+        paras:['Ein Kunde gibt eine Bestellung auf, danach wird die Verfügbarkeit geprüft.', 'Ist ein Artikel nicht verfügbar, wird der Kunde benachrichtigt und der Ablauf endet. Andernfalls werden unabhängig voneinander die Rechnung erstellt und das Paket gepackt. Sind beide Schritte erledigt, wird das Paket versendet.', 'Zeichne Kontroll- und Objektfluss. Zeige die Bestellung im Zustand [aufgegeben] als Objekt.'],
+        hints:['Unabhängig voneinander heißt nebenläufig. Welcher Kontrollknoten startet das?', 'Die Bedingungen an einer Entscheidung müssen alle Fälle abdecken und dürfen sich nicht überlappen.'],
+        sol:sol3, solNote:'',
+        checks:['Start- und Endknoten vorhanden', 'Entscheidung als Raute, Bedingungen in [ ] ohne Überlappung', 'Fork und Join als Balken', 'Objektknoten Bestellung [aufgegeben] im Fluss', 'Aktionen mit Verb benannt'] },
+      { id:'ex4', num:'04', title:'Buchexemplar', type:'Zustandsdiagramm',
+        paras:['Modelliere die Zustände eines Buchexemplars:', 'Ein Exemplar wird erfasst und ist dann verfügbar; beim Eintritt in diesen Zustand wird der Standort gesetzt. Es kann ausgeliehen werden, sofern der Kunde nicht gesperrt ist. Bei Rückgabe ist es wieder verfügbar.', 'Ist es nach 28 Tagen nicht zurück, wird eine Mahnung verschickt und es gilt als überfällig. Bei Rückgabe eines überfälligen Exemplars wird eine Gebühr berechnet. Verfügbare Exemplare können ausgemustert werden, damit endet ihr Lebenszyklus.'],
+        hints:['Wie notierst du „nach 28 Tagen“ als Ereignis?', 'Was beim Eintritt passiert, gehört in den Zustand, nicht an die Transition.'],
+        sol:sol4, solNote:'',
+        checks:['Startzustand und Endzustand', 'Transitionen in der Form ereignis [bedingung] / aktion', 'Zeitereignis after(28 Tage) mit Aktion', 'entry-Aktion im Zustand Verfügbar', 'Nur Zustände eines einzigen Objekts'] },
+      { id:'ex5', num:'05', title:'Bestellung anlegen', type:'Sequenzdiagramm',
+        paras:['Ein Kunde gibt in der Bestellmaske Artikelnummer und Menge ein. Die Bestellmaske fragt beim Lager den Bestand ab.', 'Reicht der Bestand, erzeugt die Bestellmaske eine neue Bestellung, die beim Lager die Menge reserviert. Reicht er nicht, erhält der Kunde die Meldung „nicht lieferbar“.', 'Modelliere den Ablauf als Sequenzdiagramm mit beiden Alternativen.'],
+        hints:['Für Entweder-oder gibt es ein kombiniertes Fragment.', 'Die Bestellung existiert am Anfang noch nicht. Wo beginnt ihre Lebenslinie?'],
+        sol:sol5, solNote:'',
+        checks:['Akteur und Objekte als :Klasse mit gestrichelter Lebenslinie', 'Synchrone Nachrichten mit gefüllter Spitze, Antworten gestrichelt', 'Erzeugungspfeil zeigt auf den Kopf von :Bestellung', 'alt-Fragment mit [Bedingung] und [else]', 'Aktivierungsbalken bei aktiven Objekten'] },
+      { id:'ex6', num:'06', title:'Bestellung anlegen', type:'Kommunikationsdiagramm',
+        paras:['Übertrage den Fall „Bestand reicht“ aus Übung 05 in ein Kommunikationsdiagramm.'],
+        hints:['Statt einer Zeitachse übernimmt die Nummerierung die Reihenfolge.', 'Wie zeigst du, dass :Bestellung neu entsteht?'],
+        sol:sol6, solNote:'Inhaltlich dasselbe Szenario wie in Übung 05. Das Kommunikationsdiagramm betont die Verbindungen zwischen den Objekten statt der Zeit.',
+        checks:['Objekte durch Links verbunden', 'Hierarchische Nummerierung 1, 1.1, 1.2, 1.2.1', 'Bedingung in [ ] vor dem Doppelpunkt', 'Rückgabewert per Zuweisung (bestand = …)', 'Neues Objekt mit {new} gekennzeichnet'] },
+      { id:'ex7', num:'07', title:'Webshop', type:'Paketdiagramm',
+        paras:['Ein Webshop hat die Klassen Kunde, Adresse, Kundenkonto, Privatkonto, Firmenkonto, Bestellung, Bestellposition, Artikel, Kategorie, Lagerplatz, Rechnung und Zahlung.', 'Privatkonto und Firmenkonto erben von Kundenkonto. Eine Bestellposition ist Teil einer Bestellung (Komposition). Bestellungen beziehen sich auf Kunden und Artikel, Rechnungen auf Bestellungen.', 'Teile die Klassen in vier Pakete auf und zeichne die Abhängigkeiten.'],
+        hints:['Was darf eine Paketgrenze laut Vorlesung nicht durchschneiden?', 'Abhängigkeiten zeigen vom nutzenden zum genutzten Paket.'],
+        sol:sol7, solNote:'Andere Schnitte sind möglich, solange die Paketkriterien erfüllt sind.',
+        checks:['Vererbungshierarchie komplett in einem Paket', 'Bestellung und Bestellposition im selben Paket', 'Pakete als verständliche Themenbereiche benannt', 'Abhängigkeiten gestrichelt mit offener Spitze', 'Wenige Beziehungen über Paketgrenzen'] }
+    ];
+
+    // ---------- Lernplan ----------
+    const phases = [
+      { num:'01', title:'Start & Struktur', start:'2026-11-19', end:'2026-11-29', weeks:1.5, tasks:[
+        { id:'p1a', tag:'Orga', h:0.25, text:'Anmeldung zur Studienarbeit im ZPA prüfen', detail:'Ohne ZPA-Anmeldung kein Schein, ohne Schein keine Klausurzulassung.', ref:'85' },
+        { id:'p1b', tag:'Pflichtenheft', h:0.5, text:'Aufgabenblatt lesen und Mindestanforderungen markieren', detail:'Einzelabgabe: mind. 8 funktionale und 8 nicht-funktionale Anforderungen, Stamm- und Bewegungsdaten (muss), Customizing (kann), mind. 1 statisches und 2 dynamische Produktmodelle in unterschiedlichen Modellierungssprachen, Docker-Projekt (kann, gibt Bonus). Die Zähler rechts helfen beim Mitzählen.', ref:'82–85' },
+        { id:'p1c', tag:'Pflichtenheft', h:0.25, text:'Pflichtenheft-Muster (sews2026-pflichtenheft.pdf) besorgen', detail:'Wird laut Vorlesung bereitgestellt. Falls du es nicht findest: im Praktikum nachfragen.', ref:'164' },
+        { id:'p1d', tag:'Pflichtenheft', h:0.5, text:'Dokument mit der Balzert-Gliederung anlegen', detail:'1 Zielbestimmung (Muss-, Wunsch-, Abgrenzungskriterien) · 2 Produkteinsatz · 3 Produktübersicht · 4 Produktfunktionen · 5 Produktdaten · 6 Produktleistungen · 7 Qualitätsanforderungen · 8 Benutzungsoberfläche · 9 Nicht-funktionale Anforderungen · 10 Technische Produktumgebung · 11 Entwicklungsumgebung · 12 Gliederung in Teilprodukte · 13 Ergänzungen. Die Punkte 6, 7, 10 und 11 dürfen unter 9 zusammengefasst werden.', ref:'163–164' },
+        { id:'p1e', tag:'Pflichtenheft', h:1, text:'Ausgangssituation durcharbeiten: Substantive, Verben und Restriktionen markieren', detail:'Substantive sind Kandidaten für Klassen und Produktdaten, Verben für Anwendungsfälle. Restriktionen getrennt sammeln: Aus ihnen werden später Kardinalitäten und Ausnahmen.', ref:'82–83' },
+        { id:'p1f', tag:'Theorie', h:0.75, text:'Lastenheft vs. Pflichtenheft', detail:'Lastenheft: vom Auftraggeber, Ergebnis der Planung, beschreibt das Was und Wofür ohne Details (DIN 69905). Pflichtenheft: Ergebnis der Analyse, beschreibt Funktionen, Leistungen und Schnittstellen so genau, dass Auftraggeber und Auftragnehmer die Erfüllung prüfen können. Es ist Vertragsbestandteil und Basis der Abnahme; Änderungen müssen zwischen AG und AN abgestimmt werden.', ref:'120–122, 161–162' },
+        { id:'p1g', tag:'UML', h:1, text:'Blatt 5 (Anwendungsfalldiagramm) ohne Lösung neu zeichnen und vergleichen', detail:'«include» = unbedingte Einbindung, Pfeil vom einbindenden zum eingebundenen Anwendungsfall. «extend» = bedingte Einbindung, Pfeil von der Erweiterung zum erweiterten Anwendungsfall, mit Bedingung und Extension Point. Akteure stehen immer außerhalb der Systemgrenze.', ref:'171–184' }
+      ]},
+      { num:'02', title:'Klassen, Assoziationen, Objekte', start:'2026-11-30', end:'2026-12-06', weeks:1, tasks:[
+        { id:'p2a', tag:'Theorie', h:0.75, text:'Assoziationen: bidirektional, reflexiv, Rollen', detail:'Assoziationen verbinden Objekte gleichrangiger Klassen und sind in der Systemanalyse bidirektional, also ohne Navigationspfeile. Reflexiv: eine Klasse mit sich selbst (z. B. Chef/Mitarbeiter), dann Rollennamen angeben. Vererbung verbindet dagegen Klassen, nicht Objekte.', ref:'240–250' },
+        { id:'p2b', tag:'Theorie', h:0.5, text:'Kardinalitäten sicher lesen', detail:'1 genau eine (Muss) · * beliebig viele (Kann) · 0..1 keine oder eine (Kann) · 1..* mindestens eine (Muss) · auch 0..5, 4 oder 1,3,5 sind möglich. Kunde 1 —— * Auftrag heißt: Ein Kunde hat beliebig viele Aufträge, jeder Auftrag gehört genau einem Kunden.', ref:'244–247' },
+        { id:'p2c', tag:'Theorie', h:0.5, text:'Aggregation vs. Komposition', detail:'Aggregation (leere Raute): »ist Teil von«, Teile dürfen mehreren Ganzen gehören. Komposition (gefüllte Raute): Ein Teil gehört genau einem Ganzen, die Kardinalität am Ganzen ist also höchstens 1, und es wird mit ihm gelöscht. Die Raute sitzt immer am Ganzen.', ref:'256–259' },
+        { id:'p2d', tag:'UML', h:1.5, text:'Blatt 6 (Auftrag/Produkt, Bibliothek) ohne Lösung zeichnen', detail:'Inklusive assoziativer Klasse zwischen Kunde und Buchexemplar und ihrer Auflösung: Aus A * —— * B mit assoziativer Klasse C wird A 1 —— * C * —— 1 B. Danach das Objektdiagramm dazu.', ref:'254–255' },
+        { id:'p2e', tag:'UML', h:0.5, text:'Übung 01: Objektdiagramm (Kinoabend)', go:'ex1' },
+        { id:'p2f', tag:'UML', h:0.75, text:'Übung 02: Klassendiagramm (Fahrradverleih)', go:'ex2' }
+      ]},
+      { num:'03', title:'Produktdaten & Anwendungsfälle', start:'2026-12-07', end:'2026-12-13', weeks:1, tasks:[
+        { id:'p3a', tag:'Pflichtenheft', h:1, text:'Produktdaten abgrenzen: Stamm-, Bewegungs- und Customizing-Daten', detail:'Stammdaten sind langlebig und werden selten geändert. Bewegungsdaten entstehen durch Vorgänge, haben einen Status und verweisen auf Stammdaten. Customizing-Daten legen Domänen, Typen und Nummernkreise fest, auf die Stammdaten verweisen. Die Löschregeln aus der Ausgangssituation mit aufnehmen.', ref:'82–83' },
+        { id:'p3b', tag:'Pflichtenheft', h:1.5, text:'Statisches Produktmodell erstellen, z. B. Klassendiagramm', detail:'Einzelabgabe: mind. 1. Prüfe, ob jede Restriktion aus der Ausgangssituation als Kardinalität oder Constraint im Modell steht. Zeichnen z. B. mit app.diagrams.net.', ref:'84' },
+        { id:'p3c', tag:'Theorie', h:0.5, text:'Schablone für Anwendungsfallbeschreibungen', detail:'Name, Kurzbeschreibung, Akteure, Auslöser, Ergebnisse, eingehende Daten, Vor- und Nachbedingungen, essenzielle Schritte, offene Punkte, Änderungshistorie. Dazu Ausnahmen und Fehlersituationen, Regeln, Alternativen. Sekundäre Anwendungsfälle (Teilabläufe, die in mehreren vorkommen) bekommen «secondary».', ref:'175–190' },
+        { id:'p3d', tag:'Pflichtenheft', h:1.5, text:'FA-01 bis FA-04 als Anwendungsfälle beschreiben', detail:'Jede Anforderung nummerieren und Reaktionen auf Ausnahmen dokumentieren, z. B. keine Verfügbarkeit oder eine verletzte Restriktion. Das Aufgabenblatt fordert ausdrücklich die Schablonen für primäre und sekundäre Anwendungsfälle.', ref:'84' }
+      ]},
+      { num:'04', title:'Dynamische Sicht: Aktivitäten', start:'2026-12-14', end:'2026-12-20', weeks:1, tasks:[
+        { id:'p4a', tag:'Pflichtenheft', h:1.5, text:'FA-05 bis FA-08 ergänzen (Einzelabgabe: mind. 8)' },
+        { id:'p4b', tag:'Theorie', h:0.5, text:'Aktivitätsdiagramm: Knoten und Kanten', detail:'Startknoten (mind. 1). Der Endknoten beendet alle Aktionen sofort, das Ablaufende (Kreis mit X) nur den eigenen Fluss. Entscheidung: Raute, Bedingungen in [ ], dürfen sich nicht überlappen. Aufspalten und Synchronisation: Balken (logisches UND). Objektfluss: Objekt [Zustand]. Partitionen zeigen Verantwortungsbereiche.', ref:'281–289' },
+        { id:'p4c', tag:'UML', h:1.25, text:'Blatt 7 (Sauce Hollandaise, If-else, Maximum von 3 Werten)', detail:'Bei 7a sind mehrere Startknoten erlaubt. Bei 7c zuerst alle Notationselemente benennen, dann jeden möglichen Ablauf durchspielen.' },
+        { id:'p4d', tag:'UML', h:0.5, text:'Übung 03: Aktivitätsdiagramm (Online-Bestellung)', go:'ex3' },
+        { id:'p4e', tag:'Pflichtenheft', h:1, text:'1. dynamisches Modell: Aktivitätsdiagramm', detail:'Das Aufgabenblatt schlägt Aktivitätsdiagramme für Varianten von Abläufen vor. Konkrete Instanzen dieser Abläufe lassen sich anschließend als Sequenzdiagramme modellieren.', ref:'84' }
+      ]},
+      { num:'05', title:'Ferien: Pflichtenheft fertig + Docker', start:'2026-12-21', end:'2027-01-10', weeks:3, holiday:true, note:'Hier entsteht der Großteil des Pflichtenhefts. Plane feste Lernblöcke ein und lass die Tage um Weihnachten frei.', tasks:[
+        { id:'p5a', tag:'Theorie', h:0.5, text:'Zustandsdiagramm', detail:'Zeigt die Zustände eines einzelnen Objekts über seine Lebenszeit (endlicher Automat), im Gegensatz zu Interaktionsdiagrammen mit mehreren Objekten. Transition: ereignis(argumente) [bedingung] / aktion. Zeitereignisse: after(Dauer), at(Zeitpunkt). Im Zustand: entry / do / exit.', ref:'292–296' },
+        { id:'p5b', tag:'UML', h:0.5, text:'Übung 04: Zustandsdiagramm (Buchexemplar)', go:'ex4' },
+        { id:'p5c', tag:'Theorie', h:0.5, text:'Sequenzdiagramm', detail:'Zeigt ein Szenario mit Betonung der zeitlichen Reihenfolge. Lebenslinie gestrichelt, Aktivierungsbalken = Steuerungsfokus. Synchrone Nachricht: gefüllte Spitze. Asynchron: offene Spitze. Antwort und Objekterzeugung: gestrichelt mit offener Spitze.', ref:'302–307' },
+        { id:'p5d', tag:'UML', h:0.75, text:'Übung 05: Sequenzdiagramm (Bestellung anlegen)', go:'ex5' },
+        { id:'p5e', tag:'Pflichtenheft', h:2, text:'2. dynamisches Modell, z. B. Sequenzdiagramm', detail:'Gefordert sind mind. 2 dynamische Modelle »unterschiedlicher Modellierungssprachen«. Ob zwei UML-Diagrammarten reichen oder z. B. BPMN dazu muss, kurz im Praktikum klären.', ref:'84' },
+        { id:'p5f', tag:'Pflichtenheft', h:3, text:'NFA-01 bis NFA-08 ausführlich und priorisiert formulieren', detail:'Nummeriert, begründet und nicht nur als Tabelle. Kategorien aus der Vorlesung: Benutzbarkeit, Performance, Zuverlässigkeit, Sicherheit, Wartbarkeit, Administrierbarkeit, Rahmenbedingungen. Die Ausgangssituation (schwankende Last, Skalierung, Microservices, Private Cloud) gibt Anknüpfungspunkte.', ref:'162, 84–85' },
+        { id:'p5g', tag:'Pflichtenheft', h:2.5, text:'Übrige Kapitel füllen: Zielbestimmung, Produkteinsatz, Produktumgebung, Glossar', detail:'Zielbestimmung mit Muss-, Wunsch- und Abgrenzungskriterien. Produkteinsatz: Anwendungsbereiche, Zielgruppen, Betriebsbedingungen. Technische Produktumgebung: Hardware, Software, Schnittstellen. Ein Glossar sorgt für einheitliche Begriffe.', ref:'123, 163–164' },
+        { id:'p5h', tag:'Pflichtenheft', h:1, text:'Customizing-Daten definieren (bei Einzelabgabe optional)' },
+        { id:'p5i', tag:'Docker', h:4, text:'Docker-Projekt: eine eigene funktionale Anforderung umsetzen', detail:'Vorschläge aus dem Aufgabenblatt: Gesamtpreis aus Belegpositionen oder Kapazitätsprüfung mit festen Werten. Abgabe: Dockerfile plus Quelldateien (Java oder Python). Ablauf wie in Blatt 2: mvn package → Dockerfile mit FROM, COPY, ENTRYPOINT → docker build -t name . → docker run --name c name.', ref:'84–85' },
+        { id:'p5j', tag:'Theorie', h:1, text:'Function-Point-Methode', detail:'1) UFP: Eingaben, Ausgaben, Abfragen, interne und externe Datenbestände nach Komplexität gewichten (Eingaben 3/4/6, Ausgaben 4/5/7, Abfragen 3/4/6, interne Datenbestände 7/10/15, externe 5/7/10). 2) 14 Einflussfaktoren mit je 0–5 bewerten: TCF = 0,65 + 0,01 · ΣDI, liegt zwischen 0,65 und 1,35. 3) FP = UFP · TCF. 4) Über Referenzdaten in Personenmonate umrechnen, dann Risikofaktoren aufschlagen.', ref:'133–144' },
+        { id:'p5k', tag:'UML', h:1.25, text:'Übung 06 + 07: Kommunikations- und Paketdiagramm', go:'ex6', detail:'Kommunikationsdiagramm: Links wie im Objektdiagramm, Reihenfolge über Nummern 1, 1.1, 1.2. Paketkriterien: Vererbung nicht schneiden, keine Aggregation trennen, wenige Assoziationen über Paketgrenzen.', ref:'274–277, 308–312' }
+      ]},
+      { num:'06', title:'Prüfen & abgeben', start:'2027-01-11', end:'2027-01-17', weeks:1, note:'Abgabe spätestens So 17.01.2027, 22:00 Uhr. Nicht auf den letzten Abend legen.', tasks:[
+        { id:'p6a', tag:'Pflichtenheft', h:1.5, text:'Jede Anforderung gegen die Bewertungskriterien prüfen', detail:'Eindeutig, korrekt, vollständig, plausibel, verständlich, nummeriert und gegen die Realwelt validierbar, als Vorbereitung für einen späteren Funktionstest. NFAs ausführlich, nicht nur als Tabelle mit Prioritäten.', ref:'85' },
+        { id:'p6b', tag:'Pflichtenheft', h:1, text:'Modelle gegen die Ausgangssituation prüfen: Ist jede Restriktion abgebildet?' },
+        { id:'p6c', tag:'Orga', h:0.25, text:'Deckblatt mit Name und Matrikelnummer, unterschriebene Erklärung beilegen', ref:'85', detail:'Die Erklärung mit dem vorgegebenen Wortlaut steht im Aufgabenblatt.' },
+        { id:'p6d', tag:'Orga', h:0.25, text:'Abgabe per Mail an zimmer@hm.edu', detail:'Das Docker-Projekt kann alternativ über GitHub oder Docker Hub abgegeben werden.', ref:'85' }
+      ]},
+      { num:'07', title:'Klausur-Endspurt', start:'2027-01-18', end:null, tasks:[
+        { id:'p7a', tag:'Theorie', h:0.75, text:'Prozessmodelle: eindimensional vs. zweidimensional', detail:'Balzert: keine Unterscheidung von Phase und Disziplin, eindimensional (z. B. Wasserfall, V-Modell XT). Unified Process (RUP, OEP): Phase ≠ Disziplin, zweidimensional, Basis für iterativ-inkrementelle Modelle. Agile Verfahren nutzen meist das zweidimensionale Modell; ein Scrum-Sprint dauert ca. 10–15 Arbeitstage.', ref:'7–10, 106–109' },
+        { id:'p7b', tag:'Theorie', h:0.5, text:'CI, Continuous Delivery, Continuous Deployment', detail:'CI: Änderungen ständig in einem gemeinsamen Repository zusammenführen, um teure Merge-Konflikte zu vermeiden. Continuous Delivery: Zusätzlich wird nach erfolgreichem Test eine freigegebene Version bereitgestellt, die Freigabe in Produktion bleibt manuell. Continuous Deployment: Auch diese Freigabe läuft automatisch, das setzt sehr gute Tests voraus.', ref:'11–16' },
+        { id:'p7c', tag:'Theorie', h:0.75, text:'Docker-Grundlagen', detail:'Container isolieren Anwendungen ähnlich wie VMs, enthalten aber kein eigenes Betriebssystem, nur das Nötigste: leichter, schneller, portabel. Image = Bauplan aus dem Dockerfile, Container = laufende Instanz, Registry (z. B. Docker Hub) = Ablage für Images, Compose = mehrere Container per YAML-Datei. Volumes halten Daten über das Löschen eines Containers hinaus.', ref:'48–57' },
+        { id:'p7d', tag:'Theorie', h:1, text:'Qualitätsmerkmale und Software Life Cycle', detail:'Qualitätsmerkmale nach ISO/IEC 25000, u. a. Korrektheit, Zuverlässigkeit, Benutzungsfreundlichkeit, Effizienz, Portabilität, Wartbarkeit. Korrekte Software ist nicht automatisch vertrauenswürdig, inkorrekte kann es sein. Life Cycle: Planung → Lastenheft, Analyse → Pflichtenheft, Entwurf → Architektur, dann Implementierung, Test, Integration, Abnahme, Betrieb.', ref:'37–45, 89–101' },
+        { id:'p7e', tag:'UML', h:2, text:'Alle 7 Übungen ohne Lösung, je 15 Minuten', go:'ex1' },
+        { id:'p7f', tag:'UML', h:1, text:'Notationstrainer: alle Elemente sicher erkennen', go:'quiz' },
+        { id:'p7g', tag:'UML', h:1.5, text:'Übungsblätter 5–7 ein letztes Mal auf Papier' }
+      ]}
+    ];
+    return { phases, quiz, cats, exercises };
+  }
+
+  state = { tab:'plan', done:{}, open:{}, counts:{ fa:0, nfa:0, stat:0, dyn:0 }, flags:{}, exam:'', qf:'alle', qpos:0, qpick:null, qstats:{}, exSel:'ex1', exHint:false, exSol:false, exChecks:{}, exDone:{} };
+
+  componentDidMount() {
+    try { const s = JSON.parse(localStorage.getItem('se1-lernplan-v1') || 'null'); if (s && typeof s === 'object') this.setState(s); } catch (e) {}
+    this._ready = true;
+  }
+  componentDidUpdate() {
+    if (!this._ready) return;
+    try {
+      const { tab, done, open, counts, flags, exam, qf, qstats, exSel, exChecks, exDone } = this.state;
+      localStorage.setItem('se1-lernplan-v1', JSON.stringify({ tab, done, open, counts, flags, exam, qf, qstats, exSel, exChecks, exDone }));
+    } catch (e) {}
+  }
+
+  toggleDone(id) { this.setState(s => ({ done: { ...s.done, [id]: !s.done[id] } })); }
+  toggleOpen(id, cur) { this.setState(s => ({ open: { ...s.open, [id]: !cur } })); }
+  bump(k, d) { this.setState(s => ({ counts: { ...s.counts, [k]: Math.max(0, (s.counts[k] || 0) + d) } })); }
+  goTo(t) {
+    if (t === 'quiz') this.setState({ tab:'quiz' }); else this.setState({ tab:'ex', exSel:t, exHint:false, exSol:false });
+    try { window.scrollTo({ top:0, behavior:'smooth' }); } catch (e) {}
+  }
+  pick(item, oi) {
+    if (this.state.qpick != null) return;
+    this.setState(s => { const p = (s.qstats || {})[item.id] || {}; const ok = oi === 0; return { qpick:oi, qstats: { ...s.qstats, [item.id]: { r:(p.r || 0) + (ok ? 1 : 0), w:(p.w || 0) + (ok ? 0 : 1), last:ok } } }; });
+  }
+  el(html) { return React.createElement('div', { style:{ width:'100%', display:'flex', justifyContent:'center' }, dangerouslySetInnerHTML:{ __html:html } }); }
+
+  renderVals() {
+    const D = Component.data(), s = this.state, p = this.props || {};
+    const hpw = p.hoursPerWeek ?? 4, hol = p.holidayHours ?? 8, shuffle = p.shuffleQuiz ?? true, allOpen = p.detailsOpen ?? false;
+    const now = new Date(), DAY = 864e5;
+    const exam = /^\d{4}-\d{2}-\d{2}$/.test(s.exam || '') ? new Date(s.exam + 'T09:00:00') : null;
+    const until = d => Math.max(0, Math.ceil((d - now) / DAY));
+    const dd = d => d.toLocaleDateString('de-DE', { day:'2-digit', month:'2-digit' }) ;
+    const n1 = x => x.toLocaleString('de-DE', { maximumFractionDigits:1 });
+    const tagCls = { Pflichtenheft:'tag tag-accent', UML:'tag tag-outline', Theorie:'tag tag-neutral', Docker:'tag tag-neutral', Orga:'tag tag-neutral' };
+    const done = s.done || {}, opened = s.open || {};
+    let totalN = 0, doneN = 0; const openList = [];
+
+    const phases = D.phases.map(ph => {
+      const start = new Date(ph.start + 'T00:00:00');
+      const endD = ph.end ? new Date(ph.end + 'T23:59:59') : (exam || new Date(2027, 1, 12, 23, 59));
+      const weeks = ph.weeks ?? Math.max(0.5, Math.round((endD - start) / DAY / 7 * 2) / 2);
+      const budget = weeks * (ph.holiday ? hol : hpw);
+      const effort = ph.tasks.reduce((a, t) => a + t.h, 0);
+      let dn = 0;
+      const tasks = ph.tasks.map(t => {
+        const checked = !!done[t.id]; totalN++;
+        if (checked) { doneN++; dn++; } else openList.push({ t, num:ph.num });
+        const ex = !!t.detail && (opened[t.id] ?? allOpen);
+        return { text:t.text, tag:t.tag, tagClass:tagCls[t.tag] || 'tag tag-neutral', hLabel:'≈ ' + n1(t.h) + ' h', checked,
+          toggle:() => this.toggleDone(t.id), opacity: checked ? 0.5 : 1, deco: checked ? 'line-through' : 'none',
+          hasDetail: !!t.detail, expanded: ex, detailLabel: ex ? 'Weniger' : 'Details', toggleDetail:() => this.toggleOpen(t.id, ex),
+          detail: t.detail || '', hasRef: !!t.ref, ref: t.ref || '', hasGo: !!t.go, goLabel: t.go === 'quiz' ? 'Zum Notationstrainer →' : 'Zur Übung →',
+          go:() => this.goTo(t.go), bg: ex ? 'var(--color-surface)' : 'transparent' };
+      });
+      let note = ph.note || '';
+      const early = !ph.end && exam && exam < start;
+      if (early) note = 'Deine Klausur liegt vor dem 18.01. Zieh die Theorie-Punkte dieser Phase in die Ferien vor.';
+      const range = ph.end ? dd(start) + ' – ' + dd(endD) : (exam ? (early ? 'bis ' + dd(exam) + ' (Klausur)' : dd(start) + ' – ' + dd(exam) + ' (Klausur)') : 'ab ' + dd(start));
+      return { num:ph.num, title:ph.title, range, hoursLabel:'Aufwand ≈ ' + n1(effort) + ' h · verfügbar ≈ ' + n1(budget) + ' h', tight: effort > budget,
+        isCurrent: now >= start && now <= endD, doneCount:dn, total:ph.tasks.length, pctW: Math.round(dn / ph.tasks.length * 100) + '%', hasNote: !!note, note, tasks };
+    });
+
+    const nextTasks = openList.slice(0, 4).map(({ t, num }) => ({ text:t.text, num, checked:false, toggle:() => this.toggleDone(t.id) }));
+    const counts = s.counts || {}, fl = s.flags || {};
+    const counters = [['fa','Funktionale Anforderungen',8],['nfa','Nicht-funktionale Anforderungen',8],['stat','Statische Produktmodelle',1],['dyn','Dynamische Produktmodelle',2]].map(([k, label, min]) => {
+      const v = counts[k] || 0;
+      return { label, value:v, min, color: v >= min ? 'var(--color-accent)' : 'var(--color-text)', pctW: Math.min(100, Math.round(v / min * 100)) + '%', inc:() => this.bump(k, 1), dec:() => this.bump(k, -1) };
+    });
+    const flags = [['daten','Stamm- und Bewegungsdaten','muss'],['custom','Customizing-Daten','kann'],['docker','Docker-Projekt','Bonus']].map(([k, label, req]) => ({
+      label, req, checked: !!fl[k], tagClass: req === 'muss' ? 'tag tag-accent' : 'tag tag-neutral',
+      toggle:() => this.setState(st => ({ flags: { ...(st.flags || {}), [k]: !(st.flags || {})[k] } })) }));
+
+    const qf = s.qf || 'alle', key = qf + '|' + shuffle;
+    if (this._qkey !== key || !this._qorder) {
+      const ids = D.quiz.map((q, i) => i).filter(i => qf === 'alle' || D.quiz[i].cat === qf);
+      if (shuffle) for (let i = ids.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [ids[i], ids[j]] = [ids[j], ids[i]]; }
+      this._qorder = ids.length ? ids : [0]; this._qkey = key;
+    }
+    const order = this._qorder, qpos = Math.min(s.qpos || 0, order.length - 1), qi = order[qpos], item = D.quiz[qi];
+    const answered = s.qpick != null, ok = s.qpick === 0;
+    const PERMS = [[0,1,2,3],[1,0,3,2],[2,3,0,1],[3,1,0,2],[1,2,3,0],[2,0,1,3]];
+    const qOpts = PERMS[qi % PERMS.length].map(oi => {
+      const correct = oi === 0, picked = s.qpick === oi;
+      return { label:item.opts[oi], cls: answered && correct ? 'btn btn-primary' : 'btn btn-secondary', deco: answered && picked && !correct ? 'line-through' : 'none', op: answered && !correct && !picked ? 0.5 : 1, pick:() => this.pick(item, oi) };
+    });
+    const qs = s.qstats || {}, stats = Object.values(qs);
+    const catLabel = {}; D.cats.forEach(c => { catLabel[c.k] = c.l; });
+    const chips = D.cats.map(c => ({ label:c.l, count: c.k === 'alle' ? D.quiz.length : D.quiz.filter(q => q.cat === c.k).length, cls: qf === c.k ? 'btn btn-primary' : 'btn btn-secondary',
+      pick:() => { this._qkey = null; this.setState({ qf:c.k, qpos:0, qpick:null }); } }));
+
+    const exSel = D.exercises.find(e => e.id === s.exSel) || D.exercises[0];
+    const exDone = s.exDone || {}, exChecks = s.exChecks || {};
+    const exList = D.exercises.map(e => ({ num:e.num, title:e.title, type:e.type, done: !!exDone[e.id], cls: e.id === exSel.id ? 'btn btn-primary' : 'btn btn-secondary',
+      select:() => this.setState({ exSel:e.id, exHint:false, exSol:false }) }));
+    const ex = {
+      num:exSel.num, title:exSel.title, type:exSel.type, paras: exSel.paras.map(t => ({ t })),
+      hasGiven: !!exSel.given, givenLabel: exSel.givenLabel || '', given: exSel.given ? this.el(exSel.given) : null,
+      hints: exSel.hints.map(t => ({ t })), showHint: !!s.exHint, hintLabel: s.exHint ? 'Tipps ausblenden' : 'Tipps anzeigen', toggleHint:() => this.setState(st => ({ exHint: !st.exHint })),
+      showSol: !!s.exSol, solLabel: s.exSol ? 'Lösung verbergen' : 'Musterlösung aufdecken', toggleSol:() => this.setState(st => ({ exSol: !st.exSol })),
+      sol: this.el(exSel.sol), hasSolNote: !!exSel.solNote, solNote: exSel.solNote || '',
+      checks: exSel.checks.map((c, i) => { const k = exSel.id + ':' + i; return { label:c, checked: !!exChecks[k], toggle:() => this.setState(st => ({ exChecks: { ...(st.exChecks || {}), [k]: !(st.exChecks || {})[k] } })) }; }),
+      doneCls: exDone[exSel.id] ? 'btn btn-primary' : 'btn btn-secondary', doneLabel: exDone[exSel.id] ? 'Erledigt' : 'Als erledigt markieren',
+      toggleDone:() => this.setState(st => ({ exDone: { ...(st.exDone || {}), [exSel.id]: !(st.exDone || {})[exSel.id] } }))
+    };
+
+    const abgabe = new Date(2027, 0, 17, 22, 0), ad = until(abgabe);
+    const pct = totalN ? Math.round(doneN / totalN * 100) : 0;
+    const tab = s.tab || 'plan';
+    return {
+      isPlan: tab === 'plan', isQuiz: tab === 'quiz', isEx: tab === 'ex',
+      toPlan:() => this.setState({ tab:'plan' }), toQuiz:() => this.setState({ tab:'quiz' }), toEx:() => this.setState({ tab:'ex' }),
+      abgabeDays: now > abgabe ? 'vorbei' : (ad === 1 ? '1 Tag' : ad + ' Tage'),
+      examValue: exam ? (until(exam) === 1 ? '1 Tag' : until(exam) + ' Tage') : 'Datum offen',
+      examInput: s.exam || '', setExam: e => this.setState({ exam: e.target.value }),
+      examHint: exam ? exam.toLocaleDateString('de-DE', { weekday:'short', day:'2-digit', month:'2-digit', year:'numeric' }) : 'Mitte Jan. bis Anfang Feb.',
+      pct, pctW: pct + '%', doneN, totalN,
+      phases, nextTasks, hasNext: nextTasks.length > 0, allDone: nextTasks.length === 0, counters, flags,
+      chips, qPos: qpos + 1, qCount: order.length,
+      qRight: stats.reduce((a, x) => a + (x.r || 0), 0), qWrong: stats.reduce((a, x) => a + (x.w || 0), 0),
+      qMastered: D.quiz.filter(q => qs[q.id] && qs[q.id].last).length, qTotal: D.quiz.length,
+      qGlyph: this.el(item.svg), qCat: catLabel[item.cat], qQuestion: item.q, qOpts,
+      qAnswered: answered, qVerdict: ok ? 'Richtig.' : 'Nicht ganz. Richtig ist: ' + item.opts[0], qVerdictColor: ok ? 'var(--color-accent-300)' : 'var(--color-text)',
+      qExplain: item.ex, qRef: item.ref,
+      qNext:() => { const last = qpos >= order.length - 1; if (last) this._qkey = null; this.setState({ qpos: last ? 0 : qpos + 1, qpick:null }); },
+      qReset:() => this.setState({ qstats:{}, qpick:null }),
+      exList, ex
+    };
+  }
+}
+</script>
+</body>
+</html>

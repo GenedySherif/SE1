@@ -1,0 +1,40 @@
+{
+  "v": 1,
+  "mode": "omelette",
+  "root": "project/",
+  "title": "Klausurvorbereitung UML-Diagramme",
+  "entry": "Lernplan SE1 v2.dc.html",
+  "pages": [
+    {
+      "path": "Lernplan SE1 v2.dc.html",
+      "title": "Lernplan SE1 v2",
+      "kind": "page"
+    },
+    {
+      "path": "Lernplan SE1.dc.html",
+      "title": "Lernplan SE1",
+      "kind": "page"
+    }
+  ],
+  "migratorVersion": "artifact-migrator (claude-design-backend 1e4e97bf9cb8)",
+  "createdAt": "2026-11-20T12:39:38.338Z",
+  "source": {
+    "v": 1,
+    "app": "claude-design",
+    "url": "https://claude.ai/design/p/96d7b0dc-caab-469f-8517-58be738ade38",
+    "projectId": "96d7b0dc-caab-469f-8517-58be738ade38",
+    "exportedAt": "2026-11-20T12:39:38.338Z"
+  },
+  "report": {
+    "itemsVersion": 2,
+    "pages": {
+      "total": 2,
+      "ok": 2,
+      "partial": 0,
+      "notMigrated": 0
+    },
+    "items": [],
+    "truncated": 0,
+    "truncatedLeftOut": 0
+  }
+}

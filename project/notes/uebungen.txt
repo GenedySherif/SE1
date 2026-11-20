@@ -1,0 +1,525 @@
+
+
+######## BLATT 1 (3 S.)
+1
+Übungsblatt 1 Software Engineering I
+WS 2026/27
+Prof. Dr. Torsten Zimmer
+Hochschule München
+Raum R2.035
+Sprechstunde: mittwochs, 10:45 Uhr – 11:40 Uhr
+zimmer@hm.edu
+Hinweis 1:
+Dieses Übungsblatt soll am Mittwoch, dem 14.10.2026, in den Praktika bearbeitet werden
+Hinweis 2:
+Vergeben Sie generell sowohl Bezeichnungen/Namen (Tags) für Ihre Images als auch für
+Ihre Container, so dass Sie diese besser identifizieren und ansprechen können
+Hinweis 3:
+Installieren Sie Docker Desktop über Download Docker für Windows oder Docker für Mac
+https://docs.docker.com/desktop/install/windows-install/
+https://docs.docker.com/desktop/install/mac-install/.
+Hinweis 4:
+Zunächst führen wir die Übungen in der Shell durch. Später können Sie dann Docker
+Desktop verwenden. Sie können dann manche Eingaben über Docker Desktop ersetzen,
+jedoch ist es für das Verständnis besser, zunächst die Docker Befehle über die Docker
+CLI einzugeben
+Hinweis 5:
+Installieren Sie bei Bedarf über Download das Werkzeug zur Versionsverwaltung Git:
+https://git-scm.com/downloads
+Wichtige Docker Befehle:
+siehe auch: https://docs.docker.com/engine/reference/commandline/docker/
+docker pull [Docker Hub Repo] 	Image herunterladen
+docker push [Docker Hub Repo] 	Eigenes Image hochladen
+docker build –tag [Repo]:[Vers] . 	Neues Image laut Dockerfile erzeugen
+docker run --name [C-ID] [I-ID] 	Neuen Container mit Name zu einem Image
+erzeugen und starten
+docker images 	Auflisten der Images des lokalen Repository
+docker ps –a 	Auflisten der aktiven Docker Container
+docker logs [C-ID] 	Log-Ausgaben eines Containers anzeigen
+docker inspect [C-ID] 	Konfiguration und Status eines Containers
+anzeigen
+docker start –a [C-ID] 	Vorhandener Container wird gestartet
+docker stop [C-ID] 	Vorhandener Container wird gestoppt
+docker rm –force [C-ID] 	Docker Container wird gelöscht
+docker rmi [I-ID] 	Docker Image wird gelöscht
+
+-- 1 of 3 --
+
+2
+Übung 1 (Docker Beispiel Heise Newsticker)
+Vorbereitung
+In dieser Aufgabe sollen die Heise Headlines (vgl. https://www.heise.de/newsticker ) in der
+Shell ausgegeben werden. Das verwendete Dockerfile ist entnommen aus:
+https://github.com/docbuc/prog
+1. Erzeugen Sie an geeigneter Stelle ein Arbeitsverzeichnis ohne Verwendung von
+Leerzeichen für die Folder, z.B.
+C:\Users\Admin\HM\WiSe2627\SEI\Praktika\Uebung-1 und starten Sie Ihre Shell (in
+Windows: PowerShell als Administrator ausführen)
+2. Wechseln Sie in Ihr Arbeitsverzeichnis z.B. …\Praktika\Uebung-1
+3. Falls Sie Git nicht installiert haben, kopieren Sie die ZIP-Datei aus der oben
+genannten GitHub-Adresse über Download ZIP und entpacken Sie die ZIP-Datei in
+Ihrem Arbeitsverzeichnis. Mit Git können Sie auch das Projekt Importieren von
+https://github.com/docbuc/prog über:
+git clone https://github.com/docbuc/prog.git
+4. Wechseln Sie im Arbeitsverzeichnis zu Ihrer gewünschten Programmiersprache
+(hier nodejs) und betrachten Sie den Inhalt des Dockerfiles über den Dateimanager
+oder in der PowerShell (wichtig: hier gibt der Punkt am Ende des Befehls den Pfad
+Aktuelles Verzeichnis an) z.B. über:
+Get-Content -Path .\Dockerfile
+Sie werden in den nächsten Übungen verschiedene Einträge zu Dockerfiles kennen
+lernen. Machen Sie sich dabei mit den Bedeutungen nach und nach vertraut. Einige
+Einträge sind für das Docker Image, andere für den Docker Container relevant.
+Erzeugung eines Docker Images
+5. Prüfen Sie, ob sich im aktuellen Verzeichnis nodejs das gewünschte Dockerfile
+befindet und führen Sie folgenden Befehl zur Erzeugung des Images (hier mit
+Version node) über PowerShell aus (wichtig: auch hier gibt der Punkt am Ende des
+Befehls den Pfad Aktuelles Verzeichnis an):
+docker build -t docbuc/printheadlines:node .
+Lassen Sie sich das Ergebnis im Docker Repository sowohl in der PowerShell als
+auch in Docker Desktop anzeigen über:
+docker images
+
+-- 2 of 3 --
+
+3
+Erzeugung, Ausführung und Löschen eines Containers zu einem Docker Image
+Es können beliebig viele Container zu einem Image erzeugt werden. Ein bestimmter
+Container kann auch gestoppt und wieder gestartet werden.
+6. Führen Sie folgenden Befehl zur Erzeugung eines Containers aus:
+docker run --name hlnode docbuc/printheadlines:node
+Über den Parameter --name wird hier eine Bezeichnung (hier: hlnode) für den
+Container vergeben
+7. Lassen Sie sich das Ergebnis in der PowerShell und in Docker Desktop anzeigen:
+docker ps -a
+8. Stoppen Sie den Container über:
+docker stop hlnode
+und lassen Sie sich den Inhalt und die Eigenschaften des Docker Containers in der
+PowerShell anzeigen über:
+docker inspect hlnode
+Um den Container wieder zu starten und die Ausgabe aktualisiert anzuzeigen,
+geben Sie ein:
+docker start hlnode -a
+Für jede weitere aktualisierte Ausgabe, geben Sie wiederum ein:
+docker start hlnode -a
+9. Löschen Sie schließlich den Container über:
+docker rm --force hlnode
+Lassen Sie sich das Ergebnis in der PowerShell und in Docker Desktop anzeigen:
+docker ps -a
+Optional:
+Sie können die Übung analog für andere Programmiersprachen aus der ZIP-Datei bzw. im
+GitHub-Verzeichnis durchführen.
+
+-- 3 of 3 --
+
+
+
+######## BLATT 2 (7 S.)
+1
+Übungsblatt 2 Software Engineering I
+WS 2026/27
+Prof. Dr. Torsten Zimmer
+Hochschule München
+Raum R2.035
+Sprechstunde: mittwochs, 10:45 Uhr – 11:40 Uhr
+zimmer@hm.edu
+Hinweis 1:
+Dieses Übungsblatt soll am Mittwoch, dem 21.10.2026, in den Praktika bearbeitet werden
+Hinweis 2:
+Achten Sie darauf, dass vor dem Zugriff über Maven oder Docker Ihre Dateien wie Dockerfile,
+*.jar, usw. immer im passenden Verzeichnis vorhanden sind.
+Übung 2 (Spring Boot mit Docker)
+Spring Boot (https://spring.io/projects/spring-boot) ist ein Java-basiertes Open Source Framework von
+Spring 	(https://spring.io), 	das 	es 	durch 	Bereitstellung 	von 	vordefinierten 	Komponenten 	und
+Bibliotheken ermöglicht, die Entwicklung einer Anwendung zu vereinfachen.
+Es können beispielsweise Komponenten wie Spring Cloud, Spring Security oder Spring Web
+Services in ein Spring Boot-Projekt integriert werden. Ein Werkzeug dazu ist der Spring Initializr
+(https://start.spring.io/), über den eine Auswahl der benötigten Komponenten bereit gestellt wird.
+Zentral in einem Spring Boot-Projekt ist die von Spring Boot generierte Datei pom.xml, in der z.B.
+benötigte Bibliotheken über so genannte Dependencies angegeben und über ein Maven Build in das
+Projekt geladen werden können.
+Wir verwenden in dieser Übung das bereits initialisierte Spring Boot-Projekt gs-maven, das mit
+Java-Source-Dateien, mit pom.xml und mit einem Dockerfile initialisiert ist. Sie können dann auch
+eigene 	Spring 	Boot-Projekte 	mit 	dem 	Spring 	Initializr 	sowie 	mit 	benötigten 	Komponenten
+initialisieren und ausbauen.
+a) Aufgabenstellung und Konfiguration
+In 	dieser 	Übung 	soll 	zunächst 	ein 	Java-Projekt 	als 	jar-File 	unter 	Verwendung 	des 	Build
+Management Werkzeugs Maven bzw. Gradle erzeugt werden. Dieses Java-Projekt führt ein
+Programm zur Ausgabe eines Textes sowie zur Anzeige der aktuellen lokalen Zeit aus:
+In 	diesem 	Übungsblatt 	wird 	Maven 	verwendet. 	Alternativ 	können 	Sie auch 	das 	Werkzeug
+Gradle verwenden. Gradle ist ein auf Java basierendes Build-Management-Automatisierungs-Tool,
+vergleichbar mit Apache Maven: https://gradle.org
+Im zweiten Teil soll dann zu diesem Java-Projekt über ein Dockerfile ein Docker Image generiert
+werden, das dann als Docker Container ausgeführt werden kann.
+Dieses Beispiel baut auf dem Beispiel aus dem ersten Teil auf und ist entnommen aus:
+https://spring.io/guides/gs/spring-boot-docker/ 	(Abschnitt: Containerize it)
+
+-- 1 of 7 --
+
+2
+Verwendete Source Codes und Befehle sind unter diesen Links ebenfalls vorhanden.
+Vorbereitende Aufgaben:
+1. 	Installieren Sie entweder das Build Management Werkzeug Apache Maven:
+https://maven.apache.org/download.cgi (nur die Binary-Dateien sind notwendig,
+apache-maven-3.10.0-bin.zip or apache-maven-3.10.0-bin.tar.gz)
+oder installieren Sie das Gradle Build Tool unter: https://gradle.org/install/
+Beachten Sie, dass Sie nach der Installation von Maven oder von Gradle das Verzeichnis bin, das
+die Maven- bzw. Gradle-Befehle enthält, in Ihrer Umgebungsvariable Path setzen müssen, z.B.
+unter Windows:
+C:\Users\Admin\HM\DevOps\Maven\apache-maven-3.10.0\bin
+2. 	Legen Sie zunächst ein Projektverzeichnis an einer Stelle Ihrer Wahl an, z.B. das Verzeichnis
+C:\Users\Admin\HM\WiSe2627\SEI\Praktika\Uebung-2 und importieren Sie dorthin das Spring
+Boot-Projekt gs-maven über:
+git clone https://github.com/spring-guides/gs-maven.git
+bzw. über Code - Download ZIP - gs-maven.zip unter dem Link:
+https://github.com/spring-guides/gs-maven.git
+b) Java Source Code als jar-File verpacken und ausführen
+Zunächst werden zwei einfache Java Source Code Dateien erstellt und einem Java-Projekt
+hinzugefügt. Danach wird der Java Source Code mit der Ausgabe der lokalen Zeit ergänzt und ein
+neues Java-Projekt wird generiert.
+1. 	Starten Sie Ihre Shell (in Windows: PowerShell als Administrator ausführen)
+2. 	Nach 	dem 	Entpacken 	in 	Ihrem 	Verzeichnis, 	z.B. 	C:\Users\Admin\HM\WiSe2627\-
+SEI\Praktika\Uebung-2, sollten folgende Unterordner angelegt worden sein, die zwei Java
+Source Code-Dateien (Greeter.java und HelloWorld.java) enthalten:
+…\gs-maven\initial\src\main\java\hello
+Über folgenden Befehl können Sie in der PowerShell Verzeichnisse selbst anlegen, z.B.:
+mkdir -p src\main\java\hello
+bzw. in Linux/Mac über:
+mkdir -p src/main/java/hello
+
+-- 2 of 7 --
+
+3
+3. 	Betrachten Sie in Ihrem Verzeichnis …\src\main\java\hello die beiden Java Source Code
+Dateien HelloWorld.java und Greeter.java:
+package hello;
+public class HelloWorld {
+public static void main(String[] args) {
+Greeter greeter = new Greeter();
+System.out.println(greeter.sayHello());
+}
+}
+package hello;
+public class Greeter {
+public String sayHello() {
+return "Hello world!";
+}
+}
+
+-- 3 of 7 --
+
+4
+4. 	Betrachten Sie weiterhin die Konfigurationsdatei pom.xml für Maven, die im gleichen
+Verzeichnis wie das Verzeichnis src liegen muss, z.B. in C:\Users\Admin\HM\WiSe2627\-
+SEI\Praktika\Uebung-2\gs-maven\initial:
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<modelVersion>4.0.0</modelVersion>
+<groupId>org.springframework</groupId>
+<artifactId>gs-maven</artifactId>
+<packaging>jar</packaging>
+<version>0.1.0</version>
+<properties>
+<maven.compiler.source>1.8</maven.compiler.source>
+<maven.compiler.target>1.8</maven.compiler.target>
+</properties>
+<build>
+<plugins>
+<plugin>
+<groupId>org.apache.maven.plugins</groupId>
+<artifactId>maven-shade-plugin</artifactId>
+<version>3.2.4</version>
+<executions>
+<execution>
+<phase>package</phase>
+<goals>
+<goal>shade</goal>
+</goals>
+<configuration>
+<transformers>
+<transformer
+implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+<mainClass>hello.HelloWorld</mainClass>
+</transformer>
+</transformers>
+</configuration>
+</execution>
+</executions>
+</plugin>
+</plugins>
+</build>
+</project>
+5. Führen Sie den Maven-Befehl compile zur pom.xml Datei in diesem Verzeichnis, z.B. in
+C:\Users\Admin\HM\WiSe2627\SEI\Praktika\Uebung-2\gs-maven\initial aus:
+mvn compile
+.
+Es wurde ein Verzeichnis target\classes generiert, in dem nun die beiden kompilierten Java
+class-Dateien vorhanden sein sollten.
+
+-- 4 of 7 --
+
+5
+6. Führen Sie den Maven-Befehl package zur pom.xml-Datei im gleichen Verzeichnis z.B. in
+C:\Users\Admin\HM\WiSe2627\SEI\Praktika\Uebung-2\gs-maven\initial, aus:
+mvn package
+Aufgrund des Wertes des Tags <packaging> in pom.xml wird nun eine jar-Datei
+gs-maven-0.1.0.jar generiert, die im neuen Verzeichnis target in C:\Users\Admin\-
+HM\WiSe2627\SEI\Praktika\Uebung-2\gs-maven\initial\target vorhanden sein sollte. Alle
+Informationen aus der pom.xml-Datei wurden generiert und der jar-Datei zugeordnet.
+7. 	Zur Ausgabe des Ergebnisses führen Sie folgenden Befehl zur Ausführung der jar-Datei im
+entsprechenden Verzeichnis, z.B. in C:\Users\Admin\HM\WiSe2627\SEI\Praktika\Uebung-
+2\gs-maven\initial in Ihrer Shell aus (alternativ können Sie auch direkt im Verzeichnis target
+die jar-Datei ausführen):
+java -jar target/gs-maven-0.1.0.jar
+8. 	Ändern Sie die Java Source Code Datei durch Ergänzung um die Verwendung einer lokalen
+Zeitangabe. Es sollen dazu die Joda Time Libraries importiert werden:
+package hello;
+import org.joda.time.LocalTime;
+public class HelloWorld {
+public static void main(String[] args) {
+LocalTime currentTime = new LocalTime();
+System.out.println("The current local time is: " + currentTime);
+Greeter greeter = new Greeter();
+System.out.println(greeter.sayHello());
+}
+}
+9. Ergänzen 	Sie 	die 	Datei 	pom.xml 	um 	die 	Angabe 	einer 	Dependency 	innerhalb 	des
+<project> Elements, analog z.B. nach properties. Dadurch wird die Aufnahme der Joda
+Time Libraries bei Ausführung von mvn compile berücksichtigt:
+<dependencies>
+<dependency>
+<groupId>joda-time</groupId>
+<artifactId>joda-time</artifactId>
+<version>2.9.2</version>
+</dependency>
+</dependencies>
+10. Führen 	Sie wiederum 	den 	Maven 	Befehl 	compile 	zur 	Datei 	pom.xml 	im 	gleichen
+Verzeichnis, z.B. C:\Users\Admin\HM\WiSe2627\SEI\Praktika\Uebung-2\gs-maven\initial\,
+aus:
+mvn compile
+
+-- 5 of 7 --
+
+6
+11. Führen Sie danach den Maven Befehl package zur Datei pom.xml im gleichen Verzeichnis
+aus:
+mvn package
+12. Zur Ausgabe des Ergebnisses führen Sie folgenden Befehl zur Ausführung der jar-Datei im
+entsprechenden Verzeichnis in Ihrer Shell aus:
+java -jar target/gs-maven-0.1.0.jar
+Es sollte jetzt zusätzlich noch die Ausgabe der lokalen Zeit erfolgen.
+Sie können nun individuelle Änderungen des Java Source Code durchführen und entsprechend
+nachgenerieren.
+c) Containerize it
+Aufgabe:
+In dieser Übung soll nun das Java-Programm aus b) über die Definition eines Dockerfiles einem
+Docker Image zugeordnet werden. Das Beispiel ist mit einigen Änderungen entnommen aus:
+https://spring.io/guides/gs/spring-boot-docker/
+1. Erzeugen Sie in Ihrem Arbeitsverzeichnis, in dem sich auch Ihre pom.xml Datei befindet
+folgendes Dockerfile (um den Dateityp zu erhalten, können Sie auch ein Dockerfile aus
+Übung1 kopieren und dann den Inhalt ersetzen):
+FROM openjdk:21-rc-jdk
+ARG JAR_FILE=target/gs-maven-0.1.0.jar
+COPY ${JAR_FILE} app.jar
+ENTRYPOINT ["java","-jar","/app.jar"]
+Das Docker Build verwendet hier ein Java Basis-Image openjdk mit Version 21 (von mir für
+dieses Übungsblatt gewählt) und greift auf das Java Projekt gs-maven-0.1.0.jar, das sich jetzt im
+Verzeichnis target befindet, zu.
+Über 	COPY 	wird 	diese 	jar-Datei 	in 	die 	Datei 	app.jar 	kopiert, 	welche 	dann 	über 	den
+ENTRYPOINT gefunden und mit dem Befehl java –jar ausgeführt wird.
+Hinweis: Die im oben genannten Link vorhandene jar-Datei enthält den ARG-Eintrag:
+ARG JAR_FILE=target/*.jar
+Dieser wurde von mir geändert, da sich nach der Maven Generierung mehrere jar-Dateien im
+Verzeichnis befinden können und daher die passende jar-Datei nicht mehr gefunden werden
+kann.
+
+-- 6 of 7 --
+
+7
+Prüfen Sie, ob sich im aktuellen Verzeichnis das gewünschte Dockerfile befindet und führen Sie
+folgenden Befehl zur Erzeugung des Images mit der Bezeichnung springio/gs-spring-
+boot-docker aus:
+docker build -t springio/gs-spring-boot-docker .
+Lassen Sie sich das Ergebnis im Docker Repository sowohl in der PowerShell als auch in
+Docker Desktop anzeigen über:
+docker images
+Hinweis: Das Tag latest wurde automatisch hinzugefügt.
+2. 	Führen Sie folgenden Befehl zur Erzeugung und Ausführung eines Containers aus:
+docker run --name spring springio/gs-spring-boot-docker:latest
+Über den Parameter --name wird wiederum eine Bezeichnung (hier: spring) für den
+Container vergeben. Mit
+docker start spring -a
+können Sie nach einem stop diesen Container erneut ausführen bzw. mit
+docker run springio/gs-spring-boot-docker:latest
+einen neuen Container erzeugen und ausführen
+3. 	Lassen Sie sich Ihre Container sowohl in der PowerShell als auch in Docker Desktop
+anzeigen über:
+docker ps -a
+4. 	Löschen Sie schließlich Ihren Container über:
+docker rm --force spring
+und lassen Sie sich das Ergebnis wiederum sowohl in der PowerShell als auch in Docker
+Desktop anzeigen über:
+docker ps -a
+
+-- 7 of 7 --
+
+
+
+######## BLATT 3 (4 S.)
+1
+Übungsblatt 3 Software Engineering I
+WS 2026/27
+Prof. Dr. Torsten Zimmer
+Hochschule München
+Raum R2.035
+Sprechstunde: mittwochs, 10:45 Uhr – 11:40 Uhr
+zimmer@hm.edu
+Hinweis 1:
+Dieses Übungsblatt soll am Mittwoch, dem 28.10.2026, in den Praktika bearbeitet werden.
+.
+Hinweis 2:
+Achten Sie darauf, dass sich bei Ausführung von docker 	compose die passende docker-
+compose.yml-Datei in Ihrem aktuellen bzw. im genannten Verzeichnis befindet.
+Übung 3 (Docker Compose)
+Aufgabenstellung
+Docker Container sind zunächst einmal stateless (zustandslos), da ihre Daten nach dem Löschen des
+Containers wieder verloren gehen. Um dies zu verhindern werden so genannte Volumes bzw. Bind
+Mounts verwendet, die Daten auf einem Speicherträger auch nach dem Löschen eines Containers
+persistieren können. Dadurch kann ein Docker Container auch die Eigenschaft stateful erhalten.
+In dieser Übung soll ein Docker Container einen Datenbank Container über eine graphische
+Oberfläche administrieren.
+Die beiden Container kommunizieren dabei miteinander über ein Netzwerk.
+Es 	wird 	ein 	Docker 	Image 	für 	eine 	MySQL-Datenbank 	sowie 	ein 	Docker 	Image 	für 	die
+Administration dieser Datenbank verwendet.
+Das Beispiel ist angelehnt an und leicht modifiziert:
+(ÖgK2020) Öggi, B., Kofler, M.: Docker – Das Praxisbuch für Entwickler und DevOps-Teams.
+Siehe auch https://github.com/docbuc/
+1. Erzeugen 	Sie 	an 	geeigneter 	Stelle 	ein 	Arbeitsverzeichnis, 	z.B. 	C:\Users\Admin\HM-
+\WiSe2627\SEI\Praktika\Uebung-3, und wechseln Sie in dieses Arbeitsverzeichnis.
+2. Die Eigenschaften sowie die Abhängigkeit der beiden Docker Container zueinander werden
+über die Docker Compose Datei docker-compose.yml definiert. Legen Sie in Ihrem
+Arbeitsverzeichnis diese Datei docker-compose.yml mit folgendem Inhalt an:
+
+-- 1 of 4 --
+
+2
+# Datei: docker-compose.yml
+# MySQL mit der Datenbank hotel einrichten
+version: '3.1'
+services:
+mysql:
+image: mysql
+restart: always
+environment:
+MYSQL_ROOT_PASSWORD: geheim
+MYSQL_DATABASE: hotel
+volumes:
+- ./db:/var/lib/mysql
+- ./init:/docker-entrypoint-initdb.d
+ports:
+- "13306:3306"
+phpAdmin:
+image: phpmyadmin
+environment:
+PMA_HOST: mysql
+ports:
+- "8080:80"
+3. 	Betrachten Sie den Inhalt dieser Datei. Es wurde den beiden Services mysql und phpAdmin
+jeweils ein Docker Image zugeordnet. Diese Images werden aus Docker Hub importiert.
+Über die Umgebungsvariable PMA_HOST findet der zweite Service den ersten Service
+mysql. Weitere Umgebungsvariablen werden für das Passwort und für den Namen der
+Datenbank angegeben. Das Netzwerk (siehe Abschnitt 4), über das die Docker Container
+über Ports kommunizieren können, wird automatisch angelegt.
+Weiterhin werden zwei Volume-Mappings für den Container angelegt, so dass Content
+sowohl aus dem Datenbank Container gelesen und abgespeichert werden kann, als auch
+Content in den Datenbank Container importiert werden kann:
+- 	./db:/var/lib/mysql
+- 	./init:/docker-entrypoint-initdb.d
+Ein MariaDB Container speichert alle Datenbankdateien in /var/lib/mysql relativ zum
+Verzeichnisbaum 	des 	Docker 	Containers 	(ÖgK2020). 	Zur 	Synchronisierung 	und 	zur
+Speicherung dieser Dateien wird über dieses Mapping ein Volume-Verzeichnis ./db in
+Ihrem Arbeitsverzeichnis bei der allerersten Ausführung von Docker Compose angelegt. Bei
+erneuter Ausführung werden dann die Inhalte aus ./db in den Container nach Verzeichnis
+/var/lib/mysql exportiert (natürlich nur falls dort etwas vorhanden ist).
+Das Initialisierungs-Skript wertet das Verzeichnis /docker-entrypoint-initdb.d aus.
+Alle dort befindlichen Skripte werden ausgeführt; alle dort befindlichen SQL-Dateien
+werden in die durch MYSQL_DATABASE bezeichnete Datenbank importiert (ÖgK2020).
+Wenn sich also vor Erzeugung des Containers in Ihrem Volume-Verzeichnis ./init z.B.
+eine SQL-Datei befindet, so wird diese in das Container Volume bei Erzeugung des
+Containers importiert. Dies setzt jedoch voraus, dass das Volume-Verzeichnis ./db leer ist.
+
+-- 2 of 4 --
+
+3
+4. 	Der Befehl 	docker 	compose 	up erstellt automatisch ein isoliertes Standard-Bridge-
+Netzwerk für die Anwendung sowie Volumes zur Persistierung von Daten und erzeugt bzw.
+startet die Container.
+Über das Netzwerk (Schlüsselwort networks:) können alle definierten Dienste über ihre
+Dienstnamen 	als 	Hostnamen 	kommunizieren. 	Wenn 	kein 	Netzwerk 	explizit 	in 	der
+compose.yml deklariert wurde, erzeugt docker compose ein Projekt-Standardnetzwerk.
+Starten Sie Ihre Shell (in Windows: PowerShell als Administrator ausführen) und geben Sie
+in Ihrem Arbeitsverzeichnis, z.B. …\Uebung-3, folgenden Befehl zur Ausführung von
+Docker Compose ein.
+Erlauben Sie bei einer Abfrage File-Sharing zur Anlage der beiden Volumes.
+docker compose up
+Prüfen Sie in der Shell oder über Docker Desktop, ob zwei Images geladen (pull) sowie zwei
+Container erzeugt und auch gestartet wurden.
+docker images sowie über docker ps -a
+Betrachten Sie in Docker Desktop die beiden Port Mappings 8080:80 und 13306:3306.
+Lassen Sie sich in der Shell die aktiven Netzwerke ausgeben über:
+docker network ls
+Prüfen Sie weiterhin, ob in Ihrem Arbeitsverzeichnis ein Volume-Verzeichnis
+./init sowie ein Volume-Verzeichnis ./db angelegt wurden.
+5. 	Rufen Sie bei Erfolg von Schritt 5 in Ihrem Browser das Port Mapping
+localhost:8080
+auf und melden Sie sich erst, wenn beide Container laufen, mit Benutzer root und
+Passwort geheim an. Sie können jetzt in der Datenbank hotel navigieren und z.B.
+eine eigene Tabelle buchungen anlegen. Geben Sie dazu z.B. die Tabellenfelder
+(Spalten) Nummer, Kunde und Zimmer jeweils mit Datentyp int an und speichern
+Sie diese Tabelle. Sie können auch einzelne Datensätze einfügen. Prüfen Sie die sofortige
+Persistierung im Verzeichnis ./db in Ihrem Arbeitsverzeichnis.
+Hinweis: Ein Datenbankschema mit Content wurde bisher noch nicht über
+das Volume-Verzeichnis ./init geladen (dies könnten Sie durchführen, wenn Sie
+in dieses Verzeichnis einen SQL-Dump hinterlegen, z.B. hotel.sql).
+6. 	Führen Sie folgenden Befehl zum Stoppen der Container in Ihrem Arbeitsverzeichnis, z.B.
+…\Uebung-3, aus (über eine (evt. zweite) Shell oder über Docker Desktop):
+docker compose stop
+und vergleichen Sie die Ausgabe zur Adresse localhost:8080 in Ihrem Browser
+
+-- 3 of 4 --
+
+4
+7. 	Führen Sie folgenden Befehl über Docker Desktop oder über Ihre Shell zum erneuten
+Starten der vorhandenen Container in Ihrem Arbeitsverzeichnis, z.B. …\Uebung-3, aus:
+docker compose start
+und vergleichen Sie die Ausgabe zur Adresse localhost:8080 in Ihrem Browser. Im
+Gegensatz zu docker 	compose 	up werden jetzt keine neuen Container, Volumes oder
+Netzwerke erzeugt
+8. 	Führen Sie folgenden Befehl zur Löschung der beiden Container aus:
+docker compose down
+9. 	Sie können jetzt immer die Anwendung neu starten über: docker compose up
+Prüfen Sie, ob Ihre Tabelle buchungen in die Datenbanksicht übernommen wurde. Alle
+Einträge und Eigenschaften sollten nun über die beiden Volumes persistiert sein.
+
+-- 4 of 4 --
+
+
+
+######## BLATT 4 FEHLER: No password given
+
+
+######## BLATT 5 FEHLER: No password given
+
+
+######## BLATT 6 FEHLER: No password given
+
+
+######## BLATT 7 FEHLER: No password given
+
+
+######## BLATT 5lsg FEHLER: No password given
+
+
+######## BLATT 6lsg FEHLER: No password given
