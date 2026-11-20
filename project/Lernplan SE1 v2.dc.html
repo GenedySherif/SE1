@@ -20,21 +20,49 @@
       --shadow-sm:0 0 0 1px #33281f; --shadow-md:0 0 0 1px #46372a, 0 14px 32px rgba(0,0,0,.45); --radius-md:12px; --radius-lg:18px;
       --p1:#8db7d8; --p2:#a6cf8c; --p3:#f2c45a; --p4:#f08c6e; --p5:#cfa6dc; --p6:#74c7b6; --ok:#a6cf8c; --bad:#f08c6e;
       --font-body:"DM Sans", system-ui, sans-serif; --font-heading:"Fraunces", Georgia, serif; --font-heading-weight:600;
+      --dg-cls:#f0a64e; --dg-cls-fill:color-mix(in srgb, #f0a64e 9%, #231b16); --dg-cls-name:#fde9cc; --dg-agg:#f08c6e; --dg-gen:#8db7d8; --dg-mult:#f2c45a; --dg-mult-w:600;
+      --dg-uc:#a6cf8c; --dg-uc-fill:color-mix(in srgb, #a6cf8c 10%, #231b16); --dg-actor:#cfa6dc; --dg-act:#74c7b6; --dg-act-fill:color-mix(in srgb, #74c7b6 10%, #231b16);
+      --dg-st:#cfa6dc; --dg-st-fill:color-mix(in srgb, #cfa6dc 10%, #231b16); --dg-obj:#8db7d8; --dg-obj-fill:color-mix(in srgb, #8db7d8 10%, #231b16);
       --page-bg: radial-gradient(900px 460px at 0% 0%, rgba(240,166,78,.13), transparent 70%), radial-gradient(700px 400px at 100% 0%, rgba(240,140,110,.08), transparent 70%), radial-gradient(900px 500px at 50% 115%, rgba(207,166,220,.06), transparent 70%), var(--color-bg); }
     html[data-theme="pop"] { color-scheme:dark; --color-bg:#1e1b2e; --color-surface:#2b2742; --color-text:#fbf3e6; --color-accent:#ffa977; --color-accent-100:#ffe6d6; --color-accent-200:#ffd2b6; --color-accent-300:#ffc39e; --color-accent-800:#4d2b1c;
       --color-neutral-400:#cdc6e0; --color-neutral-500:#b2aacb; --color-neutral-800:#3b3658; --color-divider:#0c0a16;
       --shadow-sm:0 0 0 2.5px #0c0a16, 5px 5px 0 0 #0c0a16; --shadow-md:0 0 0 2.5px #0c0a16, 7px 7px 0 0 #b9a6ff; --radius-md:12px; --radius-lg:18px;
       --p1:#93bbff; --p2:#80e2ad; --p3:#ffd36e; --p4:#ff94b0; --p5:#c6aaff; --p6:#74e0e6; --ok:#80e2ad; --bad:#ff94b0;
       --font-body:"Bricolage Grotesque", system-ui, sans-serif; --font-heading:"Bricolage Grotesque", system-ui, sans-serif; --font-heading-weight:700;
+      --dg-cls:#c6aaff; --dg-cls-fill:color-mix(in srgb, #c6aaff 18%, #2b2742); --dg-cls-name:#ffffff; --dg-agg:#ff94b0; --dg-gen:#80e2ad; --dg-mult:#ffd36e; --dg-mult-w:700;
+      --dg-uc:#93bbff; --dg-uc-fill:color-mix(in srgb, #93bbff 18%, #2b2742); --dg-actor:#80e2ad; --dg-act:#74e0e6; --dg-act-fill:color-mix(in srgb, #74e0e6 16%, #2b2742);
+      --dg-st:#ff94b0; --dg-st-fill:color-mix(in srgb, #ff94b0 16%, #2b2742); --dg-obj:#93bbff; --dg-obj-fill:color-mix(in srgb, #93bbff 16%, #2b2742);
       --page-bg: radial-gradient(circle at 1px 1px, rgba(251,243,230,.09) 1px, transparent 1.6px) 0 0 / 22px 22px, radial-gradient(800px 420px at 100% 0%, rgba(185,166,255,.12), transparent 70%), radial-gradient(700px 380px at 0% 100%, rgba(255,148,176,.08), transparent 70%), var(--color-bg); }
     html, body { margin:0; background:var(--color-bg); }
     a { color:var(--color-accent); }
     a:hover { color:var(--color-accent-300); }
     input[type="checkbox"] { accent-color:var(--color-accent); }
+    .stp [data-l] { transition:opacity .35s ease; }
+    .stp[data-step="1"] [data-l="2"], .stp[data-step="1"] [data-l="3"], .stp[data-step="2"] [data-l="3"] { opacity:0; }
+    .stp[data-step] [data-l="1"] [data-l] { opacity:1; }
+    .print-only { display:none; }
+    @media (max-width: 640px) {
+      .tabnav { position:fixed !important; top:auto !important; bottom:0; left:0; right:0; margin:0 !important; padding:8px 10px calc(8px + env(safe-area-inset-bottom)) !important; border-top:1px solid var(--color-divider); background:color-mix(in srgb, var(--color-bg) 95%, transparent) !important; z-index:40 !important; }
+      .tabnav button { padding:8px 12px !important; font-size:13px !important; }
+      .dg-scroll { padding:12px !important; }
+      .dg-scroll svg { min-width:540px; }
+      .toast { bottom:84px !important; }
+    }
+    @media print {
+      @page { margin:16mm; }
+      .no-print { display:none !important; }
+      .print-only { display:block !important; }
+      html[data-theme], html, body, .pg-root { background:#fff !important; color:#111 !important; color-scheme:light !important; }
+      .pg-root { --color-text:#111; --color-neutral-400:#333; --color-neutral-500:#555; --color-surface:#fff; --color-bg:#fff; --color-accent:#111; --font-body:Arial, Helvetica, sans-serif;
+        --dg-cls:#222; --dg-cls-fill:#fff; --dg-cls-name:#000; --dg-agg:#222; --dg-gen:#222; --dg-mult:#000; --dg-uc:#222; --dg-uc-fill:#fff; --dg-actor:#000; --dg-act:#222; --dg-act-fill:#fff; --dg-st:#222; --dg-st-fill:#fff; --dg-obj:#222; --dg-obj-fill:#fff; }
+      .pr-ex { break-after:page; font-family:Arial, Helvetica, sans-serif; color:#111; }
+      .pr-ex:last-child { break-after:auto; }
+      .pr-space { height:10cm; border:1px dashed #999; border-radius:6px; margin-top:14px; }
+    }
   </style>
 </helmet>
-<div style="min-height:100vh; background:var(--page-bg); color:var(--color-text); font-family:var(--font-body);">
-  <div style="max-width:1240px; margin:0 auto; padding:40px clamp(16px, 4vw, 56px) 120px; display:flex; flex-direction:column; gap:24px;">
+<div class="pg-root" style="min-height:100vh; background:var(--page-bg); color:var(--color-text); font-family:var(--font-body);">
+  <div class="no-print" style="max-width:1240px; margin:0 auto; padding:40px clamp(16px, 4vw, 56px) 120px; display:flex; flex-direction:column; gap:24px;">
 
     <header style="display:flex; flex-wrap:wrap; gap:24px 40px; align-items:flex-end; justify-content:space-between;">
       <div style="flex:1 1 440px; max-width:740px; display:flex; flex-direction:column; gap:12px;">
@@ -43,7 +71,7 @@
           <span style="color:color-mix(in srgb, var(--color-text) 62%, transparent);">WS 2026/27 · Prof. Dr. Torsten Zimmer</span>
         </div>
         <h1 style="margin:0; font-size:clamp(34px, 5vw, 54px); line-height:1.04; letter-spacing:-0.02em; text-wrap:balance;">Pflichtenheft abgeben, <span style="color:var(--color-accent);">Klausur bestehen.</span></h1>
-        <p style="margin:0; max-width:640px; font-size:15px; line-height:1.6; color:color-mix(in srgb, var(--color-text) 72%, transparent); text-wrap:pretty;">Lernplan, Notationstrainer, 22 Übungen mit Timer, Karteikarten, Sortierspiele und ein Function-Point-Rechner. Dein Fortschritt bleibt in diesem Browser gespeichert.</p>
+        <p style="margin:0; max-width:640px; font-size:15px; line-height:1.6; color:color-mix(in srgb, var(--color-text) 72%, transparent); text-wrap:pretty;">Lernplan, Notationstrainer, 31 Übungen mit Timer, Probeklausur, Karteikarten, Sortierspiele und ein Function-Point-Rechner. Dein Fortschritt bleibt in diesem Browser gespeichert.</p>
       </div>
       <div style="display:flex; flex-direction:column; gap:8px;">
         <div style="font-size:11px; letter-spacing:0.08em; text-transform:uppercase; font-weight:600; color:color-mix(in srgb, var(--color-text) 62%, transparent);">Look wählen</div>
@@ -74,14 +102,18 @@
           <span style="font-size:12px; color:color-mix(in srgb, var(--color-text) 62%, transparent);">{{ examHint }}</span>
         </div>
       </div>
-      <div style="display:flex; align-items:center; gap:16px; padding:16px 18px; border-radius:var(--radius-lg); background:var(--color-surface); box-shadow:var(--shadow-sm);">
-        <div style="width:66px; height:66px; flex:none; border-radius:50%; background:conic-gradient(var(--color-accent) {{ pctDeg }}, var(--color-neutral-800) 0); display:grid; place-items:center;">
-          <div style="width:50px; height:50px; border-radius:50%; background:var(--color-surface); display:grid; place-items:center; font-size:14px; font-weight:700; white-space:nowrap; font-variant-numeric:tabular-nums;"><span>{{ pct }}%</span></div>
-        </div>
-        <div style="display:flex; flex-direction:column; gap:4px; min-width:0;">
+      <div style="display:flex; flex-direction:column; gap:10px; padding:16px 18px; border-radius:var(--radius-lg); background:var(--color-surface); box-shadow:var(--shadow-sm);">
+        <div style="display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:4px 8px;">
           <div style="font-size:11px; letter-spacing:0.08em; text-transform:uppercase; font-weight:600; color:color-mix(in srgb, var(--color-text) 62%, transparent);">Fortschritt</div>
-          <div style="font-size:15px; font-weight:600;">{{ doneN }} von {{ totalN }} Schritten</div>
-          <div style="font-size:12px; color:color-mix(in srgb, var(--color-text) 62%, transparent);">{{ exDoneN }}/{{ exTotal }} Übungen · {{ cardsSitzt }}/{{ cardsTotal }} Karten sitzen</div>
+          <div style="font-size:11px; color:color-mix(in srgb, var(--color-text) 62%, transparent);">{{ pkBestLabel }}</div>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:10px 12px;">
+          <sc-for list="{{ rings }}" as="r" hint-placeholder-count="4">
+            <button onClick="{{ r.go }}" aria-label="{{ r.aria }}" style="display:flex; align-items:center; gap:9px; min-width:0; padding:0; border:none; background:none; color:var(--color-text); font-family:var(--font-body); text-align:left; cursor:pointer;">
+              <span style="width:42px; height:42px; flex:none; border-radius:50%; background:conic-gradient({{ r.color }} {{ r.deg }}, var(--color-neutral-800) 0); display:grid; place-items:center;"><span style="width:31px; height:31px; border-radius:50%; background:var(--color-surface); display:grid; place-items:center; font-size:10px; font-weight:800; font-variant-numeric:tabular-nums;">{{ r.pct }}</span></span>
+              <span style="display:flex; flex-direction:column; min-width:0;"><span style="font-size:13px; font-weight:700;">{{ r.label }}</span><span style="font-size:11px; font-variant-numeric:tabular-nums; color:color-mix(in srgb, var(--color-text) 62%, transparent);">{{ r.sub }}</span></span>
+            </button>
+          </sc-for>
         </div>
       </div>
       <div style="display:flex; flex-direction:column; gap:8px; padding:16px 18px; border-radius:var(--radius-lg); background:var(--color-surface); box-shadow:var(--shadow-sm);">
@@ -98,7 +130,7 @@
 
     <p style="margin:0; max-width:780px; font-size:13px; line-height:1.6; color:color-mix(in srgb, var(--color-text) 72%, transparent); text-wrap:pretty;"><span style="color:var(--color-accent); font-weight:600;">Wichtig:</span> Laut Aufgabenblatt entsteht die Studienarbeit ohne KI-Unterstützung. Diese Seite liefert deshalb nur Struktur, Checklisten und Übungen, die bewusst nicht im Hotel-Szenario spielen.</p>
 
-    <nav style="position:sticky; top:0; z-index:20; margin:0 calc(-1 * clamp(16px, 4vw, 56px)); padding:10px clamp(16px, 4vw, 56px); display:flex; gap:8px; overflow-x:auto; scrollbar-width:none; background:color-mix(in srgb, var(--color-bg) 86%, transparent); backdrop-filter:blur(10px);">
+    <nav class="tabnav" style="position:sticky; top:0; z-index:20; margin:0 calc(-1 * clamp(16px, 4vw, 56px)); padding:10px clamp(16px, 4vw, 56px); display:flex; gap:8px; overflow-x:auto; scrollbar-width:none; background:color-mix(in srgb, var(--color-bg) 86%, transparent); backdrop-filter:blur(10px);">
       <sc-for list="{{ tabs }}" as="tb" hint-placeholder-count="6">
         <button onClick="{{ tb.go }}" style="flex:none; display:flex; align-items:center; gap:8px; padding:9px 15px; border-radius:999px; border:1.5px solid {{ tb.border }}; background:{{ tb.bg }}; color:{{ tb.fg }}; font-family:var(--font-body); font-size:14px; font-weight:600; white-space:nowrap; cursor:pointer; transition:background .2s, border-color .2s;">
           <span style="width:9px; height:9px; border-radius:50%; background:{{ tb.dot }};"></span>
@@ -155,6 +187,27 @@
               </ul>
             </div>
             <p style="margin:0; max-width:820px; font-size:13px; color:color-mix(in srgb, var(--color-text) 72%, transparent); text-wrap:pretty;">Bewertet wird, ob alles eindeutig, korrekt, vollständig, plausibel, verständlich, nummeriert und gegen die Realwelt prüfbar ist. Zu zweit gelten höhere Mindestzahlen (12 FA, 12 NFA, 2 statische, 3 dynamische Modelle, Customizing und Docker Pflicht). Abgabe bis So 17.01.2027, 22:00 Uhr per Mail, mit Deckblatt und unterschriebener Erklärung.</p>
+            <div style="display:flex; flex-direction:column; gap:10px; padding-top:14px; border-top:1px solid var(--color-divider);">
+              <div style="display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:4px 12px;">
+                <h3 style="margin:0; font-family:var(--font-heading); font-weight:var(--font-heading-weight); font-size:18px;">Checkliste nach Balzert-Gliederung</h3>
+                <span style="font-size:13px; font-weight:700; font-variant-numeric:tabular-nums;">{{ pfcDone }} / {{ pfcTotal }}</span>
+              </div>
+              <div style="height:6px; border-radius:3px; background:var(--color-neutral-800); overflow:hidden;"><div style="height:100%; width:{{ pfcW }}; border-radius:3px; background:var(--p4); transition:width .3s;"></div></div>
+              <p style="margin:0; font-size:12px; color:color-mix(in srgb, var(--color-text) 62%, transparent);">Nur Leitfragen zum Selbstprüfen, keine Inhalte. Die Kapitel 6, 7, 10 und 11 dürfen unter 9 zusammengefasst werden (Folie S. 164).</p>
+              <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:12px 20px;">
+                <sc-for list="{{ pfcGroups }}" as="g" hint-placeholder-count="6">
+                  <div style="display:flex; flex-direction:column; gap:6px;">
+                    <div style="font-size:13px; font-weight:700; color:{{ g.ink }};">{{ g.ch }}</div>
+                    <sc-for list="{{ g.items }}" as="it" hint-placeholder-count="2">
+                      <button onClick="{{ it.toggle }}" aria-pressed="{{ it.checked }}" style="display:flex; gap:9px; align-items:flex-start; padding:0; border:none; background:none; color:var(--color-text); font-family:var(--font-body); font-size:13px; line-height:1.45; text-align:left; cursor:pointer;">
+                        <span style="width:18px; height:18px; flex:none; margin-top:1px; display:grid; place-items:center; border-radius:5px; border:2px solid {{ it.border }}; background:{{ it.bg }}; color:{{ it.fg }}; font-size:11px; font-weight:800; line-height:1;">{{ it.mark }}</span>
+                        <span style="opacity:{{ it.op }};">{{ it.label }}</span>
+                      </button>
+                    </sc-for>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
           </section>
         </sc-if>
 
@@ -381,6 +434,7 @@
               <sc-if value="{{ e.done }}"><span style="width:20px; height:20px; flex:none; display:grid; place-items:center; border-radius:50%; background:var(--ok); color:var(--color-surface); font-size:12px; font-weight:800;">✓</span></sc-if>
             </button>
           </sc-for>
+          <button onClick="{{ printAll }}" style="margin:8px 4px 0; align-self:flex-start; padding:8px 12px; border-radius:var(--radius-md); border:1.5px solid var(--color-divider); background:var(--color-surface); color:var(--color-text); font-family:var(--font-body); font-size:13px; font-weight:600; cursor:pointer;">Alle Übungen drucken (ohne Lösungen)</button>
           <p style="margin:8px 4px 0; font-size:12px; line-height:1.5; color:color-mix(in srgb, var(--color-text) 62%, transparent); text-wrap:pretty;">Musterlösungen folgen der Notation aus den Folien von Prof. Zimmer. Seitenangaben beziehen sich auf das Folien-PDF.</p>
         </nav>
 
@@ -401,7 +455,7 @@
           <sc-if value="{{ ex.hasGiven }}">
             <div style="display:flex; flex-direction:column; gap:8px;">
               <div style="font-size:12px; color:color-mix(in srgb, var(--color-text) 62%, transparent);">{{ ex.givenLabel }}</div>
-              <div style="padding:20px; border-radius:var(--radius-md); background:var(--color-bg); box-shadow:var(--shadow-sm); overflow-x:auto;">{{ ex.given }}</div>
+              <div class="dg-scroll" style="padding:20px; border-radius:var(--radius-md); background:var(--color-bg); box-shadow:var(--shadow-sm); overflow-x:auto;">{{ ex.given }}</div>
             </div>
           </sc-if>
 
@@ -417,11 +471,12 @@
               <button onClick="{{ ex.timerReset }}" aria-label="Timer zurücksetzen" style="padding:7px 10px; border-radius:var(--radius-md); border:1.5px solid var(--color-divider); background:transparent; color:var(--color-text); font-family:var(--font-body); font-size:13px; cursor:pointer;">↺</button>
             </div>
           </div>
-          <div style="font-size:13px; color:color-mix(in srgb, var(--color-text) 62%, transparent);">Erst auf Papier zeichnen, in der Klausur gibt es kein Tool. Dann aufdecken und mit dem Selbstcheck vergleichen.</div>
+          <div style="font-size:13px; color:color-mix(in srgb, var(--color-text) 62%, transparent);">{{ ex.workHint }}</div>
 
           <div style="display:flex; flex-wrap:wrap; gap:8px;">
             <button onClick="{{ ex.toggleHint }}" style="padding:10px 16px; border-radius:var(--radius-md); border:1.5px solid var(--color-divider); background:var(--color-surface); color:var(--color-text); font-family:var(--font-body); font-size:14px; font-weight:600; cursor:pointer;" style-hover="border-color:var(--color-text);">{{ ex.hintLabel }}</button>
             <button onClick="{{ ex.toggleSol }}" style="padding:10px 18px; border-radius:var(--radius-md); border:1.5px solid {{ ex.color }}; background:{{ ex.btnBg }}; color:{{ ex.ink }}; font-family:var(--font-body); font-size:14px; font-weight:700; cursor:pointer;">{{ ex.solLabel }}</button>
+            <button onClick="{{ ex.printCur }}" style="padding:10px 14px; border-radius:var(--radius-md); border:1.5px solid var(--color-divider); background:var(--color-surface); color:var(--color-text); font-family:var(--font-body); font-size:14px; font-weight:600; cursor:pointer;" style-hover="border-color:var(--color-text);">Drucken</button>
             <sc-if value="{{ ex.hasFp }}"><button onClick="{{ ex.loadFp }}" style="padding:10px 16px; border-radius:var(--radius-md); border:1.5px solid var(--p4); background:color-mix(in srgb, var(--p4) 14%, transparent); color:color-mix(in srgb, var(--p4) 60%, var(--color-text)); font-family:var(--font-body); font-size:14px; font-weight:700; cursor:pointer;">In den Rechner laden →</button></sc-if>
           </div>
           <sc-if value="{{ ex.showHint }}">
@@ -431,7 +486,14 @@
           </sc-if>
           <sc-if value="{{ ex.showSol }}">
             <div style="display:flex; flex-direction:column; gap:16px;">
-              <div style="padding:20px; border-radius:var(--radius-md); background:var(--color-bg); box-shadow:var(--shadow-sm); overflow-x:auto;">{{ ex.sol }}</div>
+              <sc-if value="{{ ex.hasSteps }}">
+                <div style="display:flex; flex-wrap:wrap; gap:6px; align-items:center;">
+                  <span style="font-size:12px; color:color-mix(in srgb, var(--color-text) 62%, transparent);">Aufbau:</span>
+                  <sc-for list="{{ ex.stepBtns }}" as="sb" hint-placeholder-count="3"><button onClick="{{ sb.pick }}" aria-pressed="{{ sb.on }}" style="padding:5px 11px; border-radius:999px; border:1.5px solid {{ sb.border }}; background:{{ sb.bg }}; color:{{ sb.fg }}; font-family:var(--font-body); font-size:12px; font-weight:700; cursor:pointer;">{{ sb.label }}</button></sc-for>
+                  <sc-if value="{{ ex.hasNextStep }}"><button onClick="{{ ex.nextStep }}" style="padding:5px 12px; border-radius:var(--radius-md); border:1.5px solid {{ ex.color }}; background:{{ ex.btnBg }}; color:{{ ex.ink }}; font-family:var(--font-body); font-size:12px; font-weight:700; cursor:pointer;">Nächster Schritt →</button></sc-if>
+                </div>
+              </sc-if>
+              <div class="stp dg-scroll" data-step="{{ ex.solStep }}" style="padding:20px; border-radius:var(--radius-md); background:var(--color-bg); box-shadow:var(--shadow-sm); overflow-x:auto;">{{ ex.sol }}</div>
               <sc-if value="{{ ex.hasSolNote }}"><p style="margin:0; max-width:700px; font-size:13px; line-height:1.55; color:color-mix(in srgb, var(--color-text) 72%, transparent); text-wrap:pretty;">{{ ex.solNote }}</p></sc-if>
               <div style="display:flex; flex-direction:column; gap:10px; max-width:700px; padding:16px; border-radius:var(--radius-lg); background:var(--color-surface); box-shadow:var(--shadow-sm);">
                 <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
@@ -655,9 +717,127 @@
       </section>
     </sc-if>
 
+
+    <sc-if value="{{ isPk }}">
+      <section style="display:flex; flex-direction:column; gap:22px; max-width:1000px;">
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <h2 style="margin:0; font-size:30px;">Probeklausur</h2>
+          <p style="margin:0; max-width:680px; font-size:14px; line-height:1.55; color:color-mix(in srgb, var(--color-text) 72%, transparent); text-wrap:pretty;">45 Minuten, drei Teile: 8 Notationsfragen, eine Function-Point-Rechnung und eine Diagrammaufgabe auf Papier. Ausgewertet wird erst bei der Abgabe, nach Ablauf der Zeit automatisch.</p>
+        </div>
+        <sc-if value="{{ pkIdle }}">
+          <div style="display:flex; flex-direction:column; gap:14px; padding:18px 20px; border-radius:var(--radius-lg); background:var(--color-surface); box-shadow:var(--shadow-sm);">
+            <div style="display:flex; flex-wrap:wrap; gap:8px;">
+              <span style="padding:5px 11px; border-radius:999px; background:color-mix(in srgb, var(--p1) 18%, transparent); color:color-mix(in srgb, var(--p1) 60%, var(--color-text)); font-size:12px; font-weight:700;">Teil A · 8 Notationsfragen · 8 P</span>
+              <span style="padding:5px 11px; border-radius:999px; background:color-mix(in srgb, var(--p4) 18%, transparent); color:color-mix(in srgb, var(--p4) 60%, var(--color-text)); font-size:12px; font-weight:700;">Teil B · Function Points · 4 P</span>
+              <span style="padding:5px 11px; border-radius:999px; background:color-mix(in srgb, var(--p3) 18%, transparent); color:color-mix(in srgb, var(--p3) 60%, var(--color-text)); font-size:12px; font-weight:700;">Teil C · Diagramm · Selbstcheck</span>
+            </div>
+            <div style="display:flex; flex-wrap:wrap; gap:12px; align-items:center;">
+              <button onClick="{{ pkStart }}" style="padding:10px 18px; border-radius:var(--radius-md); border:1.5px solid var(--color-accent); background:color-mix(in srgb, var(--color-accent) 20%, transparent); color:color-mix(in srgb, var(--color-accent) 60%, var(--color-text)); font-family:var(--font-body); font-size:14px; font-weight:700; cursor:pointer;">Probeklausur starten</button>
+              <span style="font-size:13px; color:color-mix(in srgb, var(--color-text) 62%, transparent);">{{ pkBestLabel }}</span>
+            </div>
+          </div>
+        </sc-if>
+        <sc-if value="{{ pkActive }}">
+          <div style="display:flex; flex-wrap:wrap; align-items:center; gap:12px 18px; padding:14px 16px; border-radius:var(--radius-lg); background:var(--color-surface); box-shadow:var(--shadow-md);">
+            <div style="display:flex; flex-direction:column; gap:2px;">
+              <span style="font-size:11px; letter-spacing:0.08em; text-transform:uppercase; font-weight:600; color:color-mix(in srgb, var(--color-text) 62%, transparent);">Restzeit</span>
+              <span style="font-size:28px; line-height:1.1; font-weight:800; font-variant-numeric:tabular-nums; color:{{ pkTimeInk }};">{{ pkTime }}</span>
+            </div>
+            <div style="flex:1 1 140px; height:8px; border-radius:4px; background:var(--color-neutral-800); overflow:hidden;"><div style="height:100%; width:{{ pkTimeW }}; border-radius:4px; background:{{ pkTimeColor }}; transition:width 1s linear;"></div></div>
+            <span style="font-size:13px; font-variant-numeric:tabular-nums; color:color-mix(in srgb, var(--color-text) 62%, transparent);">{{ pkProgress }}</span>
+            <sc-if value="{{ pkRunning }}"><button onClick="{{ pkSubmit }}" style="padding:10px 18px; border-radius:var(--radius-md); border:1.5px solid var(--color-accent); background:color-mix(in srgb, var(--color-accent) 20%, transparent); color:color-mix(in srgb, var(--color-accent) 60%, var(--color-text)); font-family:var(--font-body); font-size:14px; font-weight:700; cursor:pointer;">Abgeben</button></sc-if>
+            <sc-if value="{{ pkRunning }}"><button onClick="{{ pkCancel }}" style="padding:10px 16px; border-radius:var(--radius-md); border:1.5px solid var(--color-divider); background:var(--color-surface); color:var(--color-text); font-family:var(--font-body); font-size:14px; font-weight:600; cursor:pointer;">Abbrechen</button></sc-if>
+            <sc-if value="{{ pkDone }}"><button onClick="{{ pkStart }}" style="padding:10px 18px; border-radius:var(--radius-md); border:1.5px solid var(--color-accent); background:color-mix(in srgb, var(--color-accent) 20%, transparent); color:color-mix(in srgb, var(--color-accent) 60%, var(--color-text)); font-family:var(--font-body); font-size:14px; font-weight:700; cursor:pointer;">Neue Probeklausur</button></sc-if>
+          </div>
+          <sc-if value="{{ pkDone }}">
+            <div style="display:flex; flex-wrap:wrap; gap:18px 28px; align-items:center; padding:18px 20px; border-radius:var(--radius-lg); border:1.5px solid {{ pkResColor }}; background:{{ pkResBg }};">
+              <div style="display:flex; flex-direction:column; gap:2px;">
+                <span style="font-size:11px; letter-spacing:0.08em; text-transform:uppercase; font-weight:600; color:color-mix(in srgb, var(--color-text) 62%, transparent);">Ergebnis</span>
+                <span style="font-size:44px; line-height:1; font-weight:800; font-variant-numeric:tabular-nums; color:{{ pkResInk }};">{{ pkPct }}</span>
+                <span style="font-size:13px; font-variant-numeric:tabular-nums;">{{ pkPoints }}</span>
+              </div>
+              <div style="flex:1 1 260px; display:flex; flex-direction:column; gap:6px; font-size:14px;">
+                <sc-for list="{{ pkParts }}" as="pp" hint-placeholder-count="3"><div style="display:flex; justify-content:space-between; gap:12px; padding:5px 0; border-bottom:1px solid var(--color-divider);"><span>{{ pp.label }}</span><b style="font-variant-numeric:tabular-nums;">{{ pp.val }}</b></div></sc-for>
+                <span style="font-size:12px; color:color-mix(in srgb, var(--color-text) 62%, transparent);">Teil C zählt erst, wenn du unten die Lösung aufdeckst und den Selbstcheck abhakst.</span>
+              </div>
+            </div>
+          </sc-if>
+
+          <div style="display:flex; flex-direction:column; gap:12px;">
+            <h3 style="margin:0; font-size:20px;">Teil A · Notation</h3>
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:14px;">
+              <sc-for list="{{ pkQs }}" as="q" hint-placeholder-count="8">
+                <div style="display:flex; flex-direction:column; gap:10px; padding:14px; border-radius:var(--radius-lg); background:var(--color-surface); box-shadow:var(--shadow-sm);">
+                  <div style="display:flex; justify-content:space-between; gap:8px; font-size:11px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:{{ q.ink }};"><span>Frage {{ q.n }}</span><span>{{ q.cat }}</span></div>
+                  <div style="display:flex; justify-content:center; align-items:center; min-height:120px; padding:12px; border-radius:var(--radius-md); background:{{ q.tint }};">{{ q.glyph }}</div>
+                  <div style="font-size:15px; line-height:1.35; font-weight:700; text-wrap:pretty;">{{ q.q }}</div>
+                  <div style="display:flex; flex-direction:column; gap:6px;">
+                    <sc-for list="{{ q.opts }}" as="o" hint-placeholder-count="4">
+                      <button onClick="{{ o.pick }}" style="display:flex; align-items:center; gap:10px; padding:8px 11px; border-radius:var(--radius-md); border:1.5px solid {{ o.border }}; background:{{ o.bg }}; color:var(--color-text); font-family:var(--font-body); font-size:13px; line-height:1.35; text-align:left; cursor:pointer; opacity:{{ o.op }};">
+                        <span style="flex:1;">{{ o.label }}</span><span style="font-size:14px; font-weight:800; color:{{ o.markColor }};">{{ o.mark }}</span>
+                      </button>
+                    </sc-for>
+                  </div>
+                  <sc-if value="{{ q.showEx }}"><div style="font-size:13px; line-height:1.5; color:{{ q.exInk }};">{{ q.ex }}</div></sc-if>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:14px; padding:18px 20px; border-radius:var(--radius-lg); background:var(--color-surface); box-shadow:var(--shadow-sm);">
+            <h3 style="margin:0; font-size:20px;">Teil B · Function Points</h3>
+            <p style="margin:0; font-size:14px; line-height:1.55;">Für ein System wurden gezählt (Gewichte wie in der Vorlesung):</p>
+            <div style="display:flex; flex-direction:column; max-width:620px;">
+              <sc-for list="{{ pkFpRows }}" as="fr" hint-placeholder-count="5"><div style="display:flex; justify-content:space-between; gap:12px; padding:6px 0; border-bottom:1px solid var(--color-divider); font-size:14px;"><span style="font-weight:600;">{{ fr.label }}</span><span style="font-variant-numeric:tabular-nums;">{{ fr.text }}</span></div></sc-for>
+            </div>
+            <p style="margin:0; font-size:14px;">Die 14 Einflussfaktoren ergeben ΣDI = <b>{{ pkSdi }}</b>. Berechne UFP und FP (Komma erlaubt).</p>
+            <div style="display:flex; flex-wrap:wrap; gap:14px 24px; align-items:flex-end;">
+              <label style="display:flex; flex-direction:column; gap:4px; font-size:13px; font-weight:600;">UFP<input type="text" inputmode="decimal" value="{{ pkUfp }}" onChange="{{ pkSetUfp }}" disabled="{{ pkDone }}" style="width:140px; min-height:38px; padding:6px 10px; border-radius:var(--radius-md); border:1.5px solid {{ pkUfpBorder }}; background:var(--color-bg); color:var(--color-text); font-family:var(--font-body); font-size:15px; font-variant-numeric:tabular-nums;"></label>
+              <label style="display:flex; flex-direction:column; gap:4px; font-size:13px; font-weight:600;">FP<input type="text" inputmode="decimal" value="{{ pkFp }}" onChange="{{ pkSetFp }}" disabled="{{ pkDone }}" style="width:140px; min-height:38px; padding:6px 10px; border-radius:var(--radius-md); border:1.5px solid {{ pkFpBorder }}; background:var(--color-bg); color:var(--color-text); font-family:var(--font-body); font-size:15px; font-variant-numeric:tabular-nums;"></label>
+            </div>
+            <sc-if value="{{ pkDone }}"><div style="font-size:14px; line-height:1.6; font-variant-numeric:tabular-nums;">{{ pkFpSol }}</div></sc-if>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:14px; padding:18px 20px; border-radius:var(--radius-lg); background:var(--color-surface); box-shadow:var(--shadow-sm);">
+            <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+              <h3 style="margin:0; font-size:20px;">Teil C · {{ pkExType }}</h3>
+              <span style="font-size:13px; color:color-mix(in srgb, var(--color-text) 62%, transparent);">aus Übung {{ pkExNum }} · {{ pkExTitle }}</span>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:8px; max-width:720px;">
+              <sc-for list="{{ pkExParas }}" as="pp" hint-placeholder-count="2"><p style="margin:0; font-size:15px; line-height:1.6; text-wrap:pretty;">{{ pp.t }}</p></sc-for>
+            </div>
+            <sc-if value="{{ pkExHasGiven }}"><div class="dg-scroll" style="padding:18px; border-radius:var(--radius-md); background:var(--color-bg); box-shadow:var(--shadow-sm); overflow-x:auto;">{{ pkExGiven }}</div></sc-if>
+            <div style="font-size:13px; color:color-mix(in srgb, var(--color-text) 62%, transparent);">Auf Papier lösen. Die Lösung lässt sich nach der Abgabe aufdecken.</div>
+            <sc-if value="{{ pkCanSol }}"><button onClick="{{ pkToggleSol }}" style="align-self:flex-start; padding:10px 18px; border-radius:var(--radius-md); border:1.5px solid var(--color-accent); background:color-mix(in srgb, var(--color-accent) 20%, transparent); color:color-mix(in srgb, var(--color-accent) 60%, var(--color-text)); font-family:var(--font-body); font-size:14px; font-weight:700; cursor:pointer;">{{ pkSolLabel }}</button></sc-if>
+            <sc-if value="{{ pkShowSol }}">
+              <div class="dg-scroll" style="padding:18px; border-radius:var(--radius-md); background:var(--color-bg); box-shadow:var(--shadow-sm); overflow-x:auto;">{{ pkExSol }}</div>
+              <div style="display:flex; flex-direction:column; gap:8px; max-width:720px;">
+                <span style="font-size:11px; letter-spacing:0.08em; text-transform:uppercase; font-weight:600; color:color-mix(in srgb, var(--color-text) 62%, transparent);">Selbstcheck · je Punkt 1 P</span>
+                <sc-for list="{{ pkChecks }}" as="c">
+                  <button onClick="{{ c.toggle }}" aria-pressed="{{ c.checked }}" style="display:flex; gap:10px; align-items:flex-start; padding:0; border:none; background:none; color:var(--color-text); font-family:var(--font-body); font-size:14px; line-height:1.45; text-align:left; cursor:pointer;">
+                    <span style="width:20px; height:20px; flex:none; display:grid; place-items:center; border-radius:6px; border:2px solid {{ c.border }}; background:{{ c.bg }}; color:{{ c.fg }}; font-size:12px; font-weight:800; line-height:1;">{{ c.mark }}</span><span>{{ c.label }}</span>
+                  </button>
+                </sc-for>
+              </div>
+            </sc-if>
+          </div>
+        </sc-if>
+      </section>
+    </sc-if>
+  </div>
+  <div class="print-only">
+    <sc-for list="{{ printList }}" as="pe" hint-placeholder-count="1">
+      <article class="pr-ex">
+        <div style="font-size:10pt; color:#555;">SE I · Übung {{ pe.num }} · {{ pe.type }}</div>
+        <h2 style="margin:4px 0 10px; font-size:17pt;">{{ pe.title }}</h2>
+        <sc-for list="{{ pe.paras }}" as="pp" hint-placeholder-count="2"><p style="margin:0 0 6px; font-size:11pt; line-height:1.5;">{{ pp.t }}</p></sc-for>
+        <sc-if value="{{ pe.hasGiven }}"><div style="margin:12px 0;">{{ pe.given }}</div></sc-if>
+        <div class="pr-space"></div>
+      </article>
+    </sc-for>
   </div>
   <sc-if value="{{ hasToast }}">
-    <div role="status" style="position:fixed; left:50%; bottom:24px; z-index:50; transform:translateX(-50%); display:flex; align-items:center; gap:10px; max-width:calc(100vw - 32px); padding:12px 18px; border-radius:999px; background:var(--color-text); color:var(--color-bg); font-family:var(--font-body); font-size:14px; font-weight:700; box-shadow:0 12px 30px rgba(0,0,0,.28);">
+    <div role="status" class="toast no-print" style="position:fixed; left:50%; bottom:24px; z-index:50; transform:translateX(-50%); display:flex; align-items:center; gap:10px; max-width:calc(100vw - 32px); padding:12px 18px; border-radius:999px; background:var(--color-text); color:var(--color-bg); font-family:var(--font-body); font-size:14px; font-weight:700; box-shadow:0 12px 30px rgba(0,0,0,.28);">
       <span style="width:10px; height:10px; flex:none; border-radius:50%; background:{{ toastColor }};"></span><span>{{ toastMsg }}</span>
     </div>
   </sc-if>
@@ -673,21 +853,24 @@ class Component extends DCLogic {
     const C = { s:'var(--color-neutral-400)', t:'var(--color-text)', a:'var(--color-accent)', bg:'var(--color-bg)', sf:'var(--color-surface)', m:'var(--color-neutral-500)' };
     const esc = v => String(v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
     const svg = (w,h,b) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" style="width:100%;max-width:${w}px;height:auto;display:block;font-family:var(--font-body);overflow:visible">${b}</svg>`;
-    const tx = (x,y,v,o={}) => `<text x="${x}" y="${y}" text-anchor="${o.a||'middle'}" font-size="${o.fs||12}" style="fill:${o.c||C.t};${o.u?'text-decoration:underline;':''}${o.i?'font-style:italic;':''}${o.w?'font-weight:'+o.w+';':''}">${esc(v)}</text>`;
-    const txr = (x,y,html,o={}) => `<text x="${x}" y="${y}" text-anchor="${o.a||'middle'}" font-size="${o.fs||11.5}" style="fill:${C.t}">${html}</text>`;
+    const FS = 1.12, G = v => `<g data-l="1">${v}</g>`;
+    const tx = (x,y,v,o={}) => `<text data-l="3" x="${x}" y="${y}" text-anchor="${o.a||'middle'}" font-size="${+((o.fs||12)*FS).toFixed(2)}" style="fill:${o.c||C.t};${o.u?'text-decoration:underline;':''}${o.i?'font-style:italic;':''}${o.w?'font-weight:'+o.w+';':''}">${esc(v)}</text>`;
+    const txr = (x,y,html,o={}) => `<text data-l="3" x="${x}" y="${y}" text-anchor="${o.a||'middle'}" font-size="${+((o.fs||11.5)*FS).toFixed(2)}" style="fill:${C.t}">${html}</text>`;
     const hi = v => `<tspan style="fill:${C.a};font-weight:500">${esc(v)}</tspan>`;
     const sk = (c,sw,d) => `stroke:${c};stroke-width:${sw};${d?'stroke-dasharray:5 4;':''}`;
-    const ln = (x1,y1,x2,y2,o={}) => `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" style="${sk(o.c||C.s,o.sw||1.4,o.d)}"/>`;
+    const ln = (x1,y1,x2,y2,o={}) => `<line data-l="2" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" style="${sk(o.c||C.s,o.sw||1.4,o.d)}"/>`;
     const pts = a => a.map(p => p.map(v => +(+v).toFixed(1)).join(',')).join(' ');
-    const pl = (a,o={}) => `<polyline points="${pts(a)}" style="fill:none;${sk(o.c||C.s,o.sw||1.4,o.d)}"/>`;
-    const pg = (a,fill,o={}) => `<polygon points="${pts(a)}" style="fill:${fill};${sk(o.c||C.s,1.4,false)}"/>`;
-    const rc = (x,y,w,h,o={}) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${o.r||0}" style="fill:${o.f||C.sf};${sk(o.c||C.s,o.sw||1.4,o.d)}"/>`;
+    const pl = (a,o={}) => `<polyline data-l="2" points="${pts(a)}" style="fill:none;${sk(o.c||C.s,o.sw||1.4,o.d)}"/>`;
+    const pg = (a,fill,o={}) => `<polygon data-l="2" points="${pts(a)}" style="fill:${fill};${sk(o.c||C.s,1.4,false)}"/>`;
+    const rc = (x,y,w,h,o={}) => `<rect data-l="1" x="${x}" y="${y}" width="${w}" height="${h}" rx="${o.r||0}" style="fill:${o.f||C.sf};${sk(o.c||C.s,o.sw||1.4,o.d)}"/>`;
     const head = (x1,y1,x2,y2,type,o={}) => {
-      const an = Math.atan2(y2-y1,x2-x1), c = o.c||C.s;
+      const an = Math.atan2(y2-y1,x2-x1); let c = o.c||C.s;
       if (type==='dfilled'||type==='dhollow') {
+        if (!o.c) c = 'var(--dg-agg, var(--color-neutral-400))';
         const D=16, hw=6, ca=Math.cos(an), sa=Math.sin(an), mx=x2-D/2*ca, my=y2-D/2*sa;
         return pg([[x2,y2],[mx-sa*hw,my+ca*hw],[x2-D*ca,y2-D*sa],[mx+sa*hw,my-ca*hw]], type==='dfilled'?c:C.bg, {c});
       }
+      if (type==='hollow' && !o.c) c = 'var(--dg-gen, var(--color-neutral-400))';
       const L = type==='hollow'?14:10, W = type==='hollow'?0.5:0.45;
       const P = g => [x2-L*Math.cos(an+g), y2-L*Math.sin(an+g)];
       if (type==='open') return pl([P(W),[x2,y2],P(-W)],{c});
@@ -696,42 +879,49 @@ class Component extends DCLogic {
     const ar = (x1,y1,x2,y2,type='filled',o={}) => ln(x1,y1,x2,y2,o) + head(x1,y1,x2,y2,type,o);
     const par = (a,type='open',o={}) => { const n=a.length; return pl(a,o) + head(a[n-2][0],a[n-2][1],a[n-1][0],a[n-1][1],type,o); };
     const cls = (x,y,w,name,attrs,ops,o={}) => {
-      const lh=15, s1=o.st?13:0, s2=o.prop?13:0, hh=24+s1+s2, only=attrs==null&&ops==null, c=o.c||C.s;
+      const lh=15, s1=o.st?13:0, s2=o.prop?13:0, hh=24+s1+s2, only=attrs==null&&ops==null, c=o.c||'var(--dg-cls, var(--color-neutral-400))';
       const ah = attrs==null?0:Math.max(10,attrs.length*lh+8), oh = ops==null?0:Math.max(10,ops.length*lh+8);
       const h = only ? 30+s1+s2 : hh+ah+oh;
-      let s = rc(x,y,w,h,{c});
+      let s = rc(x,y,w,h,{c,f:o.c?undefined:'var(--dg-cls-fill, var(--color-surface))'});
       if (o.st) s += tx(x+w/2,y+14,'«'+o.st+'»',{fs:10,c:C.m});
       const ny = y+(only?19:16)+s1;
-      s += tx(x+w/2,ny,name,{i:o.i,u:o.u,w:500,c:o.nc});
+      s += tx(x+w/2,ny,name,{i:o.i,u:o.u,w:500,c:o.nc||'var(--dg-cls-name, var(--color-text))'});
       if (o.prop) s += tx(x+w/2,ny+13,o.prop,{fs:10,c:o.pc||C.m});
       let yy = y+hh;
       if (!only && attrs!=null) { s += ln(x,yy,x+w,yy,{c}); attrs.forEach((v,i) => { s += tx(x+8,yy+15+i*lh,v,{a:'start',fs:11.5,c:o.hl===i?C.a:C.t}); }); yy += ah; }
       if (!only && ops!=null) { s += ln(x,yy,x+w,yy,{c}); ops.forEach((v,i) => { s += tx(x+8,yy+15+i*lh,v,{a:'start',fs:11.5}); }); }
-      return { s, x, y, w, h, cx:x+w/2, cy:y+h/2, r:x+w, b:y+h };
+      return { s:G(s), x, y, w, h, cx:x+w/2, cy:y+h/2, r:x+w, b:y+h };
     };
     const obj = (x,y,w,name,vals,o={}) => cls(x,y,w,name,vals,null,Object.assign({},o,{u:true}));
     const nb = (x,name,y=40,w=90,o={}) => cls(x,y,w,name,null,null,o);
-    const mini = (x,y,w,name) => rc(x,y,w,24) + tx(x+w/2,y+16,name,{fs:11});
-    const act = (cx,cy,label,w=150,o={}) => rc(cx-w/2,cy-16,w,32,{r:14,c:o.c}) + tx(cx,cy+4,label,{fs:12});
-    const onode = (cx,cy,name,stt,w=140,o={}) => rc(cx-w/2,cy-17,w,34,{c:o.c}) + tx(cx,cy-3,name,{fs:12}) + tx(cx,cy+12,stt,{fs:11,c:o.c?C.a:C.m});
-    const start = (cx,cy,o={}) => `<circle cx="${cx}" cy="${cy}" r="8" style="fill:${o.c||C.t}"/>`;
-    const end = (cx,cy,o={}) => `<circle cx="${cx}" cy="${cy}" r="11" style="fill:none;${sk(o.c||C.t,1.6)}"/><circle cx="${cx}" cy="${cy}" r="6.5" style="fill:${o.c||C.t}"/>`;
-    const fend = (cx,cy,o={}) => { const c=o.c||C.t; return `<circle cx="${cx}" cy="${cy}" r="10" style="fill:${C.bg};${sk(c,1.6)}"/>` + ln(cx-7,cy-7,cx+7,cy+7,{c,sw:1.6}) + ln(cx-7,cy+7,cx+7,cy-7,{c,sw:1.6}); };
-    const dec = (cx,cy,o={}) => pg([[cx,cy-13],[cx+13,cy],[cx,cy+13],[cx-13,cy]], C.sf, {c:o.c});
-    const bar = (x,y,w,o={}) => `<rect x="${x}" y="${y}" width="${w}" height="5" rx="1.5" style="fill:${o.c||C.t}"/>`;
-    const barV = (x,y,h,o={}) => `<rect x="${x}" y="${y}" width="5" height="${h}" rx="1.5" style="fill:${o.c||C.t}"/>`;
+    const mini = (x,y,w,name) => G(rc(x,y,w,24,{c:'var(--dg-cls, var(--color-neutral-400))',f:'var(--dg-cls-fill, var(--color-surface))'}) + tx(x+w/2,y+16,name,{fs:11}));
+    const act = (cx,cy,label,w=150,o={}) => G(rc(cx-w/2,cy-16,w,32,{r:14,c:o.c||'var(--dg-act, var(--color-neutral-400))',f:'var(--dg-act-fill, var(--color-surface))'}) + tx(cx,cy+4,label,{fs:12}));
+    const onode = (cx,cy,name,stt,w=140,o={}) => G(rc(cx-w/2,cy-19,w,38,{c:o.c||'var(--dg-obj, var(--color-neutral-400))',f:'var(--dg-obj-fill, var(--color-surface))'}) + tx(cx,cy-3,name,{fs:12}) + tx(cx,cy+13,stt,{fs:11,c:o.c?C.a:C.m}));
+    const start = (cx,cy,o={}) => G(`<circle cx="${cx}" cy="${cy}" r="8" style="fill:${o.c||C.t}"/>`);
+    const end = (cx,cy,o={}) => G(`<circle cx="${cx}" cy="${cy}" r="11" style="fill:none;${sk(o.c||C.t,1.6)}"/><circle cx="${cx}" cy="${cy}" r="6.5" style="fill:${o.c||C.t}"/>`);
+    const fend = (cx,cy,o={}) => { const c=o.c||C.t; return G(`<circle cx="${cx}" cy="${cy}" r="10" style="fill:${C.bg};${sk(c,1.6)}"/>` + ln(cx-7,cy-7,cx+7,cy+7,{c,sw:1.6}) + ln(cx-7,cy+7,cx+7,cy-7,{c,sw:1.6})); };
+    const dec = (cx,cy,o={}) => G(pg([[cx,cy-13],[cx+13,cy],[cx,cy+13],[cx-13,cy]], 'var(--dg-act-fill, var(--color-surface))', {c:o.c||'var(--dg-act, var(--color-neutral-400))'}));
+    const bar = (x,y,w,o={}) => G(`<rect x="${x}" y="${y}" width="${w}" height="5" rx="1.5" style="fill:${o.c||C.t}"/>`);
+    const barV = (x,y,h,o={}) => G(`<rect x="${x}" y="${y}" width="5" height="${h}" rx="1.5" style="fill:${o.c||C.t}"/>`);
     const state = (x,y,w,h,name,inner=[],o={}) => {
-      let s = rc(x,y,w,h,{r:12,c:o.c}) + tx(x+w/2,y+(inner.length?18:h/2+4),name,{w:500});
-      if (inner.length) { s += ln(x,y+26,x+w,y+26,{c:o.c}); inner.forEach((v,i) => { s += tx(x+10,y+43+i*15,v,{a:'start',fs:11.5,c:o.hl===i?C.a:C.t}); }); }
-      return s;
+      const sc = o.c||'var(--dg-st, var(--color-neutral-400))';
+      let s = rc(x,y,w,h,{r:12,c:sc,f:'var(--dg-st-fill, var(--color-surface))'}) + tx(x+w/2,y+(inner.length?18:h/2+4),name,{w:500});
+      if (inner.length) { s += ln(x,y+26,x+w,y+26,{c:sc}); inner.forEach((v,i) => { s += tx(x+10,y+43+i*15,v,{a:'start',fs:11.5,c:o.hl===i?C.a:C.t}); }); }
+      return G(s);
     };
-    const uc = (cx,cy,rx,ry,label,o={}) => { const ls = label.split('|'); return `<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" style="fill:${C.sf};${sk(o.c||C.s,1.4)}"/>` + ls.map((v,i) => tx(cx,cy+4+(i-(ls.length-1)/2)*14,v,{fs:11.5})).join(''); };
-    const actor = (cx,y,label,o={}) => { const c=o.c||C.t; return `<circle cx="${cx}" cy="${y+7}" r="7" style="fill:none;${sk(c,1.4)}"/>` + ln(cx,y+14,cx,y+34,{c}) + ln(cx-12,y+21,cx+12,y+21,{c}) + ln(cx,y+34,cx-10,y+48,{c}) + ln(cx,y+34,cx+10,y+48,{c}) + tx(cx,y+64,label,{fs:11.5}); };
-    const pkg = (x,y,w,h,name,o={}) => { const tw = Math.min(w-20, name.length*7+24); return rc(x,y,tw,18,{c:o.c}) + rc(x,y+18,w,h-18,{c:o.c,f:o.f||'transparent'}) + tx(x+10,y+13,name,{a:'start',fs:11,w:500,c:o.c?C.a:C.t}); };
-    const life = (cx,y,name,yEnd,o={}) => { const w=o.w||110; return ln(cx,y+28,cx,yEnd,{d:true,c:C.m}) + rc(cx-w/2,y,w,28,{c:o.c}) + tx(cx,y+18,name,{u:true}); };
-    const actv = (cx,y1,y2,o={}) => rc(cx-5,y1,10,y2-y1,{c:o.c,f:o.f});
+    const uc = (cx,cy,rx,ry,label,o={}) => { const ls = label.split('|'), c = o.c||'var(--dg-uc, var(--color-neutral-400))';
+      let s = `<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" style="fill:var(--dg-uc-fill, var(--color-surface));${sk(c,1.4)}"/>`;
+      if (!o.ep) return G(s + ls.map((v,i) => tx(cx,cy+4+(i-(ls.length-1)/2)*14,v,{fs:11.5})).join(''));
+      const es = o.ep.split('|'), ly = cy - 4 - es.length*6, sy = ly + 8, hw = rx*Math.sqrt(Math.max(0, 1 - Math.pow((sy-cy)/ry, 2)));
+      s += ls.map((v,i) => tx(cx,ly-(ls.length-1-i)*14,v,{fs:11.5,w:500})).join('') + ln(cx-hw,sy,cx+hw,sy,{c});
+      s += tx(cx,sy+14,'Extension point:',{fs:10}) + es.map((v,i) => tx(cx,sy+27+i*12,v,{fs:10})).join('');
+      return G(s); };
+    const actor = (cx,y,label,o={}) => { const c=o.c||'var(--dg-actor, var(--color-text))'; return G(`<circle cx="${cx}" cy="${y+7}" r="7" style="fill:none;${sk(c,1.4)}"/>` + ln(cx,y+14,cx,y+34,{c}) + ln(cx-12,y+21,cx+12,y+21,{c}) + ln(cx,y+34,cx-10,y+48,{c}) + ln(cx,y+34,cx+10,y+48,{c}) + tx(cx,y+64,label,{fs:11.5})); };
+    const pkg = (x,y,w,h,name,o={}) => { const tw = Math.min(w-20, name.length*7.8+24); return G(rc(x,y,tw,18,{c:o.c}) + rc(x,y+18,w,h-18,{c:o.c,f:o.f||'transparent'}) + tx(x+10,y+13,name,{a:'start',fs:11,w:500,c:o.c?C.a:C.t})); };
+    const life = (cx,y,name,yEnd,o={}) => { const w=o.w||110; return G(ln(cx,y+28,cx,yEnd,{d:true,c:C.m}) + rc(cx-w/2,y,w,28,{c:o.c||'var(--dg-cls, var(--color-neutral-400))',f:'var(--dg-cls-fill, var(--color-surface))'}) + tx(cx,y+19,name,{u:true})); };
+    const actv = (cx,y1,y2,o={}) => G(rc(cx-5,y1,10,y2-y1,{c:o.c,f:o.f}));
     const msg = (x1,x2,y,label,type='filled',o={}) => ar(x1,y,x2,y,type,o) + tx((x1+x2)/2,y-6,label,{fs:11,c:o.tc});
-    const mult = (x,y,v,a='start',o={}) => tx(x,y,v,{a,fs:11,c:o.c||C.t,w:o.w});
+    const mult = (x,y,v,a='start',o={}) => tx(x,y,v,{a,fs:11,c:o.c||'var(--dg-mult, var(--color-text))',w:o.w||(o.c?undefined:'var(--dg-mult-w, 400)')});
 
     const cats = [
       { k:'alle', l:'Alle' }, { k:'klasse', l:'Klasse & Objekt' }, { k:'anwendungsfall', l:'Anwendungsfall' },
@@ -757,7 +947,7 @@ class Component extends DCLogic {
       add('kard1','klasse','Was bedeutet die markierte Kardinalität?', svg(320,110, a.s+b.s+ln(a.r,55,b.x,55)+mult(a.r+8,47,'1')+tx(b.x-6,47,'1..*',{a:'end',fs:13,c:C.a,w:500})),
         ['Jeder Kunde hat mindestens einen Auftrag (Muss)','Jeder Kunde hat genau einen Auftrag','Jeder Kunde hat keinen oder einen Auftrag (Kann)','Beliebig viele, auch keiner (Kann)'],
         '1..* heißt eine oder mehrere Beziehungen, also eine Muss-Beziehung. Gelesen wird von der anderen Seite: Jeder Kunde hat 1..* Aufträge, jeder Auftrag gehört genau einem Kunden.','245–247'); }
-    { const a=nb(10,'Mitarbeiter',40,100), b=nb(230,'PKW',40,80);
+    { const a=nb(5,'Mitarbeiter',40,100), b=nb(248,'PKW',40,66);
       add('kard01','klasse','Was bedeutet die markierte Kardinalität?', svg(320,110, a.s+b.s+ln(a.r,55,b.x,55)+tx(a.r+6,47,'Fahrer',{a:'start',fs:11,c:C.m})+mult(a.r+6,70,'0..1')+tx(b.x-6,47,'Dienstwagen',{a:'end',fs:11,c:C.m})+tx(b.x-6,70,'0..1',{a:'end',fs:13,c:C.a,w:500})),
         ['Ein Mitarbeiter hat keinen oder einen Dienstwagen','Ein Mitarbeiter hat genau einen Dienstwagen','Ein Mitarbeiter hat mindestens einen Dienstwagen','Im System gibt es höchstens einen PKW'],
         '0..1 = null oder eine Beziehung (Kann-Beziehung). »Fahrer« und »Dienstwagen« sind Rollennamen: Sie beschreiben, welche Funktion ein Objekt in der Assoziation hat.','245, 248'); }
@@ -765,8 +955,8 @@ class Component extends DCLogic {
       add('reflex','klasse',M, svg(320,110, pl([[220,63],[262,63],[262,22],[160,22],[160,55]],{c:C.a})+a.s+tx(226,80,'Mitarbeiter  *',{a:'start',fs:11})+tx(154,46,'Chef  0..1',{a:'end',fs:11})),
         ['Reflexive Assoziation mit Rollen','Vererbung einer Klasse von sich selbst','Komposition','Abhängigkeit'],
         'Assoziation zwischen Objekten derselben Klasse. Rollennamen sind hier Pflicht, sonst ist unklar, wer wer ist: Ein Angestellter hat 0..1 Chef und beliebig viele Mitarbeiter.','243, 250'); }
-    { const a=nb(15,'Kunde',20,95), b=nb(210,'Veranstaltung',20,95), c=cls(110,72,100,'Buchung',['angemeldetAm'],null,{c:C.a});
-      add('assozkl','klasse',M, svg(320,125, a.s+b.s+ln(110,35,210,35)+mult(116,29,'*')+mult(204,29,'*','end')+ln(160,35,160,72,{d:true,c:C.a})+c.s),
+    { const a=nb(8,'Kunde',20,88), b=nb(200,'Veranstaltung',20,114), c=cls(98,72,108,'Buchung',['Angemeldet am'],null,{c:C.a});
+      add('assozkl','klasse',M, svg(320,125, a.s+b.s+ln(96,35,200,35)+mult(102,29,'*')+mult(194,29,'*','end')+ln(152,35,152,72,{d:true,c:C.a})+c.s),
         ['Assoziative Klasse','Abhängigkeit zu einer Hilfsklasse','Komposition','Notiz'],
         'Die Assoziation selbst hat Eigenschaften, z. B. das Anmeldedatum. Auflösen: Kunde 1 —— * Buchung * —— 1 Veranstaltung. Die Kardinalitäten wandern dabei.','254–255'); }
     { const a=cls(90,6,150,'Person',['Name','Adresse'],['erstelleAufkleber()'],{i:true,prop:'{abstract}',pc:C.a,nc:C.a});
@@ -781,11 +971,11 @@ class Component extends DCLogic {
       add('protected','klasse','Was bedeutet das markierte # ?', svg(320,112, a.s),
         ['protected: sichtbar für Unterklassen','private: nur in der eigenen Klasse','public: für alle Klassen sichtbar','Abgeleitetes Attribut'],
         'Sichtbarkeiten: - private (nur die Klasse selbst), # protected (zusätzlich Unterklassen), + public (alle).','267'); }
-    { const a=obj(75,15,170,'anna : Kunde',['Name = "Anna"','Ort = "München"'],{nc:C.a,c:C.a});
+    { const a=obj(75,15,170,'anna: Kunde',['Name = "Anna"','Ort = "München"'],{nc:C.a,c:C.a});
       add('objekt','klasse',M, svg(320,90, a.s),
         ['Objekt im Objektdiagramm','Klasse mit Stereotyp','Paket','Anwendungsfall'],
-        'Unterstrichener Name in der Form objektname : Klasse, Attribute mit konkreten Werten. Anonyme Objekte heißen nur :Klasse. Ein Objektdiagramm ist ein Schnappschuss zu genau einem Zeitpunkt.','222–229'); }
-    { const a=obj(10,30,130,'anna : Kunde',['Name = "Anna"']), b=obj(190,30,120,'t1 : Ticket',['Platz = 7']);
+        'Unterstrichener Name in der Form objektname: Klasse, Attribute mit konkreten Werten. Anonyme Objekte heißen nur :Klasse. Ein Objektdiagramm ist ein Schnappschuss zu genau einem Zeitpunkt.','222–229'); }
+    { const a=obj(10,30,130,'anna: Kunde',['Name = "Anna"']), b=obj(190,30,120,'t1: Ticket',['Platz = 7']);
       add('link','klasse','Was zeigt die markierte Linie zwischen den Objekten?', svg(320,100, ln(140,54,190,54,{c:C.a,sw:2})+a.s+b.s),
         ['Link: Verbindung zweier Objekte','Assoziation mit Kardinalität','Komposition','Nachricht'],
         'Im Objektdiagramm verbinden Links konkrete Objekte. Sie sind Ausprägungen der Assoziationen aus dem Klassendiagramm und tragen keine Kardinalitäten.','226–227'); }
@@ -797,9 +987,9 @@ class Component extends DCLogic {
     add('include','anwendungsfall','Was bedeutet diese Beziehung?', svg(320,110, uc(72,55,58,26,'Buchen')+uc(250,55,58,26,'Bonität|prüfen')+ar(130,55,192,55,'open',{d:true,c:C.a})+tx(161,44,'«include»',{fs:11,c:C.a})),
       ['Bonität prüfen ist immer Teil von Buchen','Bonität prüfen läuft nur unter einer Bedingung','Bonität prüfen ist ein Spezialfall von Buchen','Buchen ist Teil von Bonität prüfen'],
       '«include» = Enthältbeziehung, eine unbedingte Einbindung. Der Pfeil zeigt vom einbindenden (Buchen) zum eingebundenen Anwendungsfall. So werden gleiche Teilabläufe nur einmal beschrieben.','181–182');
-    add('extend','anwendungsfall','Was bedeutet diese Beziehung?', svg(320,110, uc(72,50,58,26,'Infomaterial|versenden')+uc(250,50,58,26,'Informieren')+ar(130,50,192,50,'open',{d:true,c:C.a})+tx(161,39,'«extend»',{fs:11,c:C.a})+tx(160,100,'{Kunde wünscht Infomaterial}',{fs:11,c:C.m})),
-      ['Infomaterial versenden ergänzt Informieren nur, wenn die Bedingung gilt','Infomaterial versenden ist immer Teil von Informieren','Informieren erweitert Infomaterial versenden','Infomaterial versenden ist ein Spezialfall von Informieren'],
-      '«extend» = Erweiterungsbeziehung, eine bedingte Einbindung an einem Extension Point. Der Pfeil zeigt von der Erweiterung zum erweiterten Anwendungsfall, der auch ohne sie vollständig ist.','183–184');
+    add('extend','anwendungsfall','Was bedeutet diese Beziehung?', svg(320,110, uc(60,52,58,30,'Adressauf-|kleber erstellen')+uc(258,52,60,44,'Informieren',{ep:'Nach Kundendaten|abrufen'})+ar(118,52,198,52,'open',{d:true,c:C.a})+tx(158,40,'«extend»',{fs:11,c:C.a})+tx(158,70,'Der Kunde',{fs:10,c:C.m})+tx(158,82,'wünscht',{fs:10,c:C.m})+tx(158,94,'Info-Material',{fs:10,c:C.m})),
+      ['Adressaufkleber erstellen ergänzt Informieren nur, wenn die Bedingung gilt','Adressaufkleber erstellen ist immer Teil von Informieren','Informieren erweitert Adressaufkleber erstellen','Adressaufkleber erstellen ist ein Spezialfall von Informieren'],
+      '«extend» = Erweiterungsbeziehung, eine bedingte Einbindung an einer bestimmten Stelle. Der Pfeil zeigt von der Erweiterung zum erweiterten Anwendungsfall, der auch ohne sie ausgeführt werden kann. Die Bedingung steht am Pfeil, die Erweiterungspunkte unter einem Trennstrich mit der Überschrift Extension point (Folienbeispiel S. 184).','183–184');
     add('gaf','anwendungsfall',M, svg(320,110, uc(160,55,90,32,'Seminar|organisieren')+ln(211,93,237,66,{c:C.a,sw:2})),
       ['Geschäftsanwendungsfall','Systemanwendungsfall','Sekundärer Anwendungsfall','Abstrakter Anwendungsfall'],
       'Der Schrägstrich unten rechts kennzeichnet einen Geschäftsanwendungsfall: ein geschäftlicher Ablauf ohne Blick auf die technische Umsetzung, zeitliche Unterbrechungen sind erlaubt. Sekundäre Anwendungsfälle tragen dagegen «secondary».','175–178');
@@ -813,7 +1003,7 @@ class Component extends DCLogic {
     add('endknoten','aktivitaet',M, svg(320,110, act(100,55,'Bezahlen',130)+ar(165,55,236,55,'open')+end(248,55,{c:C.a})),
       ['Endknoten','Ablaufende','Startknoten','Synchronisation'],
       'Endknoten: Sobald er erreicht wird, enden sofort alle Aktionen der Aktivität. Mindestens einer ist Pflicht, mehrere sind erlaubt.','283–284');
-    add('entscheidung','aktivitaet',M, svg(320,112, act(55,55,'Prüfen',90)+ar(100,55,135,55,'open')+par([[148,42],[148,22],[215,22]])+par([[148,68],[148,88],[215,88]])+dec(148,55,{c:C.a})+tx(155,37,'[x < 0]',{a:'start',fs:11,c:C.a})+tx(155,81,'[x >= 0]',{a:'start',fs:11,c:C.a})+act(262,22,'A',90)+act(262,88,'B',90)),
+    add('entscheidung','aktivitaet',M, svg(320,112, act(55,55,'Prüfen',90)+ar(100,55,135,55,'open')+par([[148,42],[148,22],[215,22]])+par([[148,68],[148,88],[215,88]])+dec(148,55,{c:C.a})+tx(155,37,'[x<0]',{a:'start',fs:11,c:C.a})+tx(155,81,'[x>=0]',{a:'start',fs:11,c:C.a})+act(262,22,'A',90)+act(262,88,'B',90)),
       ['Entscheidung','Synchronisation','Aufspalten (Fork)','Ablaufende'],
       'Raute = Entscheidung: Genau ein ausgehender Pfad wird gewählt. Bedingungen stehen in eckigen Klammern und dürfen sich nicht überlappen. Eine Raute führt alternative Pfade auch wieder zusammen (logisches ODER).','285');
     add('fork','aktivitaet',M, svg(320,110, act(55,55,'Prüfen',90)+ar(100,55,128,55,'open')+barV(128,15,80,{c:C.a})+ar(133,30,195,30,'open')+ar(133,80,195,80,'open')+act(255,30,'Rechnung',120)+act(255,80,'Paket packen',120)),
@@ -832,9 +1022,9 @@ class Component extends DCLogic {
     add('entryexit','zustand','Wann wird aktion3() ausgeführt?', svg(320,105, state(75,8,170,90,'Aktiv',['entry / aktion1()','do / aktion2()','exit / aktion3()'],{hl:2})),
       ['Beim Verlassen des Zustands','Beim Eintritt in den Zustand','Dauerhaft, solange der Zustand aktiv ist','Erst im Endzustand'],
       'entry beim Eintritt, do dauerhaft während des Zustands, exit beim Verlassen. Die Aktionen werden durch Operationen des Objekts realisiert.','294');
-    add('guard','zustand','Was steht in den markierten eckigen Klammern?', svg(320,95, state(10,45,100,36,'Reserviert')+state(215,45,95,36,'Frei')+ar(110,63,215,63,'open')+txr(162,34,'stornieren() '+hi('[plaetze = 1]')+' / freigeben()')),
+    add('guard','zustand','Was steht in den markierten eckigen Klammern?', svg(320,95, state(10,45,100,36,'Reserviert')+state(215,45,95,36,'Frei')+ar(110,63,215,63,'open')+txr(162,34,'stornieren() '+hi('[plaetze=1]')+' /freigeben()')),
       ['Bedingung (Guard)','Ereignis','Aktion beim Übergang','Folgezustand'],
-      'Transition: ereignis(argumente) [bedingung] / aktion. Sie schaltet nur, wenn das Ereignis eintritt und die Bedingung erfüllt ist. Danach läuft die Aktion.','295–296');
+      'Transition: ereignis(argumente) [bedingung] /aktion. Sie schaltet nur, wenn das Ereignis eintritt und die Bedingung erfüllt ist. Danach läuft die Aktion.','295–296');
     add('after','zustand',M, svg(320,95, state(10,45,110,36,'Ausgeliehen')+state(205,45,105,36,'Überfällig')+ar(120,63,205,63,'open')+tx(162,36,'after(28 Tage)',{fs:11.5,c:C.a,w:500})),
       ['Zeitereignis','Aufrufereignis (Nachricht)','Bedingung (Guard)','do-Aktion'],
       'after(Dauer) und at(Zeitpunkt) sind Zeitereignisse. Weitere Ereignisursachen: Aufruf (das Objekt erhält eine Nachricht) und Bedingung (z. B. Lagerbestand < 100).','293, 295');
@@ -857,9 +1047,9 @@ class Component extends DCLogic {
     add('delete','interaktion',M, svg(320,100, life(170,8,':Sitzung',80,{w:110})+actv(170,48,72)+ar(40,52,165,52,'filled')+tx(100,46,'delete()',{fs:11})+ln(160,72,180,88,{c:C.a,sw:2.2})+ln(160,88,180,72,{c:C.a,sw:2.2})),
       ['Objekt wird gelöscht','Ablaufende','Endzustand','Nachricht an sich selbst'],
       'Ein X am Ende der Lebenslinie: Das Objekt wird zerstört, z. B. nach delete().','303, 305');
-    add('alt','interaktion','Was bedeutet der markierte Rahmen?', svg(320,112, rc(15,8,290,96,{c:C.a,f:'transparent'})+pg([[15,8],[55,8],[55,18],[47,26],[15,26]],C.bg,{c:C.a})+tx(24,21,'alt',{a:'start',fs:11,w:500,c:C.a})+tx(64,21,'[Neukunde]',{a:'start',fs:11})+ar(60,44,260,44,'filled')+tx(160,39,'erfassen()',{fs:11})+ln(15,58,305,58,{d:true,c:C.a})+tx(24,74,'[else]',{a:'start',fs:11})+ar(60,90,260,90,'filled')+tx(160,85,'aktualisieren()',{fs:11})),
-      ['Alternativen (alt)','Schleife (loop)','Parallele Abläufe (par)','Partition'],
-      'Kombiniertes Fragment alt: Von den durch gestrichelte Linien getrennten Bereichen wird genau der ausgeführt, dessen Bedingung gilt.','304, 307');
+    add('alt','interaktion','Was bedeuten die markierten Angaben in eckigen Klammern?', svg(320,112, life(70,4,':Maske',108,{w:90})+life(250,4,':Kunde',108,{w:90})+actv(70,40,102)+txr(160,42,hi('[Neukunde]'))+tx(160,55,'erfassen()',{fs:11})+ar(75,61,245,61,'filled')+txr(160,80,hi('[ELSE]'))+tx(160,93,'aktualisieren()',{fs:11})+ar(75,99,245,99,'filled')),
+      ['Bedingungen für alternative Abläufe, [ELSE] gilt sonst','Rückgabewerte der Nachrichten','Schleifenbedingungen (Wiederholung)','Rollennamen der Objekte'],
+      'Wie im Folienbeispiel S. 307: Die Nachricht wird nur gesendet, wenn die Bedingung gilt, [ELSE] steht für den anderen Fall. In UML 2 schreibt man Alternativen auch als kombiniertes Fragment alt.','304, 307');
     add('iterativ','interaktion','Was bedeutet der markierte Stern?', svg(320,100, ln(130,69,200,69)+rc(20,55,110,28)+tx(75,73,':Auftrag',{u:true})+rc(200,55,110,28)+tx(255,73,':Position',{u:true})+ar(140,50,190,50,'filled')+txr(165,38,'1.1'+hi('*')+': pruefe()')),
       ['Iterative Nachricht','Kardinalität: beliebig viele','Bedingte Nachricht','Asynchrone Nachricht'],
       'Im Kommunikationsdiagramm wird 1.1*: nachricht() wiederholt gesendet, z. B. an jede Position. Bedingte Nachrichten haben stattdessen eine [Bedingung].','310');
@@ -877,10 +1067,33 @@ class Component extends DCLogic {
       ['Die Vererbung wird von der Paketgrenze geschnitten','Pakete dürfen keine Klassen enthalten','Ein Paket braucht mindestens drei Klassen','Gar nichts, das ist der Idealfall'],
       'Paketkriterien: Zu jeder Unterklasse sollen alle Oberklassen im selben Paket liegen, keine Aggregation wird durchtrennt, und über Paketgrenzen laufen möglichst wenige Assoziationen.','276–277');
 
+    { const a=actor(64,18,'Anwender'), b=actor(256,18,'Administrator');
+      add('akteurgen','anwendungsfall',M, svg(320,110, a+b+ar(236,39,84,39,'hollow',{c:C.a})),
+        ['Generalisierung: Administrator ist ein spezieller Anwender','Assoziation zwischen zwei Akteuren','«include» zwischen zwei Akteuren','Anwender ist ein Spezialfall von Administrator'],
+        'Geschlossene, leere Pfeilspitze zwischen Akteuren: Der Pfeil zeigt vom speziellen (Administrator) zum allgemeinen Akteur (Anwender). So lassen sich z. B. unterschiedliche Berechtigungen darstellen. Der Administrator darf alles, was der Anwender darf.','171, 179'); }
+    add('merge','aktivitaet',M, svg(320,112, act(66,25,'Online zahlen',112)+act(66,87,'Bar zahlen',112)+par([[122,25],[172,25],[172,42]])+par([[122,87],[172,87],[172,68]])+dec(172,55,{c:C.a})+ar(185,55,212,55,'open')+act(264,55,'Ware ausgeben',104)),
+      ['Zusammenführen alternativer Pfade (logisches ODER)','Synchronisation (logisches UND)','Entscheidung','Aufspalten (Fork)'],
+      'Raute mit mehreren eingehenden und einem ausgehenden Fluss: Alternative Pfade werden zusammengeführt, es geht weiter, sobald einer davon ankommt. Ein Synchronisationsbalken würde dagegen auf alle eingehenden Abläufe warten.','285');
+    add('doakt','zustand','Wann wird druckeSeite() ausgeführt?', svg(320,105, state(75,8,170,90,'Druckt',['entry / papierPrüfen()','do / druckeSeite()','exit / meldungSenden()'],{hl:1})),
+      ['Dauerhaft, solange der Zustand aktiv ist','Einmal beim Eintritt in den Zustand','Einmal beim Verlassen des Zustands','Nur beim Übergang in den Folgezustand'],
+      'do kennzeichnet eine Aktivität, die andauert, solange das Objekt in diesem Zustand ist. entry läuft beim Eintritt, exit beim Verlassen.','294');
+    add('loop','interaktion','Was bedeutet der markierte Rahmen?', svg(320,112, rc(15,8,290,96,{c:C.a,f:'transparent'})+pg([[15,8],[60,8],[60,18],[52,26],[15,26]],C.bg,{c:C.a})+tx(22,21,'loop',{a:'start',fs:11,w:500,c:C.a})+tx(68,21,'[für jede Position]',{a:'start',fs:11})+ar(60,52,260,52,'filled')+tx(160,46,'gibPreis()',{fs:11})+ar(260,84,60,84,'open',{d:true})+tx(160,78,'preis',{fs:11})),
+      ['Wiederholung (loop)','Alternativen (alt)','Parallele Abläufe (par)','Optionaler Ablauf (opt)'],
+      'Kombiniertes Fragment loop: Der Inhalt wird wiederholt, hier für jede Position. Die Folien nennen Wiederholung als mögliche Ablauflogik im Sequenzdiagramm, loop ist der UML-Operator dafür.','304');
+    { const a=nb(20,'Gebäude'), b=nb(210,'Raum');
+      add('kompdel','klasse','Was passiert mit den Räumen, wenn das Gebäude gelöscht wird?', svg(320,110, a.s+b.s+ar(b.x,55,a.r,55,'dfilled',{c:C.a})+mult(a.r+22,47,'1')+mult(b.x-6,47,'1..*','end')),
+        ['Sie werden mit dem Gebäude gelöscht','Sie bleiben ohne Gebäude bestehen','Sie werden einem anderen Gebäude zugeordnet','Das Gebäude lässt sich erst löschen, wenn alle Räume gelöscht sind'],
+        'Komposition (gefüllte Raute): Die Lebenszeit der Teile ist der des Ganzen untergeordnet. Wird das Ganze gelöscht, werden seine Teile automatisch mitgelöscht, wie die Haustreppe mit dem Haus.','258–259'); }
+    { const a=nb(20,'Auftrag'), b=nb(210,'Position');
+      add('kompkard','klasse','Was ist an der markierten Kardinalität falsch?', svg(320,110, a.s+b.s+ar(b.x,55,a.r,55,'dfilled')+tx(a.r+22,47,'0..*',{a:'start',fs:13,c:C.a,w:600})+mult(b.x-6,47,'1..*','end')),
+        ['Am Ganzen einer Komposition darf höchstens 1 stehen','Eine Komposition braucht am Ganzen immer 1..*','An Kompositionen stehen keine Kardinalitäten','Nichts, sie ist korrekt'],
+        'Bei einer Komposition ist jedes Teil Komponente genau eines Ganzen. Die beim Ganzen angetragene Kardinalität darf deshalb nicht größer als eins sein (unshared aggregation).','258');
+    }
+
     // ---------- Übungen ----------
     const k1=cls(10,20,130,'Kunde',['Name'],null), k2=cls(200,20,140,'Ticket',['Reihe','Platz','Preis'],null), k3=cls(400,20,150,'Vorstellung',['Datum','Uhrzeit','Film'],null), k4=cls(590,20,120,'Kinosaal',['Nummer','Plätze'],null);
     const given1 = svg(720,105, ln(140,44,200,44)+mult(146,38,'1')+mult(194,38,'*','end')+ln(340,44,400,44)+mult(346,38,'*')+mult(394,38,'1','end')+ln(550,44,590,44)+mult(556,38,'*')+mult(584,38,'1','end')+k1.s+k2.s+k3.s+k4.s);
-    const o1 = [obj(10,81,130,'anna : Kunde',['Name = "Anna"']), obj(10,246,130,'ben : Kunde',['Name = "Ben"']), obj(200,10,140,'t1 : Ticket',['Reihe = 5','Platz = 7','Preis = 11 €']), obj(200,120,140,'t2 : Ticket',['Reihe = 5','Platz = 8','Preis = 11 €']), obj(200,230,140,'t3 : Ticket',['Reihe = 9','Platz = 1','Preis = 9 €']), obj(400,120,150,'dune : Vorstellung',['Datum = 12.12.2026','Uhrzeit = 20:00','Film = "Dune"']), obj(590,128,120,'saal3 : Kinosaal',['Nummer = 3','Plätze = 120'])];
+    const o1 = [obj(10,81,130,'anna: Kunde',['Name = "Anna"']), obj(10,246,130,'ben: Kunde',['Name = "Ben"']), obj(200,10,140,'t1: Ticket',['Reihe = 5','Platz = 7','Preis = 11 €']), obj(200,120,140,'t2: Ticket',['Reihe = 5','Platz = 8','Preis = 11 €']), obj(200,230,140,'t3: Ticket',['Reihe = 9','Platz = 1','Preis = 9 €']), obj(400,120,150,'dune: Vorstellung',['Datum = 12.12.2026','Uhrzeit = 20:00','Film = "Dune"']), obj(590,128,120,'saal3: Kinosaal',['Nummer = 3','Plätze = 120'])];
     const sol1 = svg(720,315, ln(140,104,200,48)+ln(140,104,200,158)+ln(140,269,200,268)+ln(340,48,400,145)+ln(340,158,400,158)+ln(340,268,400,172)+ln(550,159,590,159)+o1.map(b => b.s).join(''));
 
     const sta=cls(20,20,180,'Station',['Name','Adresse'],['ermittleFreieRäder()']), ste=cls(20,270,180,'Stellplatz',['Nummer','Belegt'],['belegen()']);
@@ -912,33 +1125,31 @@ class Component extends DCLogic {
       start(22,85)+ar(30,85,100,85,'open')+tx(64,77,'erfassen()',{fs:11})
       +ar(260,68,420,68,'open')+tx(340,60,'ausleihen() [nicht gesperrt]',{fs:11})
       +ar(420,100,260,100,'open')+tx(340,116,'zurückgeben()',{fs:11})
-      +ar(495,110,495,210,'open')+tx(486,164,'after(28 Tage) / mahnungSenden()',{a:'end',fs:11})
-      +par([[420,240],[180,240],[180,120]])+tx(300,256,'zurückgeben() / gebührBerechnen()',{fs:11})
+      +ar(495,110,495,210,'open')+tx(486,164,'after(28 Tage) /mahnungSenden()',{a:'end',fs:11})
+      +par([[420,240],[180,240],[180,120]])+tx(300,256,'zurückgeben() /gebührBerechnen()',{fs:11})
       +par([[120,120],[120,250],[62,250]])+tx(114,190,'ausmustern()',{a:'end',fs:11})
       +state(100,50,160,70,'Verfügbar',['entry / standortSetzen()'])+state(420,50,150,60,'Ausgeliehen')+state(420,210,150,60,'Überfällig')+end(50,250));
 
-    const sol5 = svg(640,445,
+    const sol5 = svg(690,445,
       ln(60,82,60,430,{d:true,c:C.m})+actor(60,8,'Kunde')
-      +life(210,30,':Bestellmaske',430,{w:124})+life(380,30,':Lager',430,{w:100})+life(530,200,':Bestellung',430,{w:110})
-      +rc(30,180,595,215,{f:'transparent',c:C.m})+pg([[30,180],[68,180],[68,191],[60,199],[30,199]],C.bg,{c:C.m})+tx(38,194,'alt',{a:'start',fs:11,w:500})
-      +tx(76,194,'[bestand >= menge]',{a:'start',fs:11})
-      +ln(30,318,625,318,{d:true,c:C.m})+tx(38,334,'[else]',{a:'start',fs:11})
-      +actv(210,95,375)+actv(380,125,162)+actv(380,255,287)+actv(530,228,300)
-      +msg(62,205,95,'bestellen(artikelNr, menge)')
-      +msg(215,375,125,'pruefeBestand(artikelNr)')
-      +msg(375,215,160,'bestand','open',{d:true})
-      +msg(215,475,214,'new()','open',{d:true})
-      +msg(525,385,260,'reservieren(menge)')
-      +msg(385,525,285,'ok','open',{d:true})
-      +msg(205,62,362,'meldung("nicht lieferbar")','open',{d:true}));
+      +life(250,30,':Bestellmaske',430,{w:130})+life(430,30,':Lager',430,{w:100})+life(590,200,':Bestellung',430,{w:116})
+      +tx(262,194,'[bestand>=menge]',{a:'start',fs:11,w:600})+tx(155,342,'[ELSE]',{fs:11,w:600})
+      +actv(250,95,375)+actv(430,125,162)+actv(430,255,287)+actv(590,228,300)
+      +msg(62,245,95,'bestellen(artikelNr, menge)')
+      +msg(255,425,125,'pruefeBestand(artikelNr)')
+      +msg(425,255,160,'bestand','open',{d:true})
+      +msg(255,532,214,'new()','open',{d:true})
+      +msg(585,435,260,'reservieren(menge)')
+      +msg(435,585,285,'ok','open',{d:true})
+      +msg(245,62,362,'meldung("nicht lieferbar")','open',{d:true}));
 
     const sol6 = svg(700,285,
       ln(42,116,200,116)+ln(340,115,500,115)+ln(320,130,420,220)+ln(500,220,560,130)
-      +actor(30,95,'Kunde')+rc(200,100,140,30)+tx(270,120,':Bestellmaske',{u:true})+rc(500,100,120,30)+tx(560,120,':Lager',{u:true})
-      +rc(390,220,140,30)+tx(460,240,':Bestellung',{u:true})+tx(460,266,'{new}',{fs:10.5,c:C.m})
+      +actor(30,95,'Kunde')+rc(200,100,140,30,{c:'var(--dg-cls, var(--color-neutral-400))',f:'var(--dg-cls-fill, var(--color-surface))'})+tx(270,120,':Bestellmaske',{u:true})+rc(500,100,120,30,{c:'var(--dg-cls, var(--color-neutral-400))',f:'var(--dg-cls-fill, var(--color-surface))'})+tx(560,120,':Lager',{u:true})
+      +rc(390,220,140,42,{c:'var(--dg-cls, var(--color-neutral-400))',f:'var(--dg-cls-fill, var(--color-surface))'})+tx(460,238,':Bestellung',{u:true})+tx(522,255,'{new}',{a:'end',fs:10.5,c:C.m})
       +ar(100,104,150,104,'filled')+tx(126,92,'1: bestellen(artikelNr, menge)',{fs:11})
       +ar(395,103,445,103,'filled')+tx(420,91,'1.1: bestand = pruefeBestand(artikelNr)',{fs:11})
-      +ar(345.6,171.9,370.6,194.4,'filled')+tx(338,198,'1.2 [bestand >= menge]: new()',{a:'end',fs:11})
+      +ar(345.6,171.9,370.6,194.4,'filled')+tx(338,198,'1.2 [bestand>=menge]: new()',{a:'end',fs:11})
       +ar(532.6,196.2,547.6,173.7,'filled')+tx(556,198,'1.2.1: reservieren(menge)',{a:'start',fs:11}));
 
     const sol7 = svg(640,330,
@@ -955,7 +1166,7 @@ class Component extends DCLogic {
         given:given1, givenLabel:'Gegebenes Klassendiagramm',
         hints:['Wie viele Vorstellung-Objekte brauchst du, wenn alle drei Tickets für dieselbe Vorstellung gelten?', 'Objekte tragen Werte, keine Typen. Links tragen keine Kardinalitäten.'],
         sol:sol1, solNote:'Objektnamen wie t1 sind frei wählbar. Anonyme Objekte (:Ticket) wären ebenfalls korrekt.',
-        checks:['Objektnamen unterstrichen, Form name : Klasse', 'Konkrete Attributwerte statt Typen', 'Genau ein Objekt für die Vorstellung und eins für den Saal', 'Jedes Ticket ist mit genau einem Kunden und einer Vorstellung verbunden', 'Links ohne Kardinalitäten und Rauten'] },
+        checks:['Objektnamen unterstrichen, Form name: Klasse', 'Konkrete Attributwerte statt Typen', 'Genau ein Objekt für die Vorstellung und eins für den Saal', 'Jedes Ticket ist mit genau einem Kunden und einer Vorstellung verbunden', 'Links ohne Kardinalitäten und Rauten'] },
       { id:'ex2', num:'02', title:'Fahrradverleih', type:'Klassendiagramm',
         paras:['Ein Fahrradverleih betreibt mehrere Stationen. Jede Station besteht aus mindestens einem Stellplatz; Stellplätze existieren nicht ohne ihre Station. An einer Station stehen 0 bis 30 Fahrräder, jedes Fahrrad ist genau einer Station zugeordnet.', 'Fahrräder sind entweder E-Bikes (mit Akkustand) oder Citybikes (mit Anzahl Gänge). Ein Kunde kann beliebig viele Ausleihen tätigen. Eine Ausleihe betrifft genau ein Fahrrad und genau einen Kunden und speichert Beginn, Ende und Preis.', 'Erstelle ein Klassendiagramm in der Analyse mit Kardinalitäten, 2–3 Assoziationsnamen sowie sinnvollen Attributen und Operationen.'],
         hints:['Welche Teile können ohne ihr Ganzes nicht existieren?', 'Gibt es Fahrräder, die weder E-Bike noch Citybike sind?', 'Die Ausleihe verbindet Kunde und Fahrrad und hat eigene Daten.'],
@@ -970,12 +1181,12 @@ class Component extends DCLogic {
         paras:['Modelliere die Zustände eines Buchexemplars:', 'Ein Exemplar wird erfasst und ist dann verfügbar; beim Eintritt in diesen Zustand wird der Standort gesetzt. Es kann ausgeliehen werden, sofern der Kunde nicht gesperrt ist. Bei Rückgabe ist es wieder verfügbar.', 'Ist es nach 28 Tagen nicht zurück, wird eine Mahnung verschickt und es gilt als überfällig. Bei Rückgabe eines überfälligen Exemplars wird eine Gebühr berechnet. Verfügbare Exemplare können ausgemustert werden, damit endet ihr Lebenszyklus.'],
         hints:['Wie notierst du „nach 28 Tagen“ als Ereignis?', 'Was beim Eintritt passiert, gehört in den Zustand, nicht an die Transition.'],
         sol:sol4, solNote:'',
-        checks:['Startzustand und Endzustand', 'Transitionen in der Form ereignis [bedingung] / aktion', 'Zeitereignis after(28 Tage) mit Aktion', 'entry-Aktion im Zustand Verfügbar', 'Nur Zustände eines einzigen Objekts'] },
+        checks:['Startzustand und Endzustand', 'Transitionen in der Form ereignis [bedingung] /aktion', 'Zeitereignis after(28 Tage) mit Aktion', 'entry-Aktion im Zustand Verfügbar', 'Nur Zustände eines einzigen Objekts'] },
       { id:'ex5', num:'05', title:'Bestellung anlegen', type:'Sequenzdiagramm',
         paras:['Ein Kunde gibt in der Bestellmaske Artikelnummer und Menge ein. Die Bestellmaske fragt beim Lager den Bestand ab.', 'Reicht der Bestand, erzeugt die Bestellmaske eine neue Bestellung, die beim Lager die Menge reserviert. Reicht er nicht, erhält der Kunde die Meldung „nicht lieferbar“.', 'Modelliere den Ablauf als Sequenzdiagramm mit beiden Alternativen.'],
-        hints:['Für Entweder-oder gibt es ein kombiniertes Fragment.', 'Die Bestellung existiert am Anfang noch nicht. Wo beginnt ihre Lebenslinie?'],
+        hints:['Wie notiert die Folie S. 307 zwei alternative Abläufe?', 'Die Bestellung existiert am Anfang noch nicht. Wo beginnt ihre Lebenslinie?'],
         sol:sol5, solNote:'',
-        checks:['Akteur und Objekte als :Klasse mit gestrichelter Lebenslinie', 'Synchrone Nachrichten mit gefüllter Spitze, Antworten gestrichelt', 'Erzeugungspfeil zeigt auf den Kopf von :Bestellung', 'alt-Fragment mit [Bedingung] und [else]', 'Aktivierungsbalken bei aktiven Objekten'] },
+        checks:['Akteur und Objekte als :Klasse mit gestrichelter Lebenslinie', 'Synchrone Nachrichten mit gefüllter Spitze, Antworten gestrichelt', 'Erzeugungspfeil zeigt auf den Kopf von :Bestellung', 'Alternativen wie Folie S. 307: [bestand>=menge] und [ELSE] über der ersten Nachricht des jeweiligen Zweigs', 'Aktivierungsbalken bei aktiven Objekten'] },
       { id:'ex6', num:'06', title:'Bestellung anlegen', type:'Kommunikationsdiagramm',
         paras:['Übertrage den Fall „Bestand reicht“ aus Übung 05 in ein Kommunikationsdiagramm.'],
         hints:['Statt einer Zeitachse übernimmt die Nummerierung die Reihenfolge.', 'Wie zeigst du, dass :Bestellung neu entsteht?'],
@@ -1021,7 +1232,7 @@ class Component extends DCLogic {
         { id:'p4e', tag:'Pflichtenheft', h:1, text:'1. dynamisches Modell: Aktivitätsdiagramm', detail:'Das Aufgabenblatt schlägt Aktivitätsdiagramme für Varianten von Abläufen vor. Konkrete Instanzen dieser Abläufe lassen sich anschließend als Sequenzdiagramme modellieren.', ref:'84' }
       ]},
       { num:'05', title:'Ferien: Pflichtenheft fertig + Docker', start:'2026-12-21', end:'2027-01-10', weeks:3, holiday:true, note:'Hier entsteht der Großteil des Pflichtenhefts. Plane feste Lernblöcke ein und lass die Tage um Weihnachten frei.', tasks:[
-        { id:'p5a', tag:'Theorie', h:0.5, text:'Zustandsdiagramm', detail:'Zeigt die Zustände eines einzelnen Objekts über seine Lebenszeit (endlicher Automat), im Gegensatz zu Interaktionsdiagrammen mit mehreren Objekten. Transition: ereignis(argumente) [bedingung] / aktion. Zeitereignisse: after(Dauer), at(Zeitpunkt). Im Zustand: entry / do / exit.', ref:'292–296' },
+        { id:'p5a', tag:'Theorie', h:0.5, text:'Zustandsdiagramm', detail:'Zeigt die Zustände eines einzelnen Objekts über seine Lebenszeit (endlicher Automat), im Gegensatz zu Interaktionsdiagrammen mit mehreren Objekten. Transition: ereignis(argumente) [bedingung] /aktion. Zeitereignisse: after(Dauer), at(Zeitpunkt). Im Zustand: entry / do / exit.', ref:'292–296' },
         { id:'p5b', tag:'UML', h:0.5, text:'Übung 04: Zustandsdiagramm (Buchexemplar)', go:'ex4' },
         { id:'p5c', tag:'Theorie', h:0.5, text:'Sequenzdiagramm', detail:'Zeigt ein Szenario mit Betonung der zeitlichen Reihenfolge. Lebenslinie gestrichelt, Aktivierungsbalken = Steuerungsfokus. Synchrone Nachricht: gefüllte Spitze. Asynchron: offene Spitze. Antwort und Objekterzeugung: gestrichelt mit offener Spitze.', ref:'302–307' },
         { id:'p5d', tag:'UML', h:0.75, text:'Übung 05: Sequenzdiagramm (Bestellung anlegen)', go:'ex5' },
@@ -1044,27 +1255,27 @@ class Component extends DCLogic {
         { id:'p7b', tag:'Theorie', h:0.5, text:'CI, Continuous Delivery, Continuous Deployment', detail:'CI: Änderungen ständig in einem gemeinsamen Repository zusammenführen, um teure Merge-Konflikte zu vermeiden. Continuous Delivery: Zusätzlich wird nach erfolgreichem Test eine freigegebene Version bereitgestellt, die Freigabe in Produktion bleibt manuell. Continuous Deployment: Auch diese Freigabe läuft automatisch, das setzt sehr gute Tests voraus.', ref:'11–16' },
         { id:'p7c', tag:'Theorie', h:0.75, text:'Docker-Grundlagen', detail:'Container isolieren Anwendungen ähnlich wie VMs, enthalten aber kein eigenes Betriebssystem, nur das Nötigste: leichter, schneller, portabel. Image = Bauplan aus dem Dockerfile, Container = laufende Instanz, Registry (z. B. Docker Hub) = Ablage für Images, Compose = mehrere Container per YAML-Datei. Volumes halten Daten über das Löschen eines Containers hinaus.', ref:'48–57' },
         { id:'p7d', tag:'Theorie', h:1, text:'Qualitätsmerkmale und Software Life Cycle', detail:'Qualitätsmerkmale nach ISO/IEC 25000, u. a. Korrektheit, Zuverlässigkeit, Benutzungsfreundlichkeit, Effizienz, Portabilität, Wartbarkeit. Korrekte Software ist nicht automatisch vertrauenswürdig, inkorrekte kann es sein. Life Cycle: Planung → Lastenheft, Analyse → Pflichtenheft, Entwurf → Architektur, dann Implementierung, Test, Integration, Abnahme, Betrieb.', ref:'37–45, 89–101' },
-        { id:'p7e', tag:'UML', h:2, text:'Alle 22 Übungen ohne Lösung, mit Klausur-Timer', go:'ex1' },
+        { id:'p7e', tag:'UML', h:2, text:'Alle 31 Übungen ohne Lösung, mit Klausur-Timer', go:'ex1' },
         { id:'p7f', tag:'UML', h:1, text:'Notationstrainer: alle Elemente sicher erkennen', go:'quiz' },
         { id:'p7g', tag:'UML', h:1.5, text:'Übungsblätter 5–7 ein letztes Mal auf Papier' }
       ]}
     ];
     // ---------- Neue Übungen 08–14 ----------
-    const sol8 = svg(720,400,
-      rc(150,10,560,380,{f:'transparent'}) + tx(162,28,'Mitgliederverwaltung',{a:'start',fs:11,w:500})
+    const sol8 = svg(720,420,
+      rc(150,10,560,400,{f:'transparent'}) + tx(162,28,'Mitgliederverwaltung',{a:'start',fs:11,w:500})
       + ln(76,160,222,114) + mult(86,150,'1') + mult(212,106,'*','end') + actor(60,140,'Trainer')
       + uc(300,110,80,30,'Mitgliedschaft|abschließen')
       + ar(380,110,488,110,'open',{d:true}) + tx(434,101,'«include»',{fs:11})
       + uc(560,110,72,28,'Identität|prüfen')
-      + pl([[230,232],[230,200],[560,200],[560,232]]) + ln(395,200,395,232) + ar(300,200,300,140,'hollow')
-      + uc(230,260,70,28,'Basistarif|abschließen') + uc(395,260,70,28,'Premiumtarif|abschließen') + uc(560,260,70,28,'Studententarif|abschließen')
-      + ar(395,331,395,288,'open',{d:true}) + tx(403,306,'«extend»',{a:'start',fs:11}) + tx(403,320,'{Mitglied wünscht Spind}',{a:'start',fs:10.5,c:C.m})
-      + uc(395,355,60,24,'Spind|mieten')
+      + pl([[230,232],[230,200],[560,200],[560,232]]) + ln(395,200,395,218) + ar(300,200,300,140,'hollow')
+      + uc(230,260,70,28,'Basistarif|abschließen') + uc(395,262,78,44,'Premiumtarif|abschließen',{ep:'Nach Tarifwahl'}) + uc(560,260,70,28,'Studententarif|abschließen')
+      + ar(395,352,395,306,'open',{d:true}) + tx(387,322,'«extend»',{a:'end',fs:11}) + tx(387,336,'Mitglied wünscht Spind',{a:'end',fs:10.5,c:C.m})
+      + uc(395,377,60,24,'Spind|mieten')
       + ar(560,288,560,331,'open',{d:true}) + tx(568,313,'«include»',{a:'start',fs:11})
       + uc(560,355,70,24,'Studierenden-|ausweis prüfen'));
 
-    const t9a=cls(10,30,150,'Teilnehmer',['Name','E-Mail'],['anmelden()']), k9a=cls(330,30,150,'Kurs',['Titel','Beginn'],['belegtePlätze()']), l9=cls(570,30,140,'Lehrkraft',['Name','Sprache'],['kursZuweisen()']), a9=cls(170,110,150,'Anmeldung',['Anmeldedatum','bezahlt'],['bezahlen()'],{c:C.a});
-    const t9b=cls(10,240,150,'Teilnehmer',['Name','E-Mail'],['anmelden()']), a9b=cls(255,240,150,'Anmeldung',['Anmeldedatum','bezahlt'],['bezahlen()'],{c:C.a}), k9b=cls(500,240,150,'Kurs',['Titel','Beginn'],['belegtePlätze()']);
+    const t9a=cls(10,30,150,'Teilnehmer',['Name','E-Mail'],['anmelden()']), k9a=cls(330,30,150,'Kurs',['Titel','Beginn'],['belegtePlätze()']), l9=cls(570,30,140,'Lehrkraft',['Name','Sprache'],['kursZuweisen()']), a9=cls(170,110,150,'Anmeldung',['Anmeldedatum','Bezahlt'],['bezahlen()'],{c:C.a});
+    const t9b=cls(10,240,150,'Teilnehmer',['Name','E-Mail'],['anmelden()']), a9b=cls(255,240,150,'Anmeldung',['Anmeldedatum','Bezahlt'],['bezahlen()'],{c:C.a}), k9b=cls(500,240,150,'Kurs',['Titel','Beginn'],['belegtePlätze()']);
     const sol9 = svg(720,335,
       tx(10,16,'a) mit assoziativer Klasse',{a:'start',fs:11,c:C.m,w:500})
       + ln(160,60,330,60) + mult(166,54,'*') + mult(324,54,'*','end') + ln(245,60,245,110,{d:true,c:C.a})
@@ -1090,12 +1301,12 @@ class Component extends DCLogic {
 
     const sol11 = svg(720,350,
       start(18,75) + ar(26,75,90,75,'open') + tx(58,66,'anlegen()',{fs:11})
-      + ar(280,75,420,75,'open') + tx(350,56,'bezahlen(betrag)',{fs:11}) + tx(350,69,'[betrag = summe]',{fs:11})
+      + ar(280,75,420,75,'open') + tx(350,56,'bezahlen(betrag)',{fs:11}) + tx(350,69,'[betrag=summe]',{fs:11})
       + ar(520,75,600,75,'open') + tx(560,67,'versenden()',{fs:11})
       + ar(655,100,655,174,'open') + tx(647,140,'zustellen()',{a:'end',fs:11}) + end(655,185)
       + ar(150,110,150,230,'open') + tx(144,174,'stornieren()',{a:'end',fs:11})
       + ar(220,110,220,230,'open') + tx(226,174,'after(14 Tage)',{a:'start',fs:11})
-      + par([[470,100],[470,255],[260,255]]) + tx(365,248,'stornieren() / erstatten()',{fs:11})
+      + par([[470,100],[470,255],[260,255]]) + tx(365,248,'stornieren() /erstatten()',{fs:11})
       + ar(185,280,185,324,'open') + tx(193,305,'after(30 Tage)',{a:'start',fs:11}) + end(185,335)
       + state(90,40,190,70,'Offen',['entry / bestätigungSenden()']) + state(420,50,100,50,'Bezahlt') + state(600,50,110,50,'Versendet') + state(110,230,150,50,'Storniert'));
 
@@ -1111,7 +1322,7 @@ class Component extends DCLogic {
 
     const ab13=cls(10,30,130,'Abteilung',['Name'],null), an13=cls(260,30,150,'Angestellter',['Name'],null);
     const given13 = svg(480,125, ln(140,53,260,53) + mult(146,47,'1') + mult(254,47,'1..*','end') + pl([[410,45],[450,45],[450,105],[335,105],[335,77]]) + tx(416,39,'Chef  0..1',{a:'start',fs:11}) + tx(341,95,'Mitarbeiter  *',{a:'start',fs:11}) + ab13.s + an13.s);
-    const it13=obj(10,100,130,'it : Abteilung',['Name = "IT"']), lea13=obj(250,20,140,'lea : Angestellter',['Name = "Lea"']), max13=obj(250,185,140,'max : Angestellter',['Name = "Max"']), tom13=obj(470,185,140,'tom : Angestellter',['Name = "Tom"']);
+    const it13=obj(10,100,130,'it: Abteilung',['Name = "IT"']), lea13=obj(250,20,140,'lea: Angestellter',['Name = "Lea"']), max13=obj(250,185,140,'max: Angestellter',['Name = "Max"']), tom13=obj(470,185,140,'tom: Angestellter',['Name = "Tom"']);
     const sol13 = svg(620,280,
       ln(140,118,250,44) + ln(140,128,250,208) + pl([[75,147],[75,262],[540,262],[540,232]])
       + ln(320,67,320,185) + tx(326,84,'Chef',{a:'start',fs:11,c:C.m}) + tx(326,178,'Mitarbeiter',{a:'start',fs:11,c:C.m})
@@ -1129,13 +1340,13 @@ class Component extends DCLogic {
       { id:'ex8', num:'08', title:'Fitnessstudio', type:'Anwendungsfalldiagramm', isNew:true,
         paras:['Ein Fitnessstudio bietet drei Tarife an: Basistarif, Premiumtarif und Studententarif. Eine Mitgliedschaft wird immer von genau einem Trainer abgeschlossen, ein Trainer kann beliebig viele Abschlüsse durchführen.', 'Bei jedem Abschluss muss die Identität geprüft werden. Beim Studententarif muss zusätzlich der Studierendenausweis geprüft werden. Beim Premiumtarif kann auf Wunsch des Mitglieds ein Spind gemietet werden.', 'Modelliere ein Anwendungsfalldiagramm mit allen passenden Notationselementen. Die Aufgabe ist aufgebaut wie Blatt 5 (Eintrittskarten, Bankkonten).'],
         hints:['Drei Tarife, ein gemeinsamer Ablauf: Welche Beziehung zwischen Anwendungsfällen drückt »ist eine Art von« aus?', 'Muss → «include», kann → «extend». Prüfe jeweils die Pfeilrichtung.', 'Die Kardinalitäten 1 und * gehören an die Assoziation zwischen Akteur und Anwendungsfall.'],
-        sol:sol8, solNote:'Notation laut Folien S. 179–184. Die Tarife erben vom allgemeinen Anwendungsfall die Assoziation zum Trainer und die Identitätsprüfung. Optional kannst du im Premiumtarif einen Extension Point »Spind« eintragen.',
-        checks:['Systemgrenze mit Namen, Akteur außerhalb', 'Kardinalität 1 am Akteur, * am Anwendungsfall', 'Tarife spezialisieren »Mitgliedschaft abschließen«, leere Pfeilspitze zeigt zum allgemeinen Fall', '«include» zu Identität prüfen (allgemein) und zur Ausweisprüfung (Studententarif)', '«extend» von Spind mieten zum Premiumtarif, mit Bedingung'] },
+        sol:sol8, solNote:'Notation laut Folien S. 179–184. Die Tarife erben vom allgemeinen Anwendungsfall die Assoziation zum Trainer und die Identitätsprüfung. Bedingung und Extension point notiert wie im Folienbeispiel S. 184.',
+        checks:['Systemgrenze mit Namen, Akteur außerhalb', 'Kardinalität 1 am Akteur, * am Anwendungsfall', 'Tarife spezialisieren »Mitgliedschaft abschließen«, leere Pfeilspitze zeigt zum allgemeinen Fall', '«include» zu Identität prüfen (allgemein) und zur Ausweisprüfung (Studententarif)', '«extend» von Spind mieten zum Premiumtarif, mit Bedingung am Pfeil und Extension point im Premiumtarif'] },
       { id:'ex9', num:'09', title:'Sprachschule', type:'Klassendiagramm', isNew:true,
         paras:['Eine Sprachschule bietet Kurse an. Ein Teilnehmer kann sich für beliebig viele Kurse anmelden, ein Kurs hat beliebig viele Teilnehmer. Zu jeder Anmeldung werden das Anmeldedatum und der Bezahlstatus gespeichert.', 'Jeder Kurs wird von genau einer Lehrkraft geleitet, eine Lehrkraft leitet beliebig viele Kurse.', 'a) Modelliere die Anmeldung als assoziative Klasse. b) Löse sie in eine eigene Klasse auf und passe die Kardinalitäten an, wie in Blatt 6 (Bibliothek, Teil 2).'],
         hints:['Wem gehören Anmeldedatum und Bezahlstatus: dem Teilnehmer, dem Kurs oder der Beziehung zwischen beiden?', 'Nach der Auflösung: Zu wie vielen Teilnehmern und wie vielen Kursen gehört eine einzelne Anmeldung?'],
         sol:sol9, solNote:'Merksatz zur Auflösung (Folie S. 255): Aus A * —— * B mit assoziativer Klasse C wird A 1 —— * C * —— 1 B.',
-        checks:['Anmeldung hängt per gestrichelter Linie an der Assoziation', 'Vor der Auflösung * —— * zwischen Teilnehmer und Kurs', 'Nach der Auflösung Teilnehmer 1 —— * Anmeldung * —— 1 Kurs', 'Anmeldedatum und bezahlt liegen in Anmeldung', 'Kurs * —— 1 Lehrkraft'] },
+        checks:['Anmeldung hängt per gestrichelter Linie an der Assoziation', 'Vor der Auflösung * —— * zwischen Teilnehmer und Kurs', 'Nach der Auflösung Teilnehmer 1 —— * Anmeldung * —— 1 Kurs', 'Anmeldedatum und Bezahlt liegen in Anmeldung', 'Kurs * —— 1 Lehrkraft'] },
       { id:'ex10', num:'10', title:'Reklamation', type:'Aktivitätsdiagramm', isNew:true,
         paras:['Ein Onlineshop bearbeitet Reklamationen. Der Kunde reicht eine Reklamation ein, der Kundenservice prüft sie.', 'Ist sie nicht berechtigt, sendet der Kundenservice eine Ablehnung und der Ablauf endet. Ist sie berechtigt, nimmt das Lager die Ware zurück, anschließend erstattet der Kundenservice den Betrag.', 'Zeichne ein Aktivitätsdiagramm mit den Partitionen Kunde, Kundenservice und Lager. Zeige die Reklamation im Zustand [eingereicht] als Objekt.'],
         hints:['Partitionen ordnen jede Aktion der ausführenden Einheit zu. Wer führt welche Aktion aus?', 'Ein Objektknoten darf auf der Grenze zwischen zwei Partitionen liegen.'],
@@ -1145,7 +1356,7 @@ class Component extends DCLogic {
         paras:['Eine Bestellung wird angelegt und ist dann offen; beim Eintritt in diesen Zustand wird eine Bestätigung gesendet. Bezahlt der Kunde den vollständigen Betrag, ist sie bezahlt. Bezahlte Bestellungen werden versendet, mit der Zustellung endet ihr Lebenszyklus.', 'Offene Bestellungen kann der Kunde stornieren. Ist eine offene Bestellung nach 14 Tagen nicht bezahlt, wird sie automatisch storniert. Auch bezahlte Bestellungen können storniert werden, dabei wird der Betrag erstattet. Stornierte Bestellungen werden nach 30 Tagen gelöscht.'],
         hints:['Wie notierst du »nach 14 Tagen automatisch«?', 'Zwei verschiedene Ereignisse zwischen denselben Zuständen sind zwei Transitionen.', 'Die Erstattung passiert beim Übergang: ereignis / aktion.'],
         sol:sol11, solNote:'Die Transition aus dem Startzustand mit anlegen() folgt dem Folienbeispiel Flugbuchung (flugEinrichten(), S. 296).',
-        checks:['Startzustand mit anlegen(), zwei Endzustände', 'entry / bestätigungSenden() im Zustand Offen', 'bezahlen(betrag) [betrag = summe]', 'after(14 Tage) und after(30 Tage) als Zeitereignisse', 'stornieren() / erstatten() von Bezahlt nach Storniert'] },
+        checks:['Startzustand mit anlegen(), zwei Endzustände', 'entry / bestätigungSenden() im Zustand Offen', 'bezahlen(betrag) [betrag=summe]', 'after(14 Tage) und after(30 Tage) als Zeitereignisse', 'stornieren() /erstatten() von Bezahlt nach Storniert'] },
       { id:'ex12', num:'12', title:'Warenkorb', type:'Sequenzdiagramm', isNew:true,
         paras:['Ein Kunde schließt in der Kasse seinen Warenkorb ab. Die Kasse fragt für jede Position den Preis ab.', 'Danach beauftragt sie den Zahlungsdienst, die Summe abzubuchen. Der Zahlungsdienst bestätigt, und der Kunde erhält eine Bestätigung.', 'Modelliere den Ablauf als Sequenzdiagramm. Die Wiederholung soll sichtbar sein.'],
         hints:['Für Wiederholungen gibt es wie für Alternativen ein kombiniertes Fragment. Welcher Operator?', 'Antworten sind optional, hier aber nötig: Woher kennt die Kasse sonst die Preise?'],
@@ -1156,7 +1367,7 @@ class Component extends DCLogic {
         given:given13, givenLabel:'Gegebenes Klassendiagramm',
         hints:['Wie viele Links entstehen aus der reflexiven Assoziation?', 'Rollennamen an den Links zeigen, wer Chef und wer Mitarbeiter ist (Folie S. 250).'],
         sol:sol13, solNote:'Lea hat keinen Link zu einem Chef. Das ist erlaubt, weil die Kardinalität 0..1 ist.',
-        checks:['Vier Objekte, Namen unterstrichen in der Form name : Klasse', 'Drei Links zur Abteilung', 'Zwei Links zwischen Lea und ihren Mitarbeitern', 'Rollennamen Chef und Mitarbeiter an den Links', 'Keine Kardinalitäten an Links'] },
+        checks:['Vier Objekte, Namen unterstrichen in der Form name: Klasse', 'Drei Links zur Abteilung', 'Zwei Links zwischen Lea und ihren Mitarbeitern', 'Rollennamen Chef und Mitarbeiter an den Links', 'Keine Kardinalitäten an Links'] },
       { id:'ex14', num:'14', title:'Vereinsverwaltung', type:'Function Points', isNew:true,
         paras:['Für eine Vereinsverwaltung wurden folgende Funktionen gezählt:', 'Eingaben: 6 einfach, 4 mittel, 2 komplex · Ausgaben: 3 einfach, 2 mittel, 1 komplex · Abfragen: 5 einfach, 2 mittel · Interne Datenbestände: 3 einfach, 1 mittel · Externe Datenbestände: 2 einfach.', 'Die 14 Einflussfaktoren ergeben zusammen ΣDI = 30. Berechne UFP, TCF und FP von Hand.'],
         hints:['Zeile für Zeile: Anzahl mal Gewicht, dann addieren.', 'TCF = 0,65 + 0,01 · ΣDI liegt immer zwischen 0,65 und 1,35.'],
@@ -1167,26 +1378,26 @@ class Component extends DCLogic {
     // ---------- Neue Übungen 15–22 ----------
     const sol15 = svg(740,400,
       rc(160,10,420,380,{f:'transparent'}) + tx(172,28,'Online-Banking',{a:'start',fs:11,w:500})
-      + ln(76,58,203,62) + ln(76,66,212,155) + ln(76,276,207,300)
+      + ln(76,58,203,62) + ln(76,66,205,152) + ln(76,276,207,300)
       + ar(60,248,60,112,'hollow')
       + actor(60,40,'Kunde') + actor(60,250,'Firmenkunde') + actor(670,150,'Zahlungssystem')
-      + uc(270,65,68,26,'Kontostand|abfragen') + uc(270,175,68,26,'Überweisung|ausführen') + uc(270,310,72,26,'Sammelüberweisung|ausführen')
+      + uc(270,65,68,26,'Kontostand|abfragen') + uc(270,175,76,42,'Überweisung|ausführen',{ep:'Nach Ausführung'}) + uc(270,310,72,26,'Sammelüberweisung|ausführen')
       + uc(480,95,58,24,'Vorlage|speichern') + uc(480,245,58,24,'TAN prüfen')
-      + ar(428,108,330,160,'open',{d:true}) + tx(440,134,'«extend»',{a:'start',fs:11}) + tx(440,148,'{Kunde wünscht Vorlage}',{a:'start',fs:10.5,c:C.m})
-      + ar(330,190,425,236,'open',{d:true}) + tx(352,226,'«include»',{a:'end',fs:11})
+      + ar(428,108,330,150,'open',{d:true}) + tx(440,134,'«extend»',{a:'start',fs:11}) + tx(440,148,'Der Kunde wünscht',{a:'start',fs:10.5,c:C.m}) + tx(440,161,'eine Vorlage',{a:'start',fs:10.5,c:C.m})
+      + ar(332,199,425,236,'open',{d:true}) + tx(352,226,'«include»',{a:'end',fs:11})
       + ar(338,300,424,256,'open',{d:true}) + tx(392,298,'«include»',{a:'start',fs:11})
-      + ln(654,172,338,176) + pl([[670,222],[670,350],[300,350],[296,336]]));
+      + ln(654,172,346,175) + pl([[670,222],[670,350],[300,350],[296,336]]));
 
-    const hs16=cls(20,30,150,'Hochschule',['Name'],null), fk16=cls(240,30,150,'Fakultät',['Name'],null), sg16=cls(450,30,150,'Studiengang',['Bezeichnung','Abschluss'],null), mo16=cls(650,30,110,'Modul',['Titel','ECTS'],null);
-    const st16=cls(450,230,150,'Student',['Matrikelnummer','status : StatusET'],null), pr16=cls(650,230,110,'Professor',['Fachgebiet'],null);
+    const hs16=cls(20,30,150,'Hochschule',['Name'],null), fk16=cls(240,30,150,'Fakultät',['Name'],null), sg16=cls(450,30,150,'Studiengang',['Bezeichnung','Abschluss'],null), mo16=cls(680,30,110,'Modul',['Titel','ECTS'],null);
+    const st16=cls(450,230,150,'Student',['Matrikelnummer','Status: StatusET'],null), pr16=cls(680,230,110,'Professor',['Fachgebiet'],null);
     const pe16=cls(520,390,150,'Person',['Name','E-Mail'],null,{i:true,prop:'{abstract}'}), en16=cls(20,230,160,'StatusET',['immatrikuliert','beurlaubt','exmatrikuliert'],null,{st:'Enumeration'});
-    const sol16 = svg(770,480,
+    const sol16 = svg(800,480,
       ar(240,60,170,60,'dfilled') + mult(190,52,'1') + mult(234,52,'1..*','end')
       + ln(390,60,450,60) + mult(396,52,'1') + mult(444,52,'1..*','end') + tx(420,76,'bietet an',{fs:11,c:C.m})
-      + ar(650,60,600,60,'dhollow') + mult(620,52,'*') + mult(644,52,'1..*','end')
-      + ln(525,230,525,sg16.b) + mult(533,sg16.b+16,'1') + mult(533,224,'*') + tx(533,190,'eingeschrieben in',{a:'start',fs:11,c:C.m})
-      + ln(705,230,705,mo16.b) + mult(713,mo16.b+16,'*') + mult(713,224,'1') + tx(697,190,'verantwortet',{a:'end',fs:11,c:C.m})
-      + pl([[525,st16.b],[525,360],[705,360],[705,pr16.b]]) + ar(595,360,595,390,'hollow')
+      + ar(680,60,600,60,'dhollow') + mult(622,52,'*') + mult(674,52,'1..*','end')
+      + ln(525,230,525,sg16.b) + mult(533,sg16.b+16,'1') + mult(533,224,'*') + tx(517,190,'eingeschrieben in',{a:'end',fs:11,c:C.m})
+      + ln(735,230,735,mo16.b) + mult(743,mo16.b+16,'*') + mult(743,224,'1') + tx(727,190,'verantwortet',{a:'end',fs:11,c:C.m})
+      + pl([[525,st16.b],[525,360],[735,360],[735,pr16.b]]) + ar(595,360,595,390,'hollow')
       + ln(180,262,450,262,{d:true}) + head(450,262,180,262,'open') + tx(315,254,'nutzt',{fs:11,c:C.m})
       + hs16.s+fk16.s+sg16.s+mo16.s+st16.s+pr16.s+pe16.s+en16.s);
 
@@ -1195,8 +1406,8 @@ class Component extends DCLogic {
       + ar(270,78,270,99,'open') + dec(270,112) + ar(270,125,270,146,'open') + act(270,162,'PIN eingeben',140)
       + ar(270,178,270,206,'open') + act(270,222,'PIN prüfen',140)
       + ar(270,238,270,269,'open') + dec(270,282)
-      + par([[283,282],[480,282],[480,112],[283,112]]) + tx(381,274,'[PIN falsch, Fehlversuche < 3]',{fs:11})
-      + par([[257,282],[90,282],[90,330]]) + tx(170,274,'[PIN falsch, Fehlversuche = 3]',{fs:11})
+      + par([[283,282],[480,282],[480,112],[283,112]]) + tx(381,274,'[PIN falsch, Fehlversuche<3]',{fs:11})
+      + par([[257,282],[90,282],[90,330]]) + tx(170,274,'[PIN falsch, Fehlversuche=3]',{fs:11})
       + act(90,346,'Karte einbehalten',140) + ar(90,362,90,394,'open') + end(90,405)
       + ar(270,295,270,330,'open') + tx(278,316,'[PIN richtig]',{a:'start',fs:11}) + act(270,346,'Betrag wählen',140)
       + ar(270,362,270,388,'open') + bar(150,388,240)
@@ -1207,7 +1418,7 @@ class Component extends DCLogic {
     const sol18 = svg(790,385,
       start(95,30) + ar(95,38,95,120,'open') + tx(103,82,'erstellen()',{a:'start',fs:11})
       + ar(150,142,250,142,'open') + tx(200,134,'zuweisen()',{fs:11})
-      + ar(440,128,590,128,'open') + tx(515,106,'lösen() [dokumentiert]',{fs:11}) + tx(515,120,'/ lösungMitteilen()',{fs:11})
+      + ar(440,128,590,128,'open') + tx(515,106,'lösen() [dokumentiert]',{fs:11}) + tx(515,120,'/lösungMitteilen()',{fs:11})
       + ar(590,160,440,160,'open') + tx(515,176,'ablehnen()',{fs:11})
       + ar(310,180,310,270,'open') + tx(302,228,'infoAnfordern()',{a:'end',fs:11})
       + ar(380,270,380,180,'open') + tx(388,228,'antworten()',{a:'start',fs:11})
@@ -1218,22 +1429,20 @@ class Component extends DCLogic {
       + state(40,122,110,40,'Neu') + state(250,105,190,75,'In Bearbeitung',['entry / kundeInformieren()','do / zeitErfassen()'])
       + state(590,122,120,40,'Gelöst') + state(250,270,190,40,'Wartet auf Kunde') + state(590,270,120,40,'Geschlossen'));
 
-    const sol19 = svg(640,455,
+    const sol19 = svg(700,455,
       ln(60,82,60,445,{d:true,c:C.m}) + actor(60,8,'Benutzer')
-      + life(210,30,':LoginMaske',445,{w:124}) + life(390,30,':Benutzerverwaltung',445,{w:150}) + life(550,200,':Sitzung',345,{w:100})
-      + rc(30,180,600,255,{f:'transparent',c:C.m}) + pg([[30,180],[68,180],[68,191],[60,199],[30,199]],C.bg,{c:C.m}) + tx(38,194,'alt',{a:'start',fs:11,w:500})
-      + tx(76,194,'[ok]',{a:'start',fs:11})
-      + ln(30,372,630,372,{d:true,c:C.m}) + tx(38,388,'[else]',{a:'start',fs:11})
-      + actv(210,95,420) + actv(390,125,162) + actv(550,228,338)
-      + msg(62,205,95,'anmelden(name, passwort)')
-      + msg(215,385,125,'pruefe(name, passwort)')
-      + msg(385,215,160,'ok','open',{d:true})
-      + msg(215,500,214,'new()','open',{d:true})
-      + msg(205,62,262,'startseite','open',{d:true})
-      + msg(62,205,298,'abmelden()')
-      + msg(215,545,330,'delete()')
-      + ln(540,337,560,355,{sw:2.2}) + ln(540,355,560,337,{sw:2.2})
-      + msg(205,62,412,'meldung("Login fehlgeschlagen")','open',{d:true}));
+      + life(270,30,':LoginMaske',445,{w:124}) + life(450,30,':Benutzerverwaltung',445,{w:156}) + life(610,200,':Sitzung',345,{w:100})
+      + tx(282,194,'[ok]',{a:'start',fs:11,w:600}) + tx(165,392,'[ELSE]',{fs:11,w:600})
+      + actv(270,95,420) + actv(450,125,162) + actv(610,228,338)
+      + msg(62,265,95,'anmelden(name, passwort)')
+      + msg(275,445,125,'pruefe(name, passwort)')
+      + msg(445,275,160,'ok','open',{d:true})
+      + msg(275,560,214,'new()','open',{d:true})
+      + msg(265,62,262,'startseite','open',{d:true})
+      + msg(62,265,298,'abmelden()')
+      + msg(275,605,330,'delete()')
+      + ln(600,337,620,355,{sw:2.2}) + ln(600,355,620,337,{sw:2.2})
+      + msg(265,62,412,'meldung("Login fehlgeschlagen")','open',{d:true}));
 
     const sol20 = svg(700,245,
       ln(42,116,200,116) + ln(320,108,480,48) + ln(320,122,470,202)
@@ -1266,7 +1475,7 @@ class Component extends DCLogic {
         paras:['Im Online-Banking kann ein Kunde seinen Kontostand abfragen und Überweisungen ausführen. Firmenkunden sind Kunden, die zusätzlich Sammelüberweisungen ausführen dürfen.', 'Jede Überweisung und jede Sammelüberweisung erfordert eine TAN-Prüfung. Bei einer Überweisung kann der Kunde, wenn er es wünscht, eine Vorlage speichern. Überweisungen und Sammelüberweisungen werden über das externe Zahlungssystem abgewickelt.', 'Modelliere ein Anwendungsfalldiagramm mit allen passenden Notationselementen.'],
         hints:['Firmenkunde darf alles, was Kunde darf, und mehr. Welche Beziehung zwischen Akteuren drückt das aus?', 'Ein externes System ist ebenfalls ein Akteur und steht außerhalb der Systemgrenze.', 'Muss → «include», kann unter Bedingung → «extend». Prüfe die Pfeilrichtung.'],
         sol:sol15, solNote:'Akteur-Generalisierung laut Folien S. 171 und 179: Der Pfeil zeigt vom speziellen (Firmenkunde) zum allgemeinen Akteur (Kunde), Firmenkunde erbt also die Assoziationen zu Kontostand und Überweisung. Sammelüberweisung bewusst nicht als Spezialisierung von Überweisung: Sonst würde auch der normale Kunde sie erben.',
-        checks:['Systemgrenze mit Namen, alle drei Akteure außerhalb', 'Generalisierung Firmenkunde → Kunde mit leerer, geschlossener Spitze', 'Sammelüberweisung nur mit Firmenkunde verbunden', '«include» von beiden Überweisungsfällen zu TAN prüfen', '«extend» von Vorlage speichern zu Überweisung, mit Bedingung', 'Zahlungssystem mit beiden Überweisungsfällen verbunden'] },
+        checks:['Systemgrenze mit Namen, alle drei Akteure außerhalb', 'Generalisierung Firmenkunde → Kunde mit leerer, geschlossener Spitze', 'Sammelüberweisung nur mit Firmenkunde verbunden', '«include» von beiden Überweisungsfällen zu TAN prüfen', '«extend» von Vorlage speichern zu Überweisung, mit Bedingung am Pfeil und Extension point in Überweisung ausführen', 'Zahlungssystem mit beiden Überweisungsfällen verbunden'] },
       { id:'ex16', num:'16', title:'Hochschule', type:'Klassendiagramm', isNew:true,
         paras:['Eine Hochschule besteht aus mindestens einer Fakultät; eine Fakultät existiert nicht ohne ihre Hochschule. Jede Fakultät bietet mindestens einen Studiengang an, jeder Studiengang gehört zu genau einer Fakultät.', 'Ein Studiengang setzt sich aus mindestens einem Modul zusammen. Ein Modul kann aber in beliebig vielen Studiengängen verwendet werden. Jedes Modul wird von genau einem Professor verantwortet, ein Professor verantwortet beliebig viele Module.', 'Studenten und Professoren sind Personen mit Name und E-Mail; Personen, die keins von beidem sind, gibt es nicht. Ein Student ist in genau einem Studiengang eingeschrieben und hat einen Status: immatrikuliert, beurlaubt oder exmatrikuliert. Erstelle das Klassendiagramm der Analyse.'],
         hints:['Fakultät und Modul sind beide Teile eines Ganzen. Bei welchem darf das Teil zu mehreren Ganzen gehören?', 'Welche Kardinalität steht bei einer Komposition immer am Ganzen?', 'Für eine feste Wertemenge gibt es einen eigenen Typ mit Stereotyp.'],
@@ -1279,14 +1488,14 @@ class Component extends DCLogic {
         checks:['Rücksprung endet in einer Raute (Zusammenführen) vor PIN eingeben, nicht direkt an der Aktion', 'Entscheidung mit drei überschneidungsfreien Bedingungen', 'Eigener Endknoten nach Karte einbehalten', 'Fork und Join um Karte ausgeben und Konto belasten', 'Geld ausgeben erst nach dem Join'] },
       { id:'ex18', num:'18', title:'Support-Ticket', type:'Zustandsdiagramm', isNew:true,
         paras:['Ein Ticket wird erstellt und ist dann neu. Wird es einem Mitarbeiter zugewiesen, ist es in Bearbeitung. Bei jedem Eintritt in diesen Zustand wird der Kunde informiert; solange das Ticket in Bearbeitung ist, wird die Arbeitszeit erfasst.', 'Fehlen Informationen, fordert der Mitarbeiter sie an, und das Ticket wartet auf den Kunden. Antwortet der Kunde, ist es wieder in Bearbeitung; antwortet er 7 Tage lang nicht, wird es geschlossen.', 'Löst der Mitarbeiter das Ticket und ist die Lösung dokumentiert, ist es gelöst; dabei wird dem Kunden die Lösung mitgeteilt. Lehnt der Kunde die Lösung ab, ist es wieder in Bearbeitung. Bestätigt er sie oder reagiert 5 Tage lang nicht, wird es geschlossen. Geschlossene Tickets werden archiviert, damit endet ihr Lebenszyklus.'],
-        hints:['»Bei jedem Eintritt« und »solange« gehören in den Zustand. Welche Schlüsselwörter?', '»Dabei wird mitgeteilt« passiert beim Übergang: ereignis [bedingung] / aktion.', 'Zwei verschiedene Ereignisse zwischen denselben Zuständen sind zwei Transitionen.'],
-        sol:sol18, solNote:'entry, do und exit laut Folie S. 294, Transitionen ereignis [bedingung] / aktion laut S. 295–296, Zeitereignisse after(…) laut S. 293.',
-        checks:['Startzustand mit erstellen(), Endzustand nach archivieren()', 'entry / kundeInformieren() und do / zeitErfassen() im Zustand In Bearbeitung', 'lösen() [dokumentiert] / lösungMitteilen()', 'after(7 Tage) und after(5 Tage) als Zeitereignisse', 'Je eine Transition für bestätigen() und after(5 Tage)', 'Rückweg ablehnen() von Gelöst nach In Bearbeitung'] },
+        hints:['»Bei jedem Eintritt« und »solange« gehören in den Zustand. Welche Schlüsselwörter?', '»Dabei wird mitgeteilt« passiert beim Übergang: ereignis [bedingung] /aktion.', 'Zwei verschiedene Ereignisse zwischen denselben Zuständen sind zwei Transitionen.'],
+        sol:sol18, solNote:'entry, do und exit laut Folie S. 294, Transitionen ereignis [bedingung] /aktion laut S. 295–296, Zeitereignisse after(…) laut S. 293.',
+        checks:['Startzustand mit erstellen(), Endzustand nach archivieren()', 'entry / kundeInformieren() und do / zeitErfassen() im Zustand In Bearbeitung', 'lösen() [dokumentiert] /lösungMitteilen()', 'after(7 Tage) und after(5 Tage) als Zeitereignisse', 'Je eine Transition für bestätigen() und after(5 Tage)', 'Rückweg ablehnen() von Gelöst nach In Bearbeitung'] },
       { id:'ex19', num:'19', title:'Login', type:'Sequenzdiagramm', isNew:true,
         paras:['Ein Benutzer meldet sich in der Login-Maske mit Name und Passwort an. Die Login-Maske lässt die Daten von der Benutzerverwaltung prüfen.', 'Sind sie korrekt, erzeugt die Login-Maske eine neue Sitzung und zeigt dem Benutzer die Startseite. Meldet sich der Benutzer später ab, löscht die Login-Maske die Sitzung.', 'Sind die Daten falsch, erhält der Benutzer die Meldung „Login fehlgeschlagen“. Modelliere beide Fälle in einem Sequenzdiagramm.'],
-        hints:['Die Sitzung gibt es am Anfang noch nicht. Wo beginnt, und wo endet ihre Lebenslinie?', 'Für Entweder-oder gibt es ein kombiniertes Fragment. Wohin gehört das Abmelden?'],
-        sol:sol19, solNote:'Erzeugen: gestrichelter Pfeil mit offener Spitze auf den Objektkopf, Löschen: X am Ende der Lebenslinie (Folien S. 303–305). Das Abmelden gehört in den [ok]-Bereich, weil es nur dort eine Sitzung gibt.',
-        checks:['Akteur Benutzer, Objekte als :Klasse mit gestrichelter Lebenslinie', 'Synchrone Nachrichten mit gefüllter Spitze, Antworten gestrichelt', 'alt-Fragment mit [ok] und [else]', ':Sitzung beginnt tiefer am Erzeugungspfeil', 'X beendet die Lebenslinie von :Sitzung nach delete()', 'Abmelden liegt im [ok]-Bereich'] },
+        hints:['Die Sitzung gibt es am Anfang noch nicht. Wo beginnt, und wo endet ihre Lebenslinie?', 'Wie notiert die Folie S. 307 Alternativen? Wohin gehört das Abmelden?'],
+        sol:sol19, solNote:'Erzeugen: gestrichelter Pfeil mit offener Spitze auf den Objektkopf, Löschen: X am Ende der Lebenslinie (Folien S. 303–305). Alternativen notiert wie im Folienbeispiel S. 307 mit [ok] und [ELSE]; in UML 2 wäre auch ein alt-Fragment korrekt. Das Abmelden gehört in den [ok]-Zweig, weil es nur dort eine Sitzung gibt.',
+        checks:['Akteur Benutzer, Objekte als :Klasse mit gestrichelter Lebenslinie', 'Synchrone Nachrichten mit gefüllter Spitze, Antworten gestrichelt', 'Alternativen wie Folie S. 307: [ok] und [ELSE] über der ersten Nachricht des jeweiligen Zweigs', ':Sitzung beginnt tiefer am Erzeugungspfeil', 'X beendet die Lebenslinie von :Sitzung nach delete()', 'Abmelden und Löschen folgen im [ok]-Zweig, vor dem [ELSE]-Zweig'] },
       { id:'ex20', num:'20', title:'Warenkorb', type:'Kommunikationsdiagramm', isNew:true,
         paras:['Übertrage das Sequenzdiagramm aus Übung 12 (Warenkorb) in ein Kommunikationsdiagramm.', 'Die Preisabfrage für jede Position und die Rückgabewerte sollen erkennbar sein.'],
         hints:['Wie kennzeichnest du laut Folie eine iterative Nachricht?', 'Antworten werden im Kommunikationsdiagramm nicht als eigene Pfeile gezeichnet. Wie zeigst du den Rückgabewert?'],
@@ -1304,7 +1513,167 @@ class Component extends DCLogic {
         fp:{ c:[4,5,3, 2,4,2, 6,3,1, 2,2,1, 1,2,0], di:[4,3,3,4,3,4,4, 3,3,3,3,4,3,3] },
         checks:['UFP = 50 + 42 + 36 + 49 + 19 = 196', 'TCF = 0,65 + 0,01 · 47 = 1,12', 'FP = 196 · 1,12 = 219,52', 'Spanne 127,4 bis 264,6'] }
     );
-    const EXC = { Objektdiagramm:'p1', Klassendiagramm:'p1', Anwendungsfalldiagramm:'p2', 'Aktivitätsdiagramm':'p3', Zustandsdiagramm:'p4', Sequenzdiagramm:'p5', Kommunikationsdiagramm:'p5', Paketdiagramm:'p6', 'Function Points':'color-accent' };
+    // ---------- Übungen 23–31: Theorie und Fehler finden ----------
+    const qa = rows => '<div style="width:100%;max-width:720px;display:flex;flex-direction:column;gap:14px;font-size:14px;line-height:1.6;color:var(--color-text);text-align:left">'
+      + rows.map(r => '<div style="display:flex;flex-direction:column;gap:3px"><div style="font-weight:700">' + r[0] + '</div><div style="opacity:.88">' + r[1] + '</div>' + (r[2] ? '<div style="font-size:12px;opacity:.6">Folien-PDF S. ' + r[2] + '</div>' : '') + '</div>').join('') + '</div>';
+
+    const fp29 = cls(20,40,140,'Fuhrpark',['Standort'],null), fa29 = cls(580,40,120,'Fahrer',['Name'],null);
+    const fzW29 = cls(300,40,160,'Fahrzeug',['Kennzeichen','Baujahr'],null), fzR29 = cls(300,40,160,'Fahrzeug',['Kennzeichen','Baujahr'],null,{i:true,prop:'{abstract}'});
+    const pk29 = cls(230,210,120,'PKW',['Sitzplätze'],null), lk29 = cls(410,210,120,'LKW',['Nutzlast'],null);
+    const given29 = svg(720,275,
+      ar(160,62,300,62,'dfilled') + mult(166,54,'0..*') + mult(276,54,'1..*','end')
+      + ln(460,62,580,62) + mult(466,54,'*') + mult(574,54,'*','end') + tx(520,80,'fährt',{fs:11,c:C.m})
+      + ar(355,fzW29.b,295,210,'hollow') + ar(405,fzW29.b,465,210,'hollow')
+      + fp29.s + fzW29.s + fa29.s + pk29.s + lk29.s);
+    const sol29 = svg(720,275,
+      ar(300,62,160,62,'dfilled') + mult(184,54,'1') + mult(294,54,'1..*','end')
+      + ln(460,62,580,62) + mult(466,54,'*') + mult(574,54,'*','end') + tx(520,80,'fährt',{fs:11,c:C.m})
+      + pl([[290,210],[290,180],[470,180],[470,210]]) + ar(380,180,380,fzR29.b,'hollow')
+      + fp29.s + fzR29.s + fa29.s + pk29.s + lk29.s);
+
+    const given30 = svg(720,330,
+      rc(140,10,560,310,{f:'transparent'})
+      + ln(216,138,312,88) + ln(216,146,314,232)
+      + actor(200,118,'Leser')
+      + uc(380,80,70,28,'Medium|ausleihen') + uc(380,240,82,44,'Medium|verlängern',{ep:'Nach Fristprüfung'})
+      + uc(600,80,70,28,'Leserkonto|prüfen') + uc(600,240,66,28,'Gebühr|bezahlen')
+      + ar(530,80,450,80,'open',{d:true}) + tx(490,70,'«include»',{fs:11})
+      + ar(462,240,534,240,'open',{d:true}) + tx(498,212,'«extend»',{fs:11}) + tx(498,262,'Gebühren',{fs:10.5,c:C.m}) + tx(498,275,'sind offen',{fs:10.5,c:C.m}));
+    const sol30 = svg(720,330,
+      rc(140,10,560,310,{f:'transparent'}) + tx(152,28,'Bibliotheksportal',{a:'start',fs:11,w:500})
+      + ln(76,132,312,88) + ln(76,142,300,226)
+      + actor(60,112,'Leser')
+      + uc(380,80,70,28,'Medium|ausleihen') + uc(380,240,82,44,'Medium|verlängern',{ep:'Nach Fristprüfung'})
+      + uc(600,80,70,28,'Leserkonto|prüfen') + uc(600,240,66,28,'Gebühr|bezahlen')
+      + ar(450,80,530,80,'open',{d:true}) + tx(490,70,'«include»',{fs:11})
+      + ar(534,240,462,240,'open',{d:true}) + tx(498,212,'«extend»',{fs:11}) + tx(498,262,'Gebühren',{fs:10.5,c:C.m}) + tx(498,275,'sind offen',{fs:10.5,c:C.m}));
+
+    const given31 = svg(520,450,
+      start(260,18) + ar(260,26,260,46,'open') + act(260,62,'Retoure erfassen',150)
+      + ar(260,78,260,106,'open') + act(260,122,'Ware prüfen',140)
+      + ar(260,138,260,165,'open') + dec(260,178)
+      + par([[247,178],[130,178],[130,222]]) + tx(188,170,'Wert >= 100 €',{fs:11})
+      + act(130,238,'Freigabe einholen',150) + ar(130,254,130,300,'open')
+      + par([[273,178],[390,178],[390,300]]) + tx(331,170,'[Wert <= 100 €]',{fs:11})
+      + bar(110,300,300) + ar(260,305,260,340,'open') + act(260,356,'Betrag erstatten',150)
+      + ar(260,372,260,400,'open') + act(260,416,'Retoure abschließen',160));
+    const sol31 = svg(520,490,
+      start(260,18) + ar(260,26,260,46,'open') + act(260,62,'Retoure erfassen',150)
+      + ar(260,78,260,106,'open') + act(260,122,'Ware prüfen',140)
+      + ar(260,138,260,165,'open') + dec(260,178)
+      + par([[247,178],[130,178],[130,222]]) + tx(188,170,'[Wert > 100 €]',{fs:11})
+      + act(130,238,'Freigabe einholen',150) + par([[130,254],[130,300],[247,300]])
+      + par([[273,178],[390,178],[390,300],[273,300]]) + tx(331,170,'[Wert <= 100 €]',{fs:11})
+      + dec(260,300) + ar(260,313,260,340,'open') + act(260,356,'Betrag erstatten',150)
+      + ar(260,372,260,400,'open') + act(260,416,'Retoure abschließen',160)
+      + ar(260,432,260,458,'open') + end(260,470));
+
+    exercises.forEach(e => { e.isNew = false; });
+    exercises.push(
+      { id:'ex23', num:'23', title:'Fahrradwerkstatt', type:'Theorie', isNew:true,
+        paras:['Eine Fahrradwerkstatt (Auftraggeber) beauftragt eine Agentur (Auftragnehmer) mit einer App für Reparaturtermine.', 'a) Wer legt das Lastenheft fest, und was beschreibt es? b) Welche Rolle spielt das Pflichtenheft bei der Abnahme? c) Nach Vertragsschluss möchte die Werkstatt zusätzlich eine Ersatzteil-Bestellung. Was muss passieren?', 'd) In der ersten Fassung steht: „Die App soll modern und schnell sein.“ Warum reicht das nicht? e) Die Werkstatt sagt „Auftrag“, die Agentur „Ticket“ für dasselbe. Welches Analyseergebnis hilft?'],
+        hints:['DIN 69905 definiert das Lastenheft über den Auftraggeber.', 'Das Pflichtenheft ist mehr als eine Beschreibung: Was ist es rechtlich?', 'Für d) denk an die Bewertungskriterien im Aufgabenblatt.'],
+        sol:qa([
+          ['a) Lastenheft','Der Auftraggeber legt es fest (DIN 69905: „die vom Auftraggeber festgelegte Gesamtheit der Forderungen an die Lieferungen und Leistungen eines Auftragnehmers“). Es ist das Ergebnis der Planung und beschreibt bewusst nur das „Was“ und „Wofür“, ohne sich in Details zu verlieren.','120'],
+          ['b) Pflichtenheft und Abnahme','Es ist Vertragsbestandteil und Basis für die spätere Abnahme. Funktionen, Leistungen und Schnittstellen sind so genau beschrieben, dass Auftraggeber und Auftragnehmer die Erfüllung nachweisen bzw. prüfen können. Hier können schon die wesentlichen Testfälle vereinbart werden.','161'],
+          ['c) Änderung nach Vertragsschluss','Änderungen am Funktionsumfang und damit am Pflichtenheft müssen zwischen Auftraggeber und Auftragnehmer abgestimmt (verhandelt) werden.','161'],
+          ['d) „modern und schnell“','Die Aussage ist nicht prüfbar. Anforderungen müssen eindeutig, nummeriert und gegen die Realwelt validierbar sein. Besser z. B.: „Die Terminsuche liefert das Ergebnis in höchstens 2 Sekunden“ (Produktleistung: Antwortzeit).','163; Aufgabenblatt S. 85'],
+          ['e) Unterschiedliche Begriffe','Ein Glossar: Es definiert die Begriffe einheitlich und vermeidet Kommunikationsstörungen durch Synonyme und Homonyme.','123']]),
+        solNote:'',
+        checks:['Lastenheft: vom Auftraggeber, beschreibt Was und Wofür', 'Pflichtenheft: Vertragsbestandteil, Basis der Abnahme, Testfälle vereinbar', 'Änderungen zwischen AG und AN abstimmen', 'Anforderung muss prüfbar sein, mit Beispiel', 'Glossar gegen Synonyme und Homonyme'] },
+      { id:'ex24', num:'24', title:'Merge-Chaos', type:'Theorie', isNew:true,
+        paras:['Sechs Entwickler arbeiten monatelang in eigenen Branches. Beim Zusammenführen gibt es jedes Mal viele Konflikte.', 'a) Welche Praxis löst das, und wie? b) Künftig wird nach erfolgreichen Tests automatisch eine freigegebene Version in ein Repository hochgeladen. In Produktion geht sie erst nach manueller Freigabe der Teamleitung. Wie heißt das?', 'c) Die manuelle Freigabe bremst. Was wäre der nächste Schritt, und was setzt er voraus? d) Worauf basieren diese Verfahren laut Vorlesung?'],
+        hints:['Die drei Begriffe bauen aufeinander auf.', 'Der Unterschied zwischen b) und c) liegt nur in der Freigabe in die Produktivumgebung.'],
+        sol:qa([
+          ['a) Continuous Integration (CI)','Mehrere Änderungen werden ständig in einem gemeinsamen Repository zusammengeführt. Damit soll ein potenziell hoher Merge-Aufwand bei Konflikten verhindert werden.','12'],
+          ['b) Continuous Delivery','Erweiterung von CI: Nach erfolgreichem Test wird eine freigegebene Version in ein Repository hochgeladen und von dort zur Auslieferung an die Produktivumgebung bereitgestellt. Das Deployment bleibt manuell.','12, 14'],
+          ['c) Continuous Deployment','Auch die Freigabe vom Repository in die Produktivumgebung erfolgt automatisch. Voraussetzung sind Tests mit sehr hoher Qualität.','12, 15'],
+          ['d) Grundlage','Auf einem kontinuierlichen Prozess zur Bearbeitung einzelner Anforderungen: Jede Änderung durchläuft sofort die Phasen und steht als Quellcode zur Integration bereit. Umgesetzt über eine Pipeline mit Stages. Vorteil: kürzere Inkrementdauer, schnelles Feedback.','10–11']]),
+        solNote:'',
+        checks:['CI: ständiges Zusammenführen in ein gemeinsames Repository', 'Delivery: freigegebene Version bereitgestellt, Deployment manuell', 'Deployment: automatische Freigabe in Produktion', 'Voraussetzung: Tests mit sehr hoher Qualität', 'Kontinuierlicher Prozess bzw. Pipeline mit Stages'] },
+      { id:'ex25', num:'25', title:'Verschwundene Tabellen', type:'Theorie', isNew:true,
+        paras:['Lena startet einen MariaDB-Container, legt Tabellen an und löscht den Container später. Aus demselben Image startet sie einen neuen Container: Die Tabellen sind weg.', 'a) Warum? b) Wie verhindert sie das? c) Was ist der Unterschied zwischen Dockerfile, Image und Container?', 'd) Ihr Projekt braucht einen Web-Container und einen DB-Container, die in der richtigen Reihenfolge starten. Welches Werkzeug hilft? e) Wo legt sie ihr Image ab, damit das Team es nutzen kann? f) Warum Container statt einer virtuellen Maschine?'],
+        hints:['Stichwort: stateless.', 'Für d) gibt es eine YAML-Datei mit festem Namen.'],
+        sol:qa([
+          ['a) Ursache','Docker-Container sind zustandslos (stateless): Endet ein Container, sind seine Daten verloren. Alle Container eines Images haben immer den gleichen Inhalt, der neue startet also ohne Lenas Tabellen.','52, 54'],
+          ['b) Lösung','Ein Docker Volume (persistent, gemountet): Darüber werden Daten eines zustandslosen Containers dauerhaft gespeichert.','54'],
+          ['c) Dockerfile, Image, Container','Dockerfile: Skript mit allen Befehlen zur Erstellung eines Images. Image: enthält alle benötigten Komponenten wie Laufzeitumgebung und Libraries. Container: wird aus einem Image erzeugt und ausgeführt; zu einem Image sind beliebig viele Container möglich.','52'],
+          ['d) Mehrere Container','Docker Compose: verwaltet eine Gruppe verlinkter Container mit einer Datei docker-compose.yml und startet sie über Abhängigkeiten in der richtigen Reihenfolge.','57'],
+          ['e) Ablage','In einem Repository einer Registry, öffentlich oder privat. Standard-Registry ist Docker Hub (pull, push).','56'],
+          ['f) Container statt VM','Container isolieren Anwendungen ähnlich wie VMs, enthalten aber keine komplette virtuelle Umgebung, nur die notwendigsten Ressourcen. Dadurch sind sie leichter, schneller und portabel, und auf derselben Hardware laufen mehr Anwendungen.','49, 51']]),
+        solNote:'',
+        checks:['Container zustandslos, Daten weg', 'Docker Volume zum Persistieren', 'Dockerfile → Image → beliebig viele Container', 'Docker Compose mit docker-compose.yml', 'Registry, Standard Docker Hub', 'Leichter, schneller, portabel als VM'] },
+      { id:'ex26', num:'26', title:'Drei Teams', type:'Theorie', isNew:true,
+        paras:['Team A arbeitet nach dem Wasserfallmodell, Team B nach dem RUP, Team C mit Scrum.', 'a) Welche Modelle sind eindimensional, welche zweidimensional, und woran liegt das? b) Phase oder Disziplin: Analyse, Testfälle erzeugen, Implementierung, UML-Klassendiagramm erstellen, Aufwandsschätzung durchführen?', 'c) Wie oft darf eine Phase bzw. eine Disziplin vorkommen? d) Wie lange dauert ein Sprint bei Team C ungefähr, und welches Modell nutzt Scrum für eine Iteration?'],
+        hints:['Entscheidend ist, ob Phase und Disziplin unterschieden werden.', 'Disziplinen entsprechen Rollen und Tätigkeiten.'],
+        sol:qa([
+          ['a) Ein- und zweidimensional','Eindimensional: Wasserfallmodell (ebenso V-Modell XT), weil Phase und Disziplin nicht unterschieden werden. Zweidimensional: RUP (ebenso OEP), weil Phase ≠ Disziplin; das ist die Basis für iterativ-inkrementelle Prozessmodelle.','7, 108'],
+          ['b) Zuordnung','Phasen: Analyse, Implementierung. Disziplinen: Testfälle erzeugen, UML-Klassendiagramm erstellen, Aufwandsschätzung durchführen.','106'],
+          ['c) Häufigkeit','Eine Phase ist in einem Prozessmodell einmalig, eine Disziplin kann innerhalb eines Projekts auch mehrfach angewendet werden.','108'],
+          ['d) Scrum','Ein Sprint dauert ca. 10 bis 15 Arbeitstage. Agile Verfahren verwenden für eine Iteration meist das zweidimensionale Modell.','10']]),
+        solNote:'',
+        checks:['Wasserfall eindimensional, RUP zweidimensional, mit Begründung', 'Analyse und Implementierung sind Phasen', 'Phase einmalig, Disziplin mehrfach', 'Sprint ca. 10–15 Arbeitstage, zweidimensionales Modell'] },
+      { id:'ex27', num:'27', title:'Qualitätsmerkmale', type:'Theorie', isNew:true,
+        paras:['Ordne jede Beobachtung einem Qualitätsmerkmal nach ISO/IEC 25000 zu:', '1) Gibt jemand „abc“ in ein Zahlenfeld ein, erscheint ein Hinweis statt eines Absturzes. 2) Die Software läuft nach dem Wechsel auf ein anderes Betriebssystem ohne Änderungen. 3) Neue Mitarbeitende können ohne Handbuch nach kurzer Zeit Rechnungen erfassen. 4) Nach vielen Hotfixes wird jede weitere Änderung schwieriger. 5) Datenbankverbindungen werden nach Gebrauch freigegeben, sortiert wird mit Quicksort statt Bubblesort. 6) Die mittlere Zeit zwischen zwei Fehlern (MTTF) beträgt 400 Stunden.', '7) Eine Ampelsteuerung erfüllt ihre Anforderungsdefinition fehlerfrei. Dort wurde aber vergessen, dass nie beide Richtungen gleichzeitig Grün haben dürfen. Ist die Software korrekt? Ist sie vertrauenswürdig?'],
+        hints:['Für 1) zählt Verhalten außerhalb der Spezifikation.', 'Für 7) unterscheidet die Folie Korrektheit und Vertrauenswürdigkeit.'],
+        sol:qa([
+          ['1) Robustheit','Funktioniert auch bei fehlerhaften Eingabedaten, Verhalten außerhalb der Spezifikation wird behandelt.','42'],
+          ['2) Portabilität','Unabhängig von konkreter Infrastruktur wie Hardware und Systemsoftware.','44'],
+          ['3) Erlernbarkeit','Bedienung leicht erlernbar, ohne langes Studieren von Handbüchern (Teil der Benutzungsfreundlichkeit).','41'],
+          ['4) Wartbarkeit','Gesetz der zunehmenden Entropie: Je mehr Wartungen, desto geringer die Wartbarkeit.','45'],
+          ['5) Effizienz','Alle Ressourcen werden ökonomisch genutzt, z. B. Freigeben von Verbindungen und sparsame Algorithmen.','43'],
+          ['6) Zuverlässigkeit','MTTF (mittlere Zeitspanne zwischen zwei Fehlern) ist eine Metrik für Zuverlässigkeit.','39'],
+          ['7) Korrekt, aber nicht vertrauenswürdig','Korrekt, weil sie sich so verhält wie in der Anforderungsdefinition festgelegt. Nicht vertrauenswürdig, weil die Anforderungsdefinition selbst nicht vertrauenswürdig ist und im Fehlerfall eine Katastrophe droht.','38, 40']]),
+        solNote:'',
+        checks:['1 Robustheit, 2 Portabilität, 3 Erlernbarkeit', '4 Wartbarkeit, 5 Effizienz, 6 Zuverlässigkeit', 'Ampel: korrekt, aber nicht vertrauenswürdig, mit Begründung'] },
+      { id:'ex28', num:'28', title:'Tierarztpraxis', type:'Theorie', isNew:true,
+        paras:['Eine Tierarztpraxis lässt eine Praxissoftware entwickeln.', 'a) Funktional oder nicht-funktional, und falls nicht-funktional: welche Kategorie? 1) Termin für ein Haustier anlegen. 2) Die Terminsuche antwortet in höchstens 2 Sekunden. 3) Nur angemeldete Tierärzte sehen Befunde. 4) Rechnung für eine Behandlung erstellen. 5) Das System ist zu 99,5 % verfügbar. 6) Neue Mitarbeitende bedienen es ohne Schulung.', 'b) Stamm-, Bewegungs- oder Customizing-Daten? Halter mit Adresse · Behandlung vom 03.02. mit Status „abgerechnet“ · Liste der erlaubten Tierarten · Haustier „Bello“ · Nummernkreis für Rechnungen. c) Welche Elemente sollte eine Schablone zur Beschreibung eines Anwendungsfalls enthalten?'],
+        hints:['Kategorien der nicht-funktionalen Anforderungen: Folie S. 162.', 'Bewegungsdaten entstehen durch Vorgänge, haben einen Status und verweisen auf Stammdaten.'],
+        sol:qa([
+          ['a) Anforderungen','1) funktional · 2) nicht-funktional: Performance · 3) nicht-funktional: Sicherheit · 4) funktional · 5) nicht-funktional: Zuverlässigkeit · 6) nicht-funktional: Benutzbarkeit','162'],
+          ['b) Daten','Halter und Haustier: Stammdaten (langlebig, selten geändert). Behandlung mit Status: Bewegungsdaten (entsteht durch einen Vorgang, hat einen Status, verweist auf Stammdaten). Erlaubte Tierarten und Nummernkreis: Customizing (Domänen, Typen, Nummernkreise).','Aufgabenblatt 82–83'],
+          ['c) Schablone','Mindestens Beschreibung, Akteure, Auslöser sowie Vor- und Nachbedingungen. Das Beispiel nach Oestereich enthält Name, Kurzbeschreibung, Akteure, Auslöser, Ergebnisse, eingehende Daten, Vor- und Nachbedingungen, essentielle Schritte, offene Punkte und Änderungshistorie; dazu können Ausnahmen und Fehlersituationen kommen.','185–189']]),
+        solNote:'Das Szenario ist bewusst kein Hotel: Übertrage nur die Denkweise auf deine Studienarbeit.',
+        checks:['Zwei funktionale, vier nicht-funktionale Anforderungen', 'NFA-Kategorien Performance, Sicherheit, Zuverlässigkeit, Benutzbarkeit', 'Halter und Haustier als Stammdaten', 'Behandlung als Bewegungsdaten', 'Tierarten und Nummernkreis als Customizing', 'Schablonen-Elemente inkl. Vor- und Nachbedingungen'] },
+      { id:'ex29', num:'29', title:'Fuhrpark', type:'Fehler finden', isNew:true,
+        paras:['Ein Fuhrpark besteht aus mindestens einem Fahrzeug. Jedes Fahrzeug gehört zu genau einem Fuhrpark und wird mit ihm gelöscht.', 'Fahrzeuge sind entweder PKW oder LKW, reine Fahrzeug-Objekte gibt es nicht. Ein Fahrer fährt beliebig viele Fahrzeuge, ein Fahrzeug hat beliebig viele Fahrer.', 'Das Klassendiagramm unten enthält genau 4 Fehler. Finde und korrigiere sie.'],
+        given:given29, givenLabel:'Fehlerhaftes Klassendiagramm',
+        hints:['Prüfe bei der Raute: Auf welcher Seite sitzt das Ganze?', 'Welche Kardinalität darf am Ganzen einer Komposition stehen?', 'In welche Richtung zeigt ein Generalisierungspfeil?'],
+        sol:sol29, solNote:'Korrigierte Fassung. Notation laut Folien S. 258 (Kardinalität am Ganzen höchstens 1), S. 264–265 (Pfeil zur Oberklasse) und S. 268 (abstrakte Klasse kursiv bzw. {abstract}).',
+        checks:['Raute sitzt am Teil (Fahrzeug) statt am Ganzen (Fuhrpark)', '0..* am Ganzen: bei Komposition höchstens 1, laut Text genau 1', 'Fahrzeug muss abstrakt sein: kursiver Name bzw. {abstract}', 'Generalisierungspfeile zeigen zu den Unterklassen statt zur Oberklasse'] },
+      { id:'ex30', num:'30', title:'Bibliotheksportal', type:'Fehler finden', isNew:true,
+        paras:['Leser können über das Bibliotheksportal Medien ausleihen und verlängern. Beim Ausleihen wird immer das Leserkonto geprüft.', 'Beim Verlängern kann der Leser, falls Gebühren offen sind, eine Gebühr bezahlen.', 'Das Anwendungsfalldiagramm unten enthält genau 4 Fehler. Finde und korrigiere sie.'],
+        given:given30, givenLabel:'Fehlerhaftes Anwendungsfalldiagramm',
+        hints:['Wo stehen Akteure, und was gehört an die Systemgrenze?', 'Von wo nach wo zeigen «include» und «extend» laut Folien S. 182 und 184?'],
+        sol:sol30, solNote:'Korrigierte Fassung. «include»: Pfeil vom einbindenden zum eingebundenen Anwendungsfall (S. 182). «extend»: Pfeil von der Erweiterung auf den zu erweiternden Anwendungsfall (S. 184). Akteure immer außerhalb der Systemgrenze (S. 171).',
+        checks:['Systemgrenze ohne Systemnamen', 'Akteur Leser steht innerhalb der Systemgrenze', '«include» zeigt falsch herum: richtig von Medium ausleihen zu Leserkonto prüfen', '«extend» zeigt falsch herum: richtig von Gebühr bezahlen zu Medium verlängern'] },
+      { id:'ex31', num:'31', title:'Retoure', type:'Fehler finden', isNew:true,
+        paras:['Eine Retoure wird erfasst und die Ware geprüft. Liegt der Warenwert über 100 €, muss eine Freigabe eingeholt werden, sonst nicht.', 'Danach wird der Betrag erstattet und die Retoure abgeschlossen.', 'Das Aktivitätsdiagramm unten enthält genau 4 Fehler. Finde und korrigiere sie.'],
+        given:given31, givenLabel:'Fehlerhaftes Aktivitätsdiagramm',
+        hints:['Prüfe die Bedingungen: Schreibweise und Überschneidung.', 'Was passiert an einem Synchronisationsbalken, wenn nur einer der beiden Pfade überhaupt durchlaufen wird?', 'Wie endet jedes Aktivitätsdiagramm?'],
+        sol:sol31, solNote:'Korrigierte Fassung. Bedingungen in eckigen Klammern und ohne Überlappung, alternative Pfade mit einer Raute zusammenführen (Folie S. 285), mindestens ein Endknoten (S. 283).',
+        checks:['Bedingung »Wert >= 100 €« steht nicht in eckigen Klammern', 'Bedingungen überlappen bei genau 100 €', 'Alternative Pfade mit Synchronisationsbalken zusammengeführt: Der Ablauf würde ewig warten, richtig ist eine Raute', 'Endknoten fehlt'] }
+    );
+
+    // ---------- Pflichtenheft-Checkliste (nur Leitfragen, keine Inhalte) ----------
+    const pfc = [
+      { ch:'1 Zielbestimmung', items:['Muss-, Wunsch- und Abgrenzungskriterien getrennt aufgeführt?'] },
+      { ch:'2 Produkteinsatz', items:['Anwendungsbereiche, Zielgruppen und Betriebsbedingungen beschrieben?'] },
+      { ch:'3 Produktübersicht', items:['Übersicht über die Anwendungsfälle vorhanden?'] },
+      { ch:'4 Produktfunktionen', items:['Mindestens 8 funktionale Anforderungen, durchnummeriert?', 'Jede mit der Schablone für primäre bzw. sekundäre Anwendungsfälle beschrieben?', 'Vor- und Nachbedingungen, Auslöser und Ergebnisse jeweils ausgefüllt?', 'Reaktionen auf Ausnahmesituationen je Anforderung dokumentiert?'] },
+      { ch:'5 Produktdaten', items:['Stamm- und Bewegungsdaten definiert (Customizing optional)?', 'Prüfungen vor dem Löschen von Stammdaten berücksichtigt?', 'Mindestens 1 statisches Produktmodell eingefügt?'] },
+      { ch:'6 Produktleistungen', items:['Mengengerüste und Antwortzeiten angegeben (oder unter 9)?'] },
+      { ch:'7 Qualitätsanforderungen', items:['Qualitätsanforderungen konkret und prüfbar (oder unter 9)?'] },
+      { ch:'8 Benutzungsoberfläche', items:['Anforderungen an die Oberfläche beschrieben?'] },
+      { ch:'9 Nicht-funktionale Anforderungen', items:['Mindestens 8 NFA, durchnummeriert?', 'Jede ausführlich und verständlich begründet, nicht nur als Tabelle?', 'Jede individuell priorisiert?', 'Bezug zur Ausgangssituation im Aufgabenblatt hergestellt?'] },
+      { ch:'10 Technische Produktumgebung', items:['Hardware, Software und Produktschnittstellen genannt (oder unter 9)?'] },
+      { ch:'11 Entwicklungsumgebung', items:['Entwicklungsumgebung beschrieben (oder unter 9)?'] },
+      { ch:'12 Gliederung in Teilprodukte', items:['Teilprodukte und ggf. Realisierungsreihenfolge angegeben?'] },
+      { ch:'13 Ergänzungen', items:['Mindestens 2 dynamische Produktmodelle in unterschiedlichen Modellierungssprachen?', 'Glossar und Liste offener Punkte?'] },
+      { ch:'Abgabe', items:['Jede Anforderung eindeutig, korrekt, vollständig, plausibel, verständlich und validierbar?', 'Deckblatt mit Name und Matrikelnummer?', 'Unterschriebene Erklärung beigelegt?', 'Optional: Docker-Projekt mit Dockerfile und Quelldateien?'] }
+    ];
+
+    const EXC = { Theorie:'p5', 'Fehler finden':'p4', Objektdiagramm:'p1', Klassendiagramm:'p1', Anwendungsfalldiagramm:'p2', 'Aktivitätsdiagramm':'p3', Zustandsdiagramm:'p4', Sequenzdiagramm:'p5', Kommunikationsdiagramm:'p5', Paketdiagramm:'p6', 'Function Points':'color-accent' };
     exercises.forEach(e => { e.color = EXC[e.type] || 'color-accent'; });
 
     const addT = (num, arr) => { const ph = phases.find(x => x.num === num); if (ph) ph.tasks.push(...arr); };
@@ -1318,6 +1687,7 @@ class Component extends DCLogic {
     addT('03', [{ id:'p3f', tag:'UML', h:0.5, text:'Übung 15: Akteur-Generalisierung (Online-Banking)', go:'ex15' }]);
     addT('04', [{ id:'p4g', tag:'UML', h:0.5, text:'Übung 17: Schleife mit Zusammenführen (Geldautomat)', go:'ex17' }]);
     addT('05', [{ id:'p5n', tag:'UML', h:0.75, text:'Übung 18 + 19: Zustand (Support-Ticket) und Sequenz mit Erzeugen/Löschen (Login)', go:'ex18' }, { id:'p5o', tag:'UML', h:0.5, text:'Übung 20: Kommunikationsdiagramm mit Iteration (Warenkorb)', go:'ex20' }, { id:'p5p', tag:'Theorie', h:0.5, text:'Übung 22: Function Points mit Spanne (Ticketshop)', go:'ex22' }]);
+    addT('07', [{ id:'p7j', tag:'Theorie', h:2, text:'Übungen 23–28: Theorie-Fälle (Lastenheft, CI/CD, Docker, Prozessmodelle, Qualität, Anforderungen)', go:'ex23' }, { id:'p7k', tag:'UML', h:1, text:'Übungen 29–31: Fehler finden', go:'ex29' }, { id:'p7l', tag:'UML', h:1, text:'Probeklausur unter Zeitdruck, Ziel mind. 80 %', go:'pk' }]);
     phases.forEach((x, i) => { x.color = ['p6','p1','p2','p3','p4','p5','color-accent'][i] || 'color-accent'; });
 
     // ---------- Karteikarten ----------
@@ -1373,19 +1743,19 @@ class Component extends DCLogic {
       { k:'nacht', name:'Nacht', bg:'#17120f', fg:'#f3e8da', font:'Fraunces, Georgia, serif', dots:['#f0a64e','#f08c6e','#a6cf8c','#8db7d8'] },
       { k:'pop', name:'Pop', bg:'#1e1b2e', fg:'#fbf3e6', font:'"Bricolage Grotesque", system-ui, sans-serif', dots:['#ffa977','#c6aaff','#80e2ad','#ff94b0'] }
     ];
-    return { phases, quiz, cats, exercises, cards, cardTopics, sorts, fpTypes, fpFactors, fpSlide, themes };
+    return { phases, quiz, cats, exercises, cards, cardTopics, sorts, fpTypes, fpFactors, fpSlide, themes, pfc };
   }
 
 
   static KEY = 'se1-lernplan-v1';
-  static SAVE = ['theme','tab','done','open','phClosed','tagF','hideDone','counts','flags','exam','qf','qmode','qstats','qstreak','qbest','exSel','exChecks','exDone','fcTopic','fcBox','sortSet','sortPlaced','sortBest','fp','act','focus','focusLog','exT'];
+  static SAVE = ['theme','tab','done','open','phClosed','tagF','hideDone','counts','flags','exam','qf','qmode','qstats','qstreak','qbest','exSel','exChecks','exDone','fcTopic','fcBox','sortSet','sortPlaced','sortBest','fp','act','focus','focusLog','exT','pk','pkBest','pfc'];
 
   state = { theme:'nacht', tab:'plan', done:{}, open:{}, phClosed:{}, tagF:'alle', hideDone:false, counts:{ fa:0, nfa:0, stat:0, dyn:0 }, flags:{}, exam:'',
     qf:'alle', qmode:'alle', qpos:0, qpick:null, qstats:{}, qstreak:0, qbest:0, qround:0,
     exSel:'ex1', exHint:false, exSol:false, exChecks:{}, exDone:{},
     fcTopic:'alle', fcBox:{}, fcPos:0, fcFlip:false, fcRound:0,
     sortSet:'fanfa', sortPlaced:{}, sortSel:null, sortChecked:false, sortBest:{},
-    fp:null, act:{}, focus:{ dur:1500, left:1500, end:null }, focusLog:{}, exT:{ dur:900, left:900, end:null }, toast:null };
+    fp:null, act:{}, focus:{ dur:1500, left:1500, end:null }, focusLog:{}, exT:{ dur:900, left:900, end:null }, toast:null, exStep:3, pk:null, pkBest:null, pfc:{}, printMode:null };
 
   componentDidMount() {
     try { const s = JSON.parse(localStorage.getItem(Component.KEY) || 'null'); if (s && typeof s === 'object') this.setState(s); } catch (e) {}
@@ -1394,8 +1764,10 @@ class Component extends DCLogic {
     this._tick = setInterval(() => this.tick(), 1000);
     this._onKey = e => this.onKey(e);
     window.addEventListener('keydown', this._onKey);
+    this._onAfterPrint = () => this.setState({ printMode:null });
+    window.addEventListener('afterprint', this._onAfterPrint);
   }
-  componentWillUnmount() { clearInterval(this._tick); clearTimeout(this._toastT); window.removeEventListener('keydown', this._onKey); }
+  componentWillUnmount() { clearInterval(this._tick); clearTimeout(this._toastT); window.removeEventListener('keydown', this._onKey); window.removeEventListener('afterprint', this._onAfterPrint); }
   componentDidUpdate() {
     this.applyTheme();
     if (!this._ready) return;
@@ -1418,6 +1790,7 @@ class Component extends DCLogic {
   tick() {
     let running = false;
     ['focus','exT'].forEach(k => { const t = this.state[k]; if (t && t.end) { running = true; if (Date.now() >= t.end) this.timerDone(k); } });
+    const pk = this.state.pk; if (pk && pk.q && !pk.done) { running = true; if (Date.now() >= pk.end) this.pkSubmit(true); }
     if (running) this.forceUpdate();
   }
   timerDone(k) {
@@ -1461,9 +1834,47 @@ class Component extends DCLogic {
   bump(k, d) { this.setState(s => ({ counts: { ...(s.counts || {}), [k]: Math.max(0, ((s.counts || {})[k] || 0) + d) } })); }
   scrollTop() { try { window.scrollTo({ top:0, behavior:'smooth' }); } catch (e) {} }
   goTo(t) {
-    if (['quiz','cards','sort','fp'].includes(t)) this.setState({ tab:t });
+    if (['quiz','cards','sort','fp','pk'].includes(t)) this.setState({ tab:t });
     else this.selectEx(t, true);
     this.scrollTop();
+  }
+  doPrint(m) {
+    this.setState({ printMode:m });
+    setTimeout(() => { try { window.print(); } catch (e) { this.toast('Drucken klappt hier nicht. Öffne die Seite direkt im Browser.', 'var(--bad)'); } }, 400);
+  }
+  pkNew() {
+    const D = Component.data(), r = n => Math.floor(Math.random() * n);
+    const ids = D.quiz.map(q => q.id); for (let i = ids.length - 1; i > 0; i--) { const j = r(i + 1); [ids[i], ids[j]] = [ids[j], ids[i]]; }
+    const pool = D.exercises.filter(e => !['Function Points','Theorie'].includes(e.type));
+    const c = Array.from({ length:15 }, (_, i) => (i % 3 === 2 ? (Math.random() < 0.5 ? 0 : 1 + r(2)) : r(6)));
+    if (c.every(x => x === 0)) c[0] = 3;
+    this.setState({ tab:'pk', pk: { q:ids.slice(0, 8), ex:pool[r(pool.length)].id, c, sdi:14 + r(43), ans:{}, ufp:'', fp:'', checks:{}, sol:false, done:false, end:Date.now() + 45 * 60000, dur:45 * 60 } });
+    this.scrollTop();
+  }
+  pkTarget(pk) {
+    const D = Component.data(); let ufp = 0;
+    D.fpTypes.forEach((ft, ti) => ft.w.forEach((w, k) => { ufp += (pk.c[ti * 3 + k] || 0) * w; }));
+    const tcf = Math.round((0.65 + 0.01 * pk.sdi) * 100) / 100;
+    return { ufp, tcf, fp: Math.round(ufp * tcf * 100) / 100 };
+  }
+  pkNum(v) { let t = String(v == null ? '' : v).trim().replace(/\s/g, ''); if (!t) return NaN; if (t.includes(',')) t = t.replace(/\./g, '').replace(',', '.'); const x = Number(t); return isFinite(x) ? x : NaN; }
+  pkScore(pk) {
+    const D = Component.data(), tg = this.pkTarget(pk), ex = D.exercises.find(e => e.id === pk.ex) || D.exercises[0];
+    const a = pk.q.filter(id => (pk.ans || {})[id] === 0).length;
+    const ufpOk = this.pkNum(pk.ufp) === tg.ufp, fpOk = Math.abs(this.pkNum(pk.fp) - tg.fp) < 0.005;
+    const b = (ufpOk ? 2 : 0) + (fpOk ? 2 : 0), c = ex.checks.filter((_, i) => (pk.checks || {})[i]).length, max = 8 + 4 + ex.checks.length;
+    return { a, b, c, max, nC:ex.checks.length, ufpOk, fpOk, tg, total:a + b + c, pct: Math.round((a + b + c) / max * 100) };
+  }
+  pkSubmit(auto) {
+    const pk = this.state.pk; if (!pk || pk.done) return;
+    const sc = this.pkScore(pk);
+    this.setState(st => ({ pk: { ...st.pk, done:true, end:Date.now() }, pkBest: Math.max(st.pkBest || 0, sc.pct) }));
+    this.bumpAct();
+    this.toast(auto ? 'Zeit um, automatisch abgegeben.' : 'Abgegeben. Jetzt Teil C aufdecken und abhaken.', 'var(--color-accent)');
+    this.scrollTop();
+  }
+  pkToggleCheck(i) {
+    this.setState(st => { const pk = { ...st.pk, checks: { ...(st.pk.checks || {}), [i]: !(st.pk.checks || {})[i] } }; const sc = this.pkScore(pk); return { pk, pkBest: Math.max(st.pkBest || 0, sc.pct) }; });
   }
   selectEx(id, tab) { this.setState(s => ({ exSel:id, exHint:false, exSol:false, exT: { ...(s.exT || { dur:900 }), end:null, left:(s.exT || { dur:900 }).dur }, ...(tab ? { tab:'ex' } : {}) })); }
   jump(anchor, num) {
@@ -1513,7 +1924,7 @@ class Component extends DCLogic {
     const exam = /^\d{4}-\d{2}-\d{2}$/.test(s.exam || '') ? new Date(s.exam + 'T09:00:00') : null;
     const until = d => Math.max(0, Math.ceil((d - now) / DAY));
     const TAGC = { Pflichtenheft:'p4', UML:'p1', Theorie:'p5', Docker:'p6', Orga:'p3' };
-    const GOL = { quiz:'Zum Notationstrainer →', cards:'Zu den Karteikarten →', sort:'Zum Sortierspiel →', fp:'Zum FP-Rechner →' };
+    const GOL = { pk:'Zur Probeklausur →', quiz:'Zum Notationstrainer →', cards:'Zu den Karteikarten →', sort:'Zum Sortierspiel →', fp:'Zum FP-Rechner →' };
     const tab = s.tab || 'plan';
 
     // ----- Lernplan -----
@@ -1631,12 +2042,17 @@ class Component extends DCLogic {
     const et = s.exT || { dur:900, left:900, end:null }, etLeft = this.timerLeft(et);
     const stepsDone = [true, !!et.end || etLeft < et.dur || !!s.exHint || !!s.exSol, !!s.exSol, allCk], curStep = stepsDone.indexOf(false);
     const steps = ['Lesen','Zeichnen','Vergleichen','Selbstcheck'].map((l, i) => ({ label:(i + 1) + ' · ' + l, bg: stepsDone[i] ? soft(ec, 22) : 'transparent', border: stepsDone[i] || i === curStep ? ec : 'var(--color-divider)', fg: stepsDone[i] ? ink(ec) : (i === curStep ? 'var(--color-text)' : muted) }));
+    const exHasSteps = exSel.sol.indexOf('<svg') === 0, exStepV = exHasSteps ? Math.min(3, Math.max(1, s.exStep || 3)) : 3;
+    const exStepBtns = [[1,'1 · Elemente'],[2,'2 · Beziehungen'],[3,'3 · Beschriftungen']].map(([k, l]) => { const pz = pill(ec, exStepV === k); return { label:l, on: exStepV === k, bg:pz.bg, border:pz.border, fg:pz.fg, pick:() => this.setState({ exStep:k }) }; });
     const exIdx = D.exercises.indexOf(exSel), prevE = D.exercises[exIdx - 1], nextE = D.exercises[exIdx + 1];
     const ex = {
       num:exSel.num, title:exSel.title, type:exSel.type, color:ec, ink:ink(ec), soft:soft(ec, 18), btnBg:soft(ec, 20),
       paras: exSel.paras.map(t => ({ t })), hasGiven: !!exSel.given, givenLabel: exSel.givenLabel || '', given: exSel.given ? this.el(exSel.given, ec) : null,
       steps, hints: exSel.hints.map(t => ({ t })), showHint: !!s.exHint, hintLabel: s.exHint ? 'Tipps ausblenden' : 'Tipps anzeigen', toggleHint:() => this.setState(st => ({ exHint: !st.exHint })),
-      showSol: !!s.exSol, solLabel: s.exSol ? 'Lösung verbergen' : 'Musterlösung aufdecken', toggleSol:() => { if (!s.exSol) this.bumpAct(); this.setState(st => ({ exSol: !st.exSol })); },
+      showSol: !!s.exSol, solLabel: s.exSol ? 'Lösung verbergen' : 'Musterlösung aufdecken', toggleSol:() => { if (!s.exSol) this.bumpAct(); this.setState(st => ({ exSol: !st.exSol, exStep: st.exSol ? st.exStep : 1 })); },
+      hasSteps: exHasSteps, solStep: String(exStepV), stepBtns: exStepBtns, hasNextStep: exHasSteps && exStepV < 3, nextStep:() => this.setState(st => ({ exStep: Math.min(3, (st.exStep || 1) + 1) })),
+      printCur:() => this.doPrint('cur'),
+      workHint: exSel.type === 'Theorie' ? 'Erst selbst stichpunktartig beantworten, dann aufdecken und mit dem Selbstcheck vergleichen.' : exSel.type === 'Fehler finden' ? 'Erst alle Fehler auf Papier markieren und korrigieren, dann aufdecken und vergleichen.' : 'Erst auf Papier zeichnen, in der Klausur gibt es kein Tool. Dann aufdecken und mit dem Selbstcheck vergleichen.',
       sol: this.el(exSel.sol, ec), hasSolNote: !!exSel.solNote, solNote: exSel.solNote || '', checks,
       score: nCk + ' / ' + checks.length, scoreW: Math.round(nCk / checks.length * 100) + '%', scoreColor: allCk ? 'var(--ok)' : ec,
       isDone: !!exDone[exSel.id], doneLabel: exDone[exSel.id] ? 'Erledigt ✓' : 'Als erledigt markieren',
@@ -1650,6 +2066,52 @@ class Component extends DCLogic {
       hasPrev: !!prevE, prevLabel: prevE ? '← ' + prevE.num + ' ' + prevE.title : '', goPrev:() => { if (prevE) { this.selectEx(prevE.id); this.scrollTop(); } },
       hasNext: !!nextE, nextLabel: nextE ? nextE.num + ' ' + nextE.title + ' →' : '', goNext:() => { if (nextE) { this.selectEx(nextE.id); this.scrollTop(); } }
     };
+
+    // ----- Probeklausur -----
+    const pkS = s.pk, pkActive = !!(pkS && pkS.q), pkDoneB = !!(pkActive && pkS.done);
+    let pkV = { pkQs:[], pkFpRows:[], pkParts:[], pkChecks:[], pkExParas:[] };
+    if (pkActive) {
+      const sc = this.pkScore(pkS), left = pkDoneB ? 0 : Math.max(0, Math.round((pkS.end - Date.now()) / 1000));
+      const pex = D.exercises.find(e => e.id === pkS.ex) || D.exercises[0], pc = col(pex.color);
+      const pkQs = pkS.q.map((id, n) => { const qi = D.quiz.findIndex(q => q.id === id), it = D.quiz[qi]; if (!it) return null;
+        const c2 = col(CATC[it.cat]), a = (pkS.ans || {})[id];
+        const opts = PERMS[qi % PERMS.length].map(oi => { const correct = oi === 0, picked = a === oi;
+          const st = !pkDoneB ? (picked ? 'sel' : 'idle') : correct ? 'right' : picked ? 'wrong' : 'dim';
+          return { label:it.opts[oi], op: st === 'dim' ? 0.55 : 1, mark: st === 'right' ? '✓' : st === 'wrong' ? '✗' : '', markColor: st === 'right' ? 'var(--ok)' : 'var(--bad)',
+            border: st === 'sel' ? 'var(--color-accent)' : st === 'right' ? 'var(--ok)' : st === 'wrong' ? 'var(--bad)' : 'var(--color-divider)',
+            bg: st === 'sel' ? soft('var(--color-accent)', 20) : st === 'right' ? soft('var(--ok)', 16) : st === 'wrong' ? soft('var(--bad)', 14) : 'var(--color-bg)',
+            pick:() => { const cur = this.state.pk; if (cur && !cur.done) this.setState(x => ({ pk: { ...x.pk, ans: { ...(x.pk.ans || {}), [id]:oi } } })); } }; });
+        return { n:n + 1, cat:catLabel[it.cat], q:it.q, glyph:this.el(it.svg, c2), tint:soft(c2, 10), ink:ink(c2), opts, showEx:pkDoneB,
+          ex: (a === 0 ? 'Richtig. ' : a == null ? 'Nicht beantwortet. Richtig ist: ' + it.opts[0] + '. ' : 'Richtig ist: ' + it.opts[0] + '. ') + it.ex,
+          exInk: a === 0 ? 'color-mix(in srgb, var(--ok) 60%, var(--color-text))' : 'var(--color-text)' }; }).filter(Boolean);
+      const KL = ['einfach','mittel','komplex'];
+      const pkFpRows = D.fpTypes.map((ft, ti) => { const parts = [0,1,2].map(k => pkS.c[ti * 3 + k] ? pkS.c[ti * 3 + k] + ' ' + KL[k] : null).filter(Boolean); return { label:ft.l, text: parts.length ? parts.join(', ') : 'keine' }; });
+      const answeredN = pkS.q.filter(id => (pkS.ans || {})[id] != null).length;
+      const resC = sc.pct >= 80 ? 'var(--ok)' : sc.pct >= 50 ? 'var(--p3)' : 'var(--bad)';
+      const pkChecks = pex.checks.map((label, i) => { const on = !!(pkS.checks || {})[i]; return { label, checked:on, bg: on ? soft(pc, 28) : 'transparent', border: on ? pc : 'color-mix(in srgb, var(--color-text) 35%, transparent)', fg:ink(pc), mark: on ? '✓' : '', toggle:() => this.pkToggleCheck(i) }; });
+      pkV = { pkQs, pkFpRows, pkChecks,
+        pkTime: mmss(left), pkTimeW: Math.round(left / pkS.dur * 100) + '%', pkTimeColor: left < 300 ? 'var(--bad)' : left < 900 ? 'var(--p3)' : 'var(--color-accent)', pkTimeInk: left < 300 && !pkDoneB ? 'color-mix(in srgb, var(--bad) 60%, var(--color-text))' : 'var(--color-text)',
+        pkProgress: pkDoneB ? 'abgegeben' : answeredN + '/8 Fragen beantwortet', pkSdi: pkS.sdi,
+        pkUfp: pkS.ufp || '', pkFp: pkS.fp || '',
+        pkSetUfp: e => { const v = e.target.value; this.setState(x => ({ pk: { ...x.pk, ufp:v } })); }, pkSetFp: e => { const v = e.target.value; this.setState(x => ({ pk: { ...x.pk, fp:v } })); },
+        pkUfpBorder: !pkDoneB ? 'var(--color-divider)' : sc.ufpOk ? 'var(--ok)' : 'var(--bad)', pkFpBorder: !pkDoneB ? 'var(--color-divider)' : sc.fpOk ? 'var(--ok)' : 'var(--bad)',
+        pkFpSol: 'Lösung: UFP = ' + sc.tg.ufp + ' · TCF = 0,65 + 0,01 · ' + pkS.sdi + ' = ' + fmt(sc.tg.tcf) + ' · FP = ' + sc.tg.ufp + ' · ' + fmt(sc.tg.tcf) + ' = ' + fmt(sc.tg.fp) + '  →  ' + (sc.ufpOk ? 'UFP ✓' : 'UFP ✗') + ' · ' + (sc.fpOk ? 'FP ✓' : 'FP ✗'),
+        pkExType: pex.type, pkExNum: pex.num, pkExTitle: pex.title, pkExParas: pex.paras.map(t => ({ t })), pkExHasGiven: !!pex.given, pkExGiven: pex.given ? this.el(pex.given, pc) : null,
+        pkExSol: this.el(pex.sol, pc), pkCanSol: pkDoneB, pkShowSol: pkDoneB && !!pkS.sol, pkSolLabel: pkS.sol ? 'Lösung verbergen' : 'Lösung aufdecken',
+        pkToggleSol:() => this.setState(x => ({ pk: { ...x.pk, sol: !x.pk.sol } })),
+        pkPct: sc.pct + ' %', pkPoints: sc.total + ' von ' + sc.max + ' Punkten', pkResColor: resC, pkResBg: soft(resC, 10), pkResInk: ink(resC),
+        pkParts: [{ label:'Teil A · Notation', val: sc.a + ' / 8' }, { label:'Teil B · Function Points', val: sc.b + ' / 4' }, { label:'Teil C · Diagramm (Selbstcheck)', val: sc.c + ' / ' + sc.nC }] };
+    }
+
+    // ----- Pflichtenheft-Checkliste -----
+    const pfcS = s.pfc || {}; let pfcDone = 0, pfcTotal = 0;
+    const pfcGroups = D.pfc.map((g, gi) => ({ ch:g.ch, ink:ink('var(--p4)'), items: g.items.map((label, i) => { const k = gi + '-' + i, on = !!pfcS[k]; pfcTotal++; if (on) pfcDone++;
+      return { label, checked:on, op: on ? 0.6 : 1, bg: on ? soft('var(--p4)', 28) : 'transparent', border: on ? 'var(--p4)' : 'color-mix(in srgb, var(--color-text) 35%, transparent)', fg:ink('var(--p4)'), mark: on ? '✓' : '',
+        toggle:() => this.setState(st => ({ pfc: { ...(st.pfc || {}), [k]: !(st.pfc || {})[k] } })) }; }) }));
+
+    // ----- Druck -----
+    const printSrc = s.printMode === 'all' ? D.exercises : s.printMode === 'cur' ? [exSel] : [];
+    const printList = printSrc.map(e => ({ num:e.num, title:e.title, type:e.type, paras:e.paras.map(t => ({ t })), hasGiven: !!e.given, given: e.given ? this.el(e.given) : null }));
 
     // ----- Karteikarten -----
     const fcTopic = s.fcTopic || 'alle', fcBox = s.fcBox || {}, TOP = {}; D.cardTopics.forEach(t => { TOP[t.k] = t; });
@@ -1718,17 +2180,23 @@ class Component extends DCLogic {
 
     // ----- Kopf -----
     const abgabe = new Date(2027, 0, 17, 22, 0), ad = until(abgabe), pct = totalN ? Math.round(doneN / totalN * 100) : 0;
-    const badges = { plan:pct + '%', quiz:qMastered + '/' + D.quiz.length, ex:exDoneN + '/' + D.exercises.length, cards:cardsSitzt + '/' + D.cards.length, sort:sortPerfect + '/' + D.sorts.length, fp:'' };
-    const tabs = [['plan','Lernplan','p6'],['quiz','Notation','p1'],['ex','Übungen','p3'],['cards','Karteikarten','p5'],['sort','Sortieren','p2'],['fp','Function Points','p4']].map(([k, l, ck]) => {
+    const badges = { pk: s.pkBest != null ? s.pkBest + '%' : '', plan:pct + '%', quiz:qMastered + '/' + D.quiz.length, ex:exDoneN + '/' + D.exercises.length, cards:cardsSitzt + '/' + D.cards.length, sort:sortPerfect + '/' + D.sorts.length, fp:'' };
+    const tabs = [['plan','Lernplan','p6'],['quiz','Notation','p1'],['ex','Übungen','p3'],['cards','Karteikarten','p5'],['sort','Sortieren','p2'],['fp','Function Points','p4'],['pk','Probeklausur','color-accent']].map(([k, l, ck]) => {
       const c = col(ck), on = tab === k;
       return { label:l, dot:c, badge:badges[k], bg: on ? soft(c, 20) : 'var(--color-surface)', border: on ? c : 'var(--color-divider)', fg: on ? ink(c) : 'var(--color-text)', go:() => this.setState({ tab:k }) };
     });
+    const rp = (n, t) => t ? Math.round(n / t * 100) : 0;
+    const rings = [['Lernplan', doneN, totalN, 'p6', 'plan'], ['Übungen', exDoneN, D.exercises.length, 'p3', 'ex'], ['Notation', qMastered, D.quiz.length, 'p1', 'quiz'], ['Karten', cardsSitzt, D.cards.length, 'p5', 'cards']].map(([l, n, t, ck, tb]) => {
+      const v = rp(n, t); return { label:l, sub:n + ' / ' + t, pct:v + '%', deg:Math.round(v * 3.6) + 'deg', color:col(ck), aria:l + ': ' + n + ' von ' + t, go:() => this.setState({ tab:tb }) }; });
     const th = s.theme === 'pop' ? 'pop' : 'nacht';
     const themes = D.themes.map(t => ({ name:t.name, bg:t.bg, fg:t.fg, font:t.font, active: th === t.k, dots:t.dots.map(c => ({ c })),
       border: th === t.k ? '2px solid var(--color-accent)' : '1px solid var(--color-divider)', shadow: th === t.k ? '0 0 0 4px ' + soft('var(--color-accent)', 25) : 'none', pick:() => this.setState({ theme:t.k }) }));
 
     return {
-      themes, tabs, isPfl: (s.tagF || 'alle') === 'Pflichtenheft', isPlan: tab === 'plan', isQuiz: tab === 'quiz', isEx: tab === 'ex', isCards: tab === 'cards', isSort: tab === 'sort', isFp: tab === 'fp',
+      themes, tabs, isPfl: (s.tagF || 'alle') === 'Pflichtenheft', isPlan: tab === 'plan', isQuiz: tab === 'quiz', isEx: tab === 'ex', isCards: tab === 'cards', isSort: tab === 'sort', isFp: tab === 'fp', isPk: tab === 'pk', rings,
+      pkIdle: !pkActive, pkActive, pkRunning: pkActive && !pkDoneB, pkDone: pkDoneB, pkStart:() => this.pkNew(), pkSubmit:() => this.pkSubmit(false), pkCancel:() => this.setState({ pk:null }),
+      pkBestLabel: s.pkBest != null ? 'Bestwert Probeklausur: ' + s.pkBest + ' %' : 'Noch keine Probeklausur', ...pkV,
+      pfcGroups, pfcDone, pfcTotal, pfcW: Math.round(pfcDone / Math.max(1, pfcTotal) * 100) + '%', printList, printAll:() => this.doPrint('all'),
       abgabeDays: now > abgabe ? 'vorbei' : (ad === 1 ? '1 Tag' : ad + ' Tage'),
       examValue: exam ? (until(exam) === 1 ? '1 Tag' : until(exam) + ' Tage') : 'Datum offen',
       examInput: s.exam || '', setExam: e => this.setState({ exam: e.target.value }),
