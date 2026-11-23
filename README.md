@@ -12,3 +12,4 @@ Sicherungen des Lernplans „Klausurvorbereitung UML-Diagramme“ (Software Engi
 | v2 | 20.11.2026 | Inhaltlich identisch mit v1 – Sicherungspunkt vor dem großen Ausbau (Probeklausur, Fehler finden, Dashboard …) |
 | v3 | 20.11.2026 | Farbige Diagramme, größere Schrift, Zimmer-Notation, Übungen 23–31, Probeklausur, Pflichtenheft-Checkliste, Dashboard, Druck, Handy |
 | v4 | 23.11.2026 | Neu gestaltete Oberfläche (Start-Seite, Üben-Bereich, Einstellungen) vor dem Umbau zu Schaubildern |
+| v5 | 23.11.2026 | Lernplan als visuelle Roadmap, Reiter UML-Überblick (Übersichtskarte, 8 Spickzettel, 4 Vergleiche), Theorie-Schaubilder |

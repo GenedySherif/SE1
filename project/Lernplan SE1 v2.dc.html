@@ -270,92 +270,154 @@
 
     <sc-if value="{{ isPlan }}" hint-placeholder-val="{{ true }}">
       <section style="display:flex; flex-direction:column; gap:22px;">
-        <div style="display:flex; flex-direction:column; gap:6px;">
-          <h2 style="margin:0; font-size:30px;">Lernplan</h2>
-          <p style="margin:0; max-width:640px; font-size:14px; line-height:1.55; color:color-mix(in srgb, var(--color-text) 72%, transparent); text-wrap:pretty;">Alle 7 Phasen mit sämtlichen Aufgaben. Hake ab, filtere nach Thema und klapp Details auf. Was heute dran ist, steht auf der Startseite.</p>
-        </div>
-        <div style="display:flex; flex-direction:column; gap:12px; padding:16px 18px; border-radius:var(--radius-lg); background:var(--color-surface); box-shadow:var(--shadow-sm);">
-          <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:6px 16px; align-items:baseline;">
-            <div style="font-size:11px; letter-spacing:0.08em; text-transform:uppercase; font-weight:600; color:color-mix(in srgb, var(--color-text) 62%, transparent);">Zeitstrahl · 7 Phasen bis zur Klausur</div>
-            <div style="font-size:12px; color:color-mix(in srgb, var(--color-text) 62%, transparent);">{{ timelineHint }}</div>
+        <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-end; gap:8px 20px;">
+          <div style="display:flex; flex-direction:column; gap:6px;">
+            <h2 style="margin:0; font-size:30px;">Lernplan</h2>
+            <p style="margin:0; max-width:620px; font-size:14px; line-height:1.55; color:color-mix(in srgb, var(--color-text) 72%, transparent); text-wrap:pretty;">Dein Weg in 7 Etappen. Tippe eine Etappe an, darunter erscheinen nur ihre Aufgaben.</p>
           </div>
-          <div style="display:flex; gap:4px; height:44px;">
-            <sc-for list="{{ phases }}" as="ph" hint-placeholder-count="7">
-              <button onClick="{{ ph.jump }}" title="{{ ph.title }}" style="flex:{{ ph.flex }} 1 0; min-width:32px; position:relative; overflow:hidden; display:flex; align-items:center; padding:0 9px; border:1.5px solid {{ ph.fillSoft }}; border-radius:10px; background:{{ ph.soft }}; color:{{ ph.ink }}; font-family:var(--font-body); font-size:12px; font-weight:700; cursor:pointer;" style-hover="border-color:currentColor;">
-                <span style="position:absolute; left:0; top:0; bottom:0; width:{{ ph.pctW }}; background:{{ ph.fillSoft }}; transition:width .4s;"></span>
-                <sc-if value="{{ ph.isCurrent }}"><span style="position:absolute; top:5px; bottom:5px; left:{{ ph.todayPos }}; width:3px; border-radius:2px; background:var(--color-text);"></span></sc-if>
-                <span style="position:relative;">{{ ph.num }}</span>
-              </button>
-            </sc-for>
-          </div>
-          <div style="display:flex; flex-wrap:wrap; gap:6px 18px; font-size:12px; color:color-mix(in srgb, var(--color-text) 62%, transparent);">
-            <span style="display:flex; align-items:center; gap:6px;"><span style="width:3px; height:12px; border-radius:2px; background:var(--color-text);"></span>Heute</span>
-            <span>Füllung = erledigt</span>
-            <span>Klick springt zur Phase</span>
-          </div>
+          <span style="font-size:13px; font-weight:700; font-variant-numeric:tabular-nums;">{{ doneN }} / {{ totalN }} erledigt</span>
         </div>
 
-        <div style="display:flex; flex-wrap:wrap; gap:8px; align-items:center;">
-          <sc-for list="{{ tagChips }}" as="c" hint-placeholder-count="6">
-            <button onClick="{{ c.pick }}" style="display:flex; align-items:center; gap:7px; padding:6px 12px; border-radius:999px; border:1.5px solid {{ c.border }}; background:{{ c.bg }}; color:{{ c.fg }}; font-family:var(--font-body); font-size:13px; font-weight:600; cursor:pointer;">
-              <span style="width:8px; height:8px; border-radius:50%; background:{{ c.dot }};"></span><span>{{ c.label }}</span><span style="opacity:0.65; font-variant-numeric:tabular-nums;">{{ c.count }}</span>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(148px, 1fr)); gap:10px;">
+          <sc-for list="{{ phases }}" as="ph" hint-placeholder-count="7">
+            <button onClick="{{ ph.select }}" aria-pressed="{{ ph.sel }}" aria-label="Etappe {{ ph.num }}: {{ ph.title }}" style="position:relative; display:flex; flex-direction:column; gap:10px; min-width:0; padding:14px; border-radius:var(--radius-lg); border:2px solid {{ ph.cardBorder }}; background:{{ ph.cardBg }}; color:var(--color-text); font-family:var(--font-body); text-align:left; cursor:pointer; transition:transform .15s, border-color .2s;" style-hover="transform:translateY(-2px);">
+              <span style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
+                <span style="width:40px; height:40px; flex:none; display:grid; place-items:center; border-radius:12px; background:{{ ph.soft }}; color:{{ ph.ink }};">{{ ph.icon }}</span>
+                <sc-if value="{{ ph.isCurrent }}"><span style="font-size:10px; font-weight:800; letter-spacing:0.06em; text-transform:uppercase; padding:3px 8px; border-radius:999px; background:{{ ph.fill }}; color:var(--color-bg);">jetzt</span></sc-if>
+                <sc-if value="{{ ph.allDone }}"><span style="width:22px; height:22px; display:grid; place-items:center; border-radius:50%; background:var(--ok); color:var(--color-bg); font-size:12px; font-weight:800;">✓</span></sc-if>
+              </span>
+              <span style="display:flex; flex-direction:column; gap:2px;">
+                <span style="font-size:11px; font-weight:800; font-variant-numeric:tabular-nums; color:{{ ph.ink }};">{{ ph.num }} · {{ ph.shortRange }}</span>
+                <span style="font-size:14px; line-height:1.3; font-weight:700; text-wrap:balance;">{{ ph.title }}</span>
+              </span>
+              <span style="display:flex; flex-direction:column; gap:3px;">
+                <sc-for list="{{ ph.keys }}" as="k" hint-placeholder-count="3"><span style="display:flex; gap:6px; font-size:12px; line-height:1.35; color:color-mix(in srgb, var(--color-text) 72%, transparent);"><span style="color:{{ ph.ink }};">›</span><span>{{ k.t }}</span></span></sc-for>
+              </span>
+              <span style="display:flex; flex-wrap:wrap; gap:3px; margin-top:auto;">
+                <sc-for list="{{ ph.dots }}" as="d" hint-placeholder-count="6"><span title="{{ d.title }}" style="width:10px; height:10px; border-radius:3px; border:1.5px solid {{ d.c }}; background:{{ d.bg }};"></span></sc-for>
+              </span>
+              <span style="display:flex; align-items:center; gap:8px;">
+                <span style="flex:1; height:5px; border-radius:3px; background:var(--color-neutral-800); overflow:hidden;"><span style="display:block; height:100%; width:{{ ph.pctW }}; border-radius:3px; background:{{ ph.fill }};"></span></span>
+                <span style="font-size:11px; font-weight:700; font-variant-numeric:tabular-nums;">{{ ph.doneCount }}/{{ ph.total }}</span>
+              </span>
             </button>
           </sc-for>
-          <label style="margin-left:auto; display:flex; align-items:center; gap:8px; font-size:13px; cursor:pointer;"><input type="checkbox" checked="{{ hideDone }}" onChange="{{ toggleHideDone }}" style="width:16px; height:16px; margin:0;">Erledigte ausblenden</label>
+        </div>
+        <div style="display:flex; flex-wrap:wrap; gap:6px 18px; font-size:12px; color:color-mix(in srgb, var(--color-text) 62%, transparent);">
+          <sc-for list="{{ planLegend }}" as="lg" hint-placeholder-count="3"><span style="display:flex; align-items:center; gap:6px;"><span style="width:10px; height:10px; border-radius:3px; border:1.5px solid {{ lg.c }}; background:{{ lg.c }};"></span>{{ lg.l }}</span></sc-for>
+          <span>Kästchen gefüllt = erledigt</span>
         </div>
 
-        <sc-if value="{{ isPfl }}">
-          <button onClick="{{ goPfl }}" style="align-self:flex-start; display:flex; align-items:center; gap:8px; padding:10px 16px; border-radius:var(--radius-md); border:1.5px solid var(--p4); background:color-mix(in srgb, var(--p4) 14%, transparent); color:color-mix(in srgb, var(--p4) 60%, var(--color-text)); font-family:var(--font-body); font-size:14px; font-weight:700; cursor:pointer;">Auftrag, Checkliste und Abgabe-Check im Reiter Pflichtenheft →</button>
-        </sc-if>
-
-        <div style="display:flex; flex-direction:column; gap:36px; max-width:900px;">
-          <div style="min-width:0; display:flex; flex-direction:column; gap:28px;">
-            <sc-for list="{{ phases }}" as="ph" hint-placeholder-count="3">
-              <div id="{{ ph.anchor }}" style="display:flex; flex-direction:column; gap:10px;">
-                <button onClick="{{ ph.toggle }}" aria-expanded="{{ ph.open }}" style="display:flex; align-items:center; gap:14px; flex-wrap:wrap; width:100%; padding:0; border:none; background:none; color:inherit; font-family:var(--font-body); text-align:left; cursor:pointer;">
-                  <span style="width:44px; height:44px; flex:none; display:grid; place-items:center; border-radius:13px; border:1.5px solid {{ ph.fill }}; background:{{ ph.soft }}; color:{{ ph.ink }}; font-size:15px; font-weight:700; font-variant-numeric:tabular-nums;">{{ ph.num }}</span>
-                  <span style="flex:1 1 200px; min-width:0; display:flex; flex-direction:column; gap:3px;">
-                    <span style="font-family:var(--font-heading); font-weight:var(--font-heading-weight); font-size:23px; line-height:1.15;">{{ ph.title }}</span>
-                    <span style="font-size:12px; color:color-mix(in srgb, var(--color-text) 62%, transparent);">{{ ph.range }} · {{ ph.hoursLabel }}</span>
-                  </span>
-                  <span style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-                    <sc-if value="{{ ph.isCurrent }}"><span style="font-size:11px; font-weight:700; padding:3px 10px; border-radius:999px; border:1px solid {{ ph.fill }}; background:{{ ph.soft }}; color:{{ ph.ink }};">diese Woche</span></sc-if>
-                    <sc-if value="{{ ph.tight }}"><span style="font-size:11px; font-weight:700; padding:3px 10px; border-radius:999px; background:color-mix(in srgb, var(--bad) 16%, transparent); color:color-mix(in srgb, var(--bad) 60%, var(--color-text));">knapp</span></sc-if>
-                    <span style="font-size:13px; font-weight:700; font-variant-numeric:tabular-nums;">{{ ph.doneCount }}/{{ ph.total }}</span>
-                    <span style="display:inline-block; font-size:14px; transform:rotate({{ ph.chev }}); transition:transform .2s; color:color-mix(in srgb, var(--color-text) 62%, transparent);">▾</span>
-                  </span>
-                </button>
-                <div style="height:5px; border-radius:3px; background:var(--color-neutral-800); overflow:hidden;"><div style="height:100%; width:{{ ph.pctW }}; border-radius:3px; background:{{ ph.fill }}; transition:width .4s;"></div></div>
-                <sc-if value="{{ ph.open }}" hint-placeholder-val="{{ true }}">
-                  <div style="display:flex; flex-direction:column; gap:2px;">
-                    <sc-if value="{{ ph.hasNote }}"><p style="margin:4px 0 6px; max-width:680px; font-size:13px; line-height:1.55; color:{{ ph.ink }}; text-wrap:pretty;">{{ ph.note }}</p></sc-if>
-                    <sc-for list="{{ ph.tasks }}" as="t" hint-placeholder-count="4">
-                      <div style="display:flex; gap:12px; align-items:flex-start; padding:10px 12px; margin:0 -12px; border-radius:var(--radius-md); background:{{ t.bg }}; transition:background .2s;" style-hover="background:color-mix(in srgb, var(--color-text) 5%, transparent);">
-                        <button onClick="{{ t.toggle }}" aria-pressed="{{ t.checked }}" aria-label="{{ t.text }}" style="width:22px; height:22px; flex:none; margin-top:1px; padding:0; display:grid; place-items:center; border-radius:7px; border:2px solid {{ t.checkBorder }}; background:{{ t.checkBg }}; color:{{ t.checkFg }}; font-size:13px; font-weight:800; line-height:1; cursor:pointer; transition:background .15s, border-color .15s;">{{ t.checkMark }}</button>
-                        <div style="flex:1; min-width:0; display:flex; flex-direction:column; gap:6px;">
-                          <span style="font-size:15px; line-height:1.45; text-wrap:pretty; opacity:{{ t.opacity }}; text-decoration:{{ t.deco }};">{{ t.text }}</span>
-                          <div style="display:flex; flex-wrap:wrap; gap:6px 10px; align-items:center;">
-                            <span style="font-size:11px; font-weight:700; padding:2px 9px; border-radius:999px; background:{{ t.tagSoft }}; color:{{ t.tagInk }};">{{ t.tag }}</span>
-                            <span style="font-size:12px; color:color-mix(in srgb, var(--color-text) 62%, transparent);">{{ t.hLabel }}</span>
-                            <sc-if value="{{ t.hasDetail }}"><button onClick="{{ t.toggleDetail }}" style="padding:2px 8px; border:none; border-radius:6px; background:transparent; color:var(--color-accent); font-family:var(--font-body); font-size:12px; font-weight:700; cursor:pointer;" style-hover="background:color-mix(in srgb, var(--color-accent) 12%, transparent);">{{ t.detailLabel }}</button></sc-if>
-                            <sc-if value="{{ t.hasGo }}"><button onClick="{{ t.go }}" style="padding:2px 8px; border:none; border-radius:6px; background:transparent; color:var(--color-accent); font-family:var(--font-body); font-size:12px; font-weight:700; cursor:pointer;" style-hover="background:color-mix(in srgb, var(--color-accent) 12%, transparent);">{{ t.goLabel }}</button></sc-if>
-                          </div>
-                          <sc-if value="{{ t.expanded }}">
-                            <div style="display:flex; flex-direction:column; gap:6px; max-width:680px; padding-top:2px;">
-                              <p style="margin:0; font-size:14px; line-height:1.6; text-wrap:pretty; color:color-mix(in srgb, var(--color-text) 88%, transparent);">{{ t.detail }}</p>
-                              <sc-if value="{{ t.hasRef }}"><span style="font-size:12px; color:var(--color-accent);">Folien-PDF S. {{ t.ref }}</span></sc-if>
-                            </div>
-                          </sc-if>
-                        </div>
+        <div id="plan-detail" style="display:flex; flex-direction:column; gap:18px; padding:clamp(16px, 3vw, 26px); border-radius:var(--radius-lg); background:var(--color-surface); box-shadow:var(--shadow-sm); border-top:4px solid {{ pSel.fill }};">
+          <div style="display:flex; flex-wrap:wrap; align-items:center; gap:10px 16px;">
+            <span style="width:48px; height:48px; flex:none; display:grid; place-items:center; border-radius:14px; background:{{ pSel.soft }}; color:{{ pSel.ink }};">{{ pSel.icon }}</span>
+            <span style="flex:1 1 240px; min-width:0; display:flex; flex-direction:column; gap:3px;">
+              <span style="font-size:11px; font-weight:800; letter-spacing:0.08em; text-transform:uppercase; color:{{ pSel.ink }};">Etappe {{ pSel.num }} · {{ pSel.range }}</span>
+              <span style="font-family:var(--font-heading); font-weight:var(--font-heading-weight); font-size:24px; line-height:1.15;">{{ pSel.title }}</span>
+              <span style="font-size:12px; color:color-mix(in srgb, var(--color-text) 62%, transparent);">{{ pSel.hoursLabel }}</span>
+            </span>
+            <sc-if value="{{ pSel.tight }}"><span style="font-size:11px; font-weight:700; padding:3px 10px; border-radius:999px; background:color-mix(in srgb, var(--bad) 16%, transparent); color:color-mix(in srgb, var(--bad) 60%, var(--color-text));">knapp</span></sc-if>
+          </div>
+          <sc-if value="{{ pSel.hasNote }}"><p style="margin:0; max-width:720px; font-size:13px; line-height:1.55; color:{{ pSel.ink }}; text-wrap:pretty;">{{ pSel.note }}</p></sc-if>
+          <sc-for list="{{ planGroups }}" as="g" hint-placeholder-count="3">
+            <div style="display:flex; flex-direction:column; gap:2px;">
+              <div style="display:flex; align-items:center; gap:8px; padding-bottom:6px; border-bottom:1px solid var(--color-divider);">
+                <span style="width:10px; height:10px; border-radius:3px; background:{{ g.c }};"></span>
+                <span style="font-size:13px; font-weight:800;">{{ g.label }}</span>
+                <span style="font-size:12px; font-variant-numeric:tabular-nums; color:color-mix(in srgb, var(--color-text) 62%, transparent);">{{ g.count }}</span>
+              </div>
+              <sc-for list="{{ g.tasks }}" as="t" hint-placeholder-count="3">
+                <div style="display:flex; gap:12px; align-items:flex-start; padding:9px 0;">
+                  <button onClick="{{ t.toggle }}" aria-pressed="{{ t.checked }}" aria-label="{{ t.text }}" style="width:22px; height:22px; flex:none; margin-top:1px; padding:0; display:grid; place-items:center; border-radius:7px; border:2px solid {{ t.checkBorder }}; background:{{ t.checkBg }}; color:{{ t.checkFg }}; font-size:13px; font-weight:800; line-height:1; cursor:pointer;">{{ t.checkMark }}</button>
+                  <div style="flex:1; min-width:0; display:flex; flex-direction:column; gap:6px;">
+                    <span style="display:flex; flex-wrap:wrap; align-items:baseline; gap:4px 12px;">
+                      <span style="font-size:15px; line-height:1.45; text-wrap:pretty; opacity:{{ t.opacity }}; text-decoration:{{ t.deco }};">{{ t.text }}</span>
+                      <span style="font-size:12px; color:color-mix(in srgb, var(--color-text) 62%, transparent);">{{ t.hLabel }}</span>
+                      <sc-if value="{{ t.hasDetail }}"><button onClick="{{ t.toggleDetail }}" style="padding:2px 6px; border:none; border-radius:6px; background:transparent; color:var(--color-accent); font-family:var(--font-body); font-size:12px; font-weight:700; cursor:pointer;">{{ t.detailLabel }}</button></sc-if>
+                      <sc-if value="{{ t.hasGo }}"><button onClick="{{ t.go }}" style="padding:2px 6px; border:none; border-radius:6px; background:transparent; color:var(--color-accent); font-family:var(--font-body); font-size:12px; font-weight:700; cursor:pointer;">{{ t.goLabel }}</button></sc-if>
+                    </span>
+                    <sc-if value="{{ t.expanded }}">
+                      <div style="display:flex; flex-direction:column; gap:10px; max-width:720px;">
+                        <sc-if value="{{ t.hasFig }}"><div class="dg-scroll" style="padding:14px; border-radius:var(--radius-md); background:var(--color-bg); box-shadow:var(--shadow-sm); overflow-x:auto;">{{ t.figEl }}</div></sc-if>
+                        <p style="margin:0; font-size:14px; line-height:1.6; text-wrap:pretty; color:color-mix(in srgb, var(--color-text) 88%, transparent);">{{ t.detail }}</p>
+                        <sc-if value="{{ t.hasRef }}"><span style="font-size:12px; color:var(--color-accent);">Folien-PDF S. {{ t.ref }}</span></sc-if>
                       </div>
-                    </sc-for>
-                    <sc-if value="{{ ph.empty }}"><div style="padding:6px 0; font-size:13px; color:color-mix(in srgb, var(--color-text) 62%, transparent);">Keine Aufgaben mit diesem Filter.</div></sc-if>
+                    </sc-if>
                   </div>
-                </sc-if>
+                </div>
+              </sc-for>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ isUml }}">
+      <section style="display:flex; flex-direction:column; gap:34px;">
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <h2 style="margin:0; font-size:30px;">UML-Überblick</h2>
+          <p style="margin:0; max-width:660px; font-size:14px; line-height:1.55; color:color-mix(in srgb, var(--color-text) 72%, transparent); text-wrap:pretty;">Alle Diagrammtypen aus SE I auf einen Blick: wohin sie gehören, wie man sie liest und was man leicht verwechselt. Notation wie in den Folien von Prof. Zimmer.</p>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:14px; padding:clamp(16px, 3vw, 24px); border-radius:var(--radius-lg); background:var(--color-surface); box-shadow:var(--shadow-sm);">
+          <div style="align-self:center; display:flex; flex-direction:column; align-items:center; gap:2px; padding:10px 22px; border-radius:999px; border:2px solid var(--color-accent); background:color-mix(in srgb, var(--color-accent) 12%, transparent); text-align:center;">
+            <span style="font-size:15px; font-weight:800;">UML 2.5.1 · 14 Diagrammtypen</span>
+            <span style="font-size:11px; color:color-mix(in srgb, var(--color-text) 62%, transparent);">statische und dynamische Sicht auf ein Produktmodell · Folie S. 199</span>
+          </div>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:14px;">
+            <sc-for list="{{ umlMap }}" as="grp" hint-placeholder-count="3">
+              <div style="display:flex; flex-direction:column; gap:8px; padding:12px; border-radius:var(--radius-md); border:1.5px solid {{ grp.c }}; background:{{ grp.soft }};">
+                <div style="display:flex; flex-direction:column; gap:1px; padding:2px 4px 6px;">
+                  <span style="font-size:14px; font-weight:800; color:{{ grp.ink }};">{{ grp.label }}</span>
+                  <span style="font-size:11px; color:color-mix(in srgb, var(--color-text) 62%, transparent);">{{ grp.sub }}</span>
+                </div>
+                <sc-for list="{{ grp.items }}" as="it" hint-placeholder-count="4">
+                  <button onClick="{{ it.go }}" style="display:flex; flex-direction:column; gap:2px; padding:9px 11px; border-radius:10px; border:1px solid {{ it.border }}; background:{{ it.bg }}; color:var(--color-text); font-family:var(--font-body); text-align:left; cursor:{{ it.cursor }}; opacity:{{ it.op }};" style-hover="border-color:var(--color-accent);">
+                    <span style="display:flex; justify-content:space-between; gap:8px; font-size:13px; font-weight:700;"><span>{{ it.name }}</span><span style="font-size:11px; color:{{ grp.ink }};">{{ it.tag }}</span></span>
+                    <span style="font-size:12px; line-height:1.4; color:color-mix(in srgb, var(--color-text) 62%, transparent);">{{ it.q }}</span>
+                  </button>
+                </sc-for>
               </div>
             </sc-for>
           </div>
+          <p style="margin:0; font-size:12px; color:color-mix(in srgb, var(--color-text) 62%, transparent);">Interaktionsdiagramme sind eine Untergruppe der Verhaltensdiagramme. Ausgegraut: kommt in SE I nicht dran. Antippen springt zum Spickzettel.</p>
+        </div>
 
+        <div style="display:flex; flex-direction:column; gap:14px;">
+          <h3 style="margin:0; font-family:var(--font-heading); font-weight:var(--font-heading-weight); font-size:24px;">Spickzettel je Diagrammtyp</h3>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 480px), 1fr)); gap:16px;">
+            <sc-for list="{{ umlSheets }}" as="sh" hint-placeholder-count="4">
+              <article id="{{ sh.anchor }}" style="display:flex; flex-direction:column; gap:12px; padding:18px; border-radius:var(--radius-lg); background:var(--color-surface); box-shadow:var(--shadow-sm); border-top:4px solid {{ sh.c }}; scroll-margin-top:90px;">
+                <div style="display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:4px 12px;">
+                  <h4 style="margin:0; font-size:18px; font-weight:800;">{{ sh.title }}</h4>
+                  <span style="font-size:11px; color:color-mix(in srgb, var(--color-text) 62%, transparent);">Folien S. {{ sh.ref }}</span>
+                </div>
+                <div style="font-size:13px; font-weight:600; color:{{ sh.ink }};">{{ sh.q }}</div>
+                <div class="dg-scroll" style="padding:14px; border-radius:var(--radius-md); background:var(--color-bg); overflow-x:auto;">{{ sh.img }}</div>
+                <ol style="margin:0; padding:0; list-style:none; display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:6px 14px;">
+                  <sc-for list="{{ sh.legend }}" as="lg" hint-placeholder-count="4">
+                    <li style="display:flex; gap:8px; align-items:flex-start; font-size:12.5px; line-height:1.4;"><span style="width:20px; height:20px; flex:none; display:grid; place-items:center; border-radius:50%; background:var(--color-accent); color:var(--color-bg); font-size:11px; font-weight:800;">{{ lg.n }}</span><span><b>{{ lg.t }}</b> · {{ lg.d }}</span></li>
+                  </sc-for>
+                </ol>
+              </article>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:14px;">
+          <h3 style="margin:0; font-family:var(--font-heading); font-weight:var(--font-heading-weight); font-size:24px;">Leicht verwechselt</h3>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 480px), 1fr)); gap:16px;">
+            <sc-for list="{{ umlCmp }}" as="cp" hint-placeholder-count="4">
+              <article style="display:flex; flex-direction:column; gap:12px; padding:18px; border-radius:var(--radius-lg); background:var(--color-surface); box-shadow:var(--shadow-sm);">
+                <h4 style="margin:0; font-size:17px; font-weight:800;">{{ cp.title }}</h4>
+                <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:10px;">
+                  <div style="display:flex; flex-direction:column; gap:8px; padding:12px; border-radius:var(--radius-md); background:var(--color-bg);">{{ cp.l }}<span style="font-size:12.5px; line-height:1.4;">{{ cp.lt }}</span></div>
+                  <div style="display:flex; flex-direction:column; gap:8px; padding:12px; border-radius:var(--radius-md); background:var(--color-bg);">{{ cp.r }}<span style="font-size:12.5px; line-height:1.4;">{{ cp.rt }}</span></div>
+                </div>
+                <p style="margin:0; font-size:12.5px; line-height:1.5; color:var(--color-accent);">{{ cp.note }}</p>
+              </article>
+            </sc-for>
+          </div>
         </div>
       </section>
     </sc-if>
@@ -1879,12 +1941,148 @@ class Component extends DCLogic {
       { k:'nacht', name:'Nacht', bg:'#17120f', fg:'#f3e8da', font:'Fraunces, Georgia, serif', dots:['#f0a64e','#f08c6e','#a6cf8c','#8db7d8'] },
       { k:'pop', name:'Pop', bg:'#1e1b2e', fg:'#fbf3e6', font:'"Bricolage Grotesque", system-ui, sans-serif', dots:['#ffa977','#c6aaff','#80e2ad','#ff94b0'] }
     ];
-    return { phases, quiz, cats, exercises, cards, cardTopics, sorts, fpTypes, fpFactors, fpSlide, themes, pfc };
+    // ---------- UML-Überblick: Spickzettel, Vergleiche, Theorie-Schaubilder ----------
+    const co = (x,y,n) => `<g data-l="3"><circle cx="${x}" cy="${y}" r="10" style="fill:var(--color-accent)"/><text x="${x}" y="${y+4.2}" text-anchor="middle" font-size="12" style="fill:var(--color-bg);font-weight:800">${n}</text></g>`;
+    const box = (x,y,w,h,label,o={}) => G(rc(x,y,w,h,{r:o.r||8,c:o.c||'var(--dg-cls, var(--color-neutral-400))',f:o.f||'var(--dg-cls-fill, var(--color-surface))'}) + (Array.isArray(label) ? label : [label]).map((l,i,a) => tx(x+w/2,y+h/2+4+(i-(a.length-1)/2)*14,l,{fs:o.fs||11.5,w:o.w})).join(''));
+    const S = (k,title,q,ref,img,legend) => ({ k, title, q, ref, img, legend: legend.map(([t,d],i) => ({ n:String(i+1), t, d })) });
+
+    // 1 Klassendiagramm
+    const uK1 = cls(20,30,160,'Kunde',['Name','/ Alter'],['bestellen()']), uK2 = cls(330,30,150,'Auftrag',['Datum'],null), uK3 = cls(330,190,150,'Position',['Menge'],null), uK4 = cls(20,210,160,'Privatkunde',['Geburtsdatum'],null);
+    const imgK = svg(520,270, ln(180,58,330,58) + mult(186,50,'1') + mult(324,50,'*','end') + tx(255,76,'erteilt',{fs:11,c:C.m})
+      + ar(405,190,405,uK2.b,'dfilled') + mult(413,uK2.b+18,'1') + mult(413,184,'1..*')
+      + ar(100,210,100,uK1.b,'hollow')
+      + uK1.s + uK2.s + uK3.s + uK4.s
+      + co(14,26,1) + co(100,73,2) + co(255,44,3) + co(312,40,4) + co(392,104,5) + co(84,170,6));
+    // 2 Objektdiagramm
+    const uO1 = obj(20,40,150,'anna: Kunde',['Name = "Anna"']), uO2 = obj(280,40,170,'a17: Auftrag',['Datum = 03.02.2027']), uO3 = obj(280,170,170,':Position',['Menge = 2']);
+    const imgO = svg(520,240, ln(170,64,280,64) + ln(365,uO2.b,365,170) + uO1.s + uO2.s + uO3.s
+      + co(14,34,1) + co(30,92,2) + co(225,52,3) + co(272,164,4));
+    // 3 Paketdiagramm
+    const imgP = svg(520,230, pkg(20,20,480,190,'Webshop') + pkg(50,70,170,110,'Verkauf') + mini(70,120,60,'Auftrag') + mini(140,120,64,'Position')
+      + pkg(310,70,170,110,'Lager') + mini(330,120,64,'Artikel') + mini(404,120,60,'Platz')
+      + ar(220,140,310,140,'open',{d:true}) + tx(265,132,'nutzt',{fs:10.5,c:C.m})
+      + co(14,16,1) + co(60,112,2) + co(265,152,3));
+    // 4 Anwendungsfalldiagramm
+    const imgU = svg(560,280, rc(130,10,420,260,{f:'transparent'}) + tx(142,28,'Bibliothek',{a:'start',fs:11,w:500})
+      + ln(76,108,226,80) + actor(60,86,'Leser')
+      + uc(290,80,68,28,'Medium|ausleihen') + uc(470,80,66,28,'Konto|prüfen') + uc(290,196,80,42,'Medium|verlängern',{ep:'Nach Fristprüfung'}) + uc(470,212,62,26,'Gebühr|zahlen')
+      + ln(76,116,214,186)
+      + ar(358,80,404,80,'open',{d:true}) + tx(381,70,'«include»',{fs:10.5})
+      + ar(410,206,372,200,'open',{d:true}) + tx(392,178,'«extend»',{fs:10.5}) + tx(470,256,'Gebühren offen',{fs:10,c:C.m})
+      + co(30,80,1) + co(140,44,2) + co(236,58,3) + co(381,96,4) + co(392,162,5) + co(214,222,6));
+    // 5 Aktivitätsdiagramm
+    const imgA = svg(560,300, start(60,30) + ar(60,38,60,58,'open') + act(60,74,'Bestellen',100)
+      + ar(110,74,150,74,'open') + dec(163,74)
+      + par([[163,87],[163,150],[190,150]]) + tx(170,118,'[nicht lieferbar]',{a:'start',fs:10.5}) + act(250,150,'Absagen',110) + ar(305,150,330,150,'open') + fend(342,150)
+      + ar(176,74,240,74,'open') + tx(206,66,'[lieferbar]',{fs:10}) + barV(240,40,68)
+      + ar(245,52,290,52,'open') + ar(245,96,290,96,'open') + act(345,52,'Rechnen',100) + act(345,96,'Packen',100)
+      + ar(395,52,440,52,'open') + ar(395,96,440,96,'open') + barV(440,40,68) + ar(445,74,480,74,'open') + end(494,74)
+      + co(42,22,1) + co(60,52,2) + co(150,58,3) + co(242,28,4) + co(510,58,5) + co(360,150,6));
+    // 6 Zustandsdiagramm
+    const imgZ = svg(560,260, start(14,60) + ar(22,60,80,60,'open') + tx(50,52,'anlegen()',{fs:10})
+      + state(80,30,170,64,'Offen',['entry / bestätigen()'])
+      + ar(250,52,420,52,'open') + tx(335,34,'bezahlen(b)',{fs:10.5}) + tx(335,46,'[b=summe] /quittieren()',{fs:10.5})
+      + state(420,30,120,44,'Bezahlt') + ar(480,74,480,190,'open') + tx(488,136,'zustellen()',{a:'start',fs:10.5}) + end(480,202)
+      + ar(165,94,165,170,'open') + tx(173,136,'after(14 Tage)',{a:'start',fs:10.5}) + state(100,170,130,44,'Storniert')
+      + co(14,40,1) + co(78,26,2) + co(335,66,3) + co(150,132,4) + co(502,206,5));
+    // 7 Sequenzdiagramm
+    const imgS = svg(560,280, ln(50,74,50,270,{d:true,c:C.m}) + actor(50,4,'Kunde')
+      + life(200,20,':Maske',270,{w:100}) + life(370,20,':Lager',270,{w:100}) + life(505,146,':Beleg',270,{w:90})
+      + actv(200,80,250) + actv(370,100,135)
+      + msg(52,195,80,'bestellen()') + msg(205,365,105,'pruefe(nr)') + msg(365,205,130,'bestand','open',{d:true})
+      + msg(205,460,160,'new()','open',{d:true}) + msg(205,365,205,'buchen()','open') + msg(195,52,246,'ok','open',{d:true})
+      + co(26,20,1) + co(222,12,2) + co(186,232,3) + co(340,97,4) + co(335,122,5) + co(410,152,6) + co(340,197,7));
+    // 8 Kommunikationsdiagramm
+    const imgC = svg(560,240, ln(42,96,180,96) + ln(300,90,420,40) + ln(300,104,420,180)
+      + actor(30,75,'Kunde') + box(180,80,120,30,':Kasse',{r:0}) + box(420,25,120,30,':Position',{r:0}) + box(420,165,120,30,':Zahlung',{r:0})
+      + ar(80,84,130,84,'filled') + tx(105,72,'1: kaufen()',{fs:10.5})
+      + ar(345,58,380,44,'filled') + tx(330,36,'1.1*: p = gibPreis()',{fs:10.5})
+      + ar(345,138,380,155,'filled') + tx(318,178,'1.2 [p>0]: zahle(p)',{fs:10.5})
+      + co(150,108,1) + co(62,66,2) + co(256,26,3) + co(240,182,4) + co(403,22,5));
+    const tu = '<tspan style="text-decoration:underline">';
+    const sheets = [
+      S('klasse','Klassendiagramm','Welche Dinge gibt es und wie hängen sie zusammen?','200–270', imgK, [['Klasse','Kasten: Name, Attribute, Operationen'],['Abgeleitetes Attribut','/ vor dem Namen, wird berechnet'],['Assoziation','Linie, optional mit Namen'],['Kardinalität','1, *, 0..1, 1..* an jedem Ende'],['Komposition','gefüllte Raute am Ganzen, Teile werden mitgelöscht'],['Generalisierung','leere Spitze zeigt zur Oberklasse']]),
+      S('objekt','Objektdiagramm','Wie sieht es zu einem Zeitpunkt konkret aus?','222–229', imgO, [['Objekt','name: Klasse, unterstrichen'],['Attributwerte','Attribut = Wert'],['Link','Verbindung konkreter Objekte, keine Kardinalitäten'],['Anonymes Objekt',':Klasse ohne Namen']]),
+      S('paket','Paketdiagramm','Wie gliedere ich das Modell grob?','274–277', imgP, [['Paket','Kasten mit Reiter, kann Pakete enthalten'],['Inhalt','Klassen gehören genau einem Paket'],['Abhängigkeit','gestrichelt mit offener Spitze, zum genutzten Paket']]),
+      S('anwendungsfall','Anwendungsfalldiagramm','Was leistet das System für wen?','171–184', imgU, [['Akteur','Strichmännchen, immer außerhalb'],['Systemgrenze','Kasten mit Systemnamen'],['Anwendungsfall','Ellipse, mit Akteur verbunden'],['«include»','immer, Pfeil zum eingebundenen Fall'],['«extend»','nur bei Bedingung, Pfeil zum erweiterten Fall'],['Extension point','Stelle der Erweiterung im erweiterten Fall']]),
+      S('aktivitaet','Aktivitätsdiagramm','Wie läuft ein Prozess ab, auch parallel?','281–288', imgA, [['Startknoten','gefüllter Kreis'],['Aktion','abgerundetes Rechteck'],['Entscheidung','Raute, Bedingungen in [ ] ohne Überlappung'],['Fork / Join','Balken: parallel aufteilen bzw. auf alle warten'],['Endknoten','beendet die ganze Aktivität'],['Ablaufende','Kreis mit X, beendet nur diesen Fluss']]),
+      S('zustand','Zustandsdiagramm','Welche Zustände durchläuft ein Objekt?','292–296', imgZ, [['Startzustand','gefüllter Kreis'],['Zustand','abgerundet, mit entry / do / exit'],['Transition','ereignis [bedingung] /aktion'],['Zeitereignis','after(Dauer) oder at(Zeitpunkt)'],['Endzustand','Kreis mit Punkt']]),
+      S('sequenz','Sequenzdiagramm','Welche Nachrichten in welcher zeitlichen Reihenfolge?','302–307', imgS, [['Akteur','löst das Szenario aus'],['Objekt + Lebenslinie',':Klasse, gestrichelte Linie nach unten'],['Aktivierungsbalken','Objekt hat gerade die Steuerung'],['Synchrone Nachricht','gefüllte Spitze, Sender wartet'],['Antwort','gestrichelt, offene Spitze'],['Objekterzeugung','gestrichelt auf den Kopf des neuen Objekts'],['Asynchrone Nachricht','offene Spitze, Sender wartet nicht']]),
+      S('kommunikation','Kommunikationsdiagramm','Wer spricht mit wem über welche Verbindung?','308–310', imgC, [['Link','Verbindung, über die Nachrichten laufen'],['Sequenzausdruck','Nummer: 1, 1.1, 1.2 statt Zeitachse'],['Iteration','* nach der Nummer: wiederholt'],['Bedingung','[…] nach der Nummer'],['Zuweisung','antwort = nachricht()'] ])
+    ];
+
+    // Vergleiche
+    const cmpBox = (title, l, r, lt, rt, ln2) => ({ title, l, r, lt, rt, note: ln2 });
+    const t1 = nb(10,'Team',30,80), s1 = nb(160,'Spieler',30,80), h2 = nb(10,'Haus',30,80), r2 = nb(160,'Raum',30,80);
+    const compares = [
+      cmpBox('Aggregation vs. Komposition',
+        svg(250,90, ar(s1.x,45,t1.r,45,'dhollow') + mult(t1.r+20,37,'*') + mult(s1.x-6,37,'1..*','end') + t1.s + s1.s),
+        svg(250,90, ar(r2.x,45,h2.r,45,'dfilled') + mult(h2.r+20,37,'1') + mult(r2.x-6,37,'1..*','end') + h2.s + r2.s),
+        'Leere Raute: Teil darf zu mehreren Ganzen gehören, lebt weiter', 'Gefüllte Raute: Teil gehört genau einem Ganzen und wird mitgelöscht', 'Die Raute sitzt immer am Ganzen. Bei der Komposition steht dort höchstens 1. Folien S. 256–259.'),
+      cmpBox('«include» vs. «extend»',
+        svg(250,90, uc(55,45,50,24,'Buchen') + uc(195,45,50,24,'Prüfen') + ar(105,45,145,45,'open',{d:true}) + tx(125,30,'«include»',{fs:10})),
+        svg(250,90, uc(55,45,50,24,'Buchen') + uc(195,45,50,24,'Rabatt') + ar(145,45,105,45,'open',{d:true}) + tx(125,30,'«extend»',{fs:10}) + tx(125,78,'Bedingung',{fs:9.5,c:C.m})),
+        'Immer: Pfeil vom einbindenden zum eingebundenen Fall', 'Nur bei Bedingung: Pfeil von der Erweiterung zum erweiterten Fall', 'Merkhilfe: Die Pfeile zeigen in entgegengesetzte Richtungen. Folien S. 181–184.'),
+      cmpBox('ODER vs. UND im Aktivitätsdiagramm',
+        svg(250,100, act(45,25,'A',60) + act(45,75,'B',60) + par([[75,25],[125,25],[125,37]]) + par([[75,75],[125,75],[125,63]]) + dec(125,50) + ar(138,50,170,50,'open') + act(205,50,'C',60)),
+        svg(250,100, act(45,25,'A',60) + act(45,75,'B',60) + ar(75,25,120,25,'open') + ar(75,75,120,75,'open') + barV(120,12,76) + ar(125,50,170,50,'open') + act(205,50,'C',60)),
+        'Raute: Zusammenführen, weiter sobald EIN Pfad ankommt', 'Balken: Synchronisation, weiter erst wenn ALLE angekommen sind', 'Alternative Pfade nie mit einem Balken zusammenführen, sonst wartet der Ablauf ewig. Folie S. 285–286.'),
+      cmpBox('Sequenz- vs. Kommunikationsdiagramm',
+        svg(250,130, life(40,4,':Kunde',125,{w:70}) + life(205,4,':Kasse',125,{w:70}) + actv(205,48,100) + msg(45,200,50,'kaufen()') + msg(200,45,96,'beleg','open',{d:true})),
+        svg(250,130, box(10,50,80,28,':Kunde',{r:0}) + box(160,50,80,28,':Kasse',{r:0}) + ln(90,64,160,64) + ar(105,52,140,52,'filled') + tx(125,40,'1: kaufen()',{fs:10})),
+        'Zeitachse nach unten: betont die Reihenfolge', 'Links und Nummern: betont, wer mit wem verbunden ist', 'Gleicher Inhalt, andere Sicht. Antworten im Kommunikationsdiagramm per Zuweisung. Folien S. 302–310.')
+    ];
+
+    // Theorie-Schaubilder
+    const LC = [['Konzeption','Planung, Lastenheft'],['Analyse','Systemspezifikation, Pflichtenheft'],['Entwurf','Architektur, Feinentwurf'],['Implementierung','Codierte Komponenten'],['Test','Verbesserte Komponenten'],['Integration','Produkt'],['Abnahme, Einführung','Produkt im Einsatz'],['Betrieb, Evolution','']];
+    const figLC = svg(640,200, LC.map(([p,r],i) => { const x = 10 + (i % 4) * 158, y = i < 4 ? 14 : 112, hl = i < 2;
+        return box(x,y,140,34,p,{c: hl ? 'var(--color-accent)' : undefined, w:600, fs:11}) + (r ? tx(x+70,y+52,r,{fs:10,c: hl ? C.a : C.m, w: hl ? 600 : 400}) : '') + (i % 4 < 3 ? ar(x+140,y+17,x+158,y+17,'open') : ''); }).join('')
+      + par([[592,48],[620,48],[620,96],[80,96],[80,112]],'open'));
+    const figKard = svg(520,150, [['1','genau eins','Muss'],['*','beliebig viele, auch keins','Kann'],['0..1','keins oder eins','Kann'],['1..*','mindestens eins','Muss']].map(([k,t,m],i) => { const y = 22 + i * 34;
+        return box(10,y-14,70,24,'Kunde',{r:0,fs:10.5}) + ln(80,y-2,200,y-2) + box(200,y-14,70,24,'Auftrag',{r:0,fs:10.5}) + tx(194,y-6,k,{a:'end',fs:13,w:700,c:'var(--dg-mult, var(--color-text))'}) + tx(290,y+2,t,{a:'start',fs:11.5}) + tx(500,y+2,m,{a:'end',fs:11,w:600,c: m === 'Muss' ? 'var(--bad)' : 'var(--ok)'}); }).join(''));
+    const SCH = ['Name','Kurzbeschreibung','Akteure','Auslöser','Ergebnis(se)','Eingehende Daten','Vorbedingungen','Nachbedingungen','Essentielle Schritte','Offene Punkte','Änderungshistorie'];
+    const figSch = svg(520,230, rc(10,8,500,214,{r:10,f:'var(--color-surface)'}) + tx(260,28,'Anwendungsfallbeschreibung (Oestereich)',{fs:12,w:700})
+      + SCH.map((f,i) => { const col2 = i >= 6, x = col2 ? 270 : 26, y = 52 + (col2 ? i - 6 : i) * 28; return rc(x,y-14,224,22,{r:5,f: i >= 6 && i <= 8 ? 'color-mix(in srgb, var(--color-accent) 14%, transparent)' : 'transparent',c:'var(--color-divider)'}) + tx(x+10,y+1,f,{a:'start',fs:11}); }).join('')
+      + tx(270,206,'+ Ausnahmen und Fehlersituationen (S. 189)',{a:'start',fs:10.5,c:C.a,w:600}));
+    const figFP = svg(620,130, box(10,20,180,70,['1) UFP','5 Kategorien × Gewicht'],{w:600}) + ar(190,55,222,55,'open') + box(222,20,180,70,['2) TCF = 0,65 + 0,01 · ΣDI','14 Faktoren je 0–5'],{w:600}) + ar(402,55,434,55,'open') + box(434,20,176,70,['3) FP = UFP · TCF','→ Aufwand über Referenzdaten'],{w:600})
+      + tx(312,112,'TCF liegt immer zwischen 0,65 und 1,35',{fs:11,c:C.a,w:600}));
+    const PH = ['Analyse','Entwurf','Implementierung','Test'], DI = ['Klassendiagramm erstellen','Testfälle erzeugen','Aufwand schätzen'];
+    const W2 = [[3,2,1,0],[1,1,2,3],[2,1,1,1]];
+    const figProz = svg(660,210, tx(10,18,'Eindimensional: Phase = Disziplin',{a:'start',fs:11.5,w:700}) + tx(10,34,'z. B. Wasserfall, V-Modell XT',{a:'start',fs:10.5,c:C.m})
+      + PH.map((p,i) => box(10,50+i*38,140,28,p,{fs:11}) + (i < 3 ? ar(80,78+i*38,80,88+i*38,'open') : '')).join('')
+      + tx(230,18,'Zweidimensional: Phase ≠ Disziplin',{a:'start',fs:11.5,w:700}) + tx(230,34,'z. B. RUP, OEP · Basis für iterativ-inkrementelle Modelle',{a:'start',fs:10.5,c:C.m})
+      + PH.map((p,i) => tx(400+i*64,60,p.length > 9 ? 'Implem.' : p,{fs:10.5,w:600})).join('')
+      + DI.map((d,r) => tx(366,88+r*36,d,{a:'end',fs:10.5}) + W2[r].map((v,c) => `<rect data-l="1" x="${372+c*64}" y="${72+r*36}" width="56" height="26" rx="5" style="fill:color-mix(in srgb, var(--color-accent) ${[6,30,55,85][v]}%, transparent);stroke:var(--color-divider)"/>`).join('')).join('')
+      + tx(500,196,'Disziplinen kommen in mehreren Phasen vor',{fs:10.5,c:C.a,w:600}));
+    const figCI = svg(660,170, [['Commit',10],['Build',130],['Test',250],['Release ins Repository',370],['Produktion',530]].map(([l,x],i,a) => box(x,40,i === 3 ? 140 : 100,36,l,{fs:11,w:600}) + (i < 4 ? ar(x+(i === 3 ? 140 : 100),58,a[i+1][1],58,'open') : '')).join('')
+      + tx(520,32,'Freigabe',{fs:10,c:C.m})
+      + pl([[10,92],[10,100],[350,100],[350,92]],{c:'var(--p1)'}) + tx(180,116,'Continuous Integration',{fs:11,w:700,c:'var(--p1)'})
+      + pl([[10,124],[10,132],[510,132],[510,124]],{c:'var(--p3)'}) + tx(260,148,'Continuous Delivery: Deployment manuell',{fs:11,w:700,c:'var(--p3)'})
+      + pl([[10,150],[10,158],[630,158],[630,150]],{c:'var(--p5)'}) + tx(330,170,'Continuous Deployment: alles automatisch, braucht sehr gute Tests',{fs:11,w:700,c:'var(--p5)'}));
+    const figDock = svg(660,230, box(10,90,110,40,'Dockerfile',{fs:11.5,w:600}) + ar(120,110,190,110,'open') + tx(155,102,'build',{fs:10.5,c:C.m})
+      + box(190,90,110,40,'Image',{fs:11.5,w:600}) + ar(300,110,380,60,'open') + ar(300,110,380,110,'open') + ar(300,110,380,160,'open') + tx(325,86,'run',{fs:10.5,c:C.m})
+      + rc(370,30,170,160,{r:10,f:'transparent',d:true,c:C.m}) + tx(455,24,'Compose: docker-compose.yml',{fs:10,c:C.m})
+      + box(380,44,150,32,'Container (Web)',{r:6,fs:11}) + box(380,94,150,32,'Container (API)',{r:6,fs:11}) + box(380,144,150,32,'Container (DB)',{r:6,fs:11})
+      + ln(530,160,580,160,{d:true}) + box(580,140,70,40,'Volume',{r:20,fs:11,w:600}) + tx(615,198,'Daten bleiben',{fs:10,c:C.a,w:600})
+      + box(190,10,110,34,'Registry',{fs:11,w:600}) + tx(245,58,'z. B. Docker Hub',{fs:9.5,c:C.m}) + ar(235,90,235,44,'open') + ar(260,44,260,90,'open') + tx(222,70,'push',{a:'end',fs:10,c:C.m}) + tx(268,70,'pull',{a:'start',fs:10,c:C.m})
+      + tx(245,152,'1 Image → beliebig viele Container',{fs:10.5,c:C.a,w:600}) + tx(245,168,'Container sind zustandslos',{fs:10.5,c:C.a,w:600}));
+    const QG = [['Korrektheit, Vollständigkeit',[]],['Zuverlässigkeit',[]],['Benutzungsfreundlichkeit',['Adäquatheit','Erlernbarkeit','Robustheit']],['Effizienz',[]],['Portabilität, Kompatibilität',[]],['Interoperabilität',[]],['Wartungsfreundlichkeit',['Lesbarkeit','Erweiterbarkeit','Testbarkeit']]];
+    const figQ = svg(660,250, box(230,8,200,34,'Softwarequalität ISO/IEC 25000',{fs:11.5,w:700,c:'var(--color-accent)'})
+      + QG.map(([g,subs],i) => { const x = 10 + (i % 4) * 162, y = i < 4 ? 70 : 150; return ln(330,42,x+75,y,{c:'var(--color-divider)'}) + box(x,y,150,30,g,{fs:10.5,w:600}) + subs.map((s2,j) => tx(x+75,y+46+j*14,s2,{fs:10,c:C.m})).join(''); }).join('')
+      + tx(500,232,'Korrekt heißt nicht automatisch vertrauenswürdig',{fs:10.5,c:C.a,w:600}));
+    const figs = { lc:figLC, kard:figKard, sch:figSch, fp:figFP, proz:figProz, ci:figCI, dock:figDock, q:figQ };
+    const FIGMAP = { p1f:figLC, p2a:sheets[0].img, p2b:figKard, p2c:compares[0].l + compares[0].r, p3c:figSch, p4b:sheets[4].img, p5a:sheets[5].img, p5c:sheets[6].img, p5j:figFP, p7a:figProz, p7b:figCI, p7c:figDock, p7d:figQ };
+    phases.forEach(ph => ph.tasks.forEach(t => { if (FIGMAP[t.id]) t.fig = FIGMAP[t.id]; }));
+    const THFIG = { ex23:figLC, ex24:figCI, ex25:figDock, ex26:figProz, ex27:figQ, ex28:figSch };
+    exercises.forEach(e => { if (THFIG[e.id] && e.sol.indexOf('<svg') !== 0) e.sol = '<div style="width:100%;display:flex;flex-direction:column;gap:18px;align-items:center">' + THFIG[e.id] + e.sol + '</div>'; });
+    const uml = { sheets, compares };
+
+    return { phases, quiz, cats, exercises, cards, cardTopics, sorts, fpTypes, fpFactors, fpSlide, themes, pfc, uml };
   }
 
 
   static KEY = 'se1-lernplan-v1';
-  static SAVE = ['theme','uebTool','done','open','phClosed','tagF','hideDone','counts','flags','exam','qf','qmode','qstats','qstreak','qbest','exSel','exChecks','exDone','fcTopic','fcBox','sortSet','sortPlaced','sortBest','fp','act','focus','focusLog','exT','pk','pkBest','pfc'];
+  static SAVE = ['theme','uebTool','planSel','done','open','phClosed','tagF','hideDone','counts','flags','exam','qf','qmode','qstats','qstreak','qbest','exSel','exChecks','exDone','fcTopic','fcBox','sortSet','sortPlaced','sortBest','fp','act','focus','focusLog','exT','pk','pkBest','pfc'];
 
   state = { theme:'nacht', tab:'start', uebTool:'quiz', settingsOpen:false, justDone:{}, examEdit:false, done:{}, open:{}, phClosed:{}, tagF:'alle', hideDone:false, counts:{ fa:0, nfa:0, stat:0, dyn:0 }, flags:{}, exam:'',
     qf:'alle', qmode:'alle', qpos:0, qpick:null, qstats:{}, qstreak:0, qbest:0, qround:0,
@@ -2016,7 +2214,7 @@ class Component extends DCLogic {
   }
   selectEx(id, tab) { this.setState(s => ({ exSel:id, exHint:false, exSol:false, exT: { ...(s.exT || { dur:900 }), end:null, left:(s.exT || { dur:900 }).dur }, ...(tab ? { tab:'ex' } : {}) })); }
   jump(anchor, num) {
-    this.setState(s => ({ phClosed: { ...(s.phClosed || {}), [num]: false }, tagF:'alle' }));
+    this.setState({ planSel:num, tagF:'alle' }); anchor = 'plan-detail';
     setTimeout(() => { const el = document.getElementById(anchor); if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 90, behavior:'smooth' }); }, 40);
   }
   pick(item, oi) {
@@ -2078,14 +2276,13 @@ class Component extends DCLogic {
       ph.tasks.forEach(t => {
         const checked = !!done[t.id]; totalN++; tagCount[t.tag] = (tagCount[t.tag] || 0) + 1;
         if (checked) { doneN++; dn++; } else openList.push({ t, num:ph.num, c });
-        if ((tagF !== 'alle' && t.tag !== tagF) || (s.hideDone && checked)) return;
         const ex = !!t.detail && (opened[t.id] ?? allOpen), tc = col(TAGC[t.tag] || 'color-accent');
         tasks.push({ text:t.text, tag:t.tag, tagSoft:soft(tc, 18), tagInk:ink(tc), hLabel:'≈ ' + n1(t.h) + ' h', checked,
           toggle:() => this.toggleDone(t.id), checkBg: checked ? soft(c, 28) : 'transparent', checkBorder: checked ? c : 'color-mix(in srgb, var(--color-text) 35%, transparent)', checkFg:ink(c), checkMark: checked ? '✓' : '',
           opacity: checked ? 0.55 : 1, deco: checked ? 'line-through' : 'none',
           hasDetail: !!t.detail, expanded:ex, detailLabel: ex ? 'Weniger' : 'Details', toggleDetail:() => this.toggleOpen(t.id, ex),
           detail:t.detail || '', hasRef: !!t.ref, ref:t.ref || '', hasGo: !!t.go, goLabel: GOL[t.go] || 'Zur Übung →', go:() => this.goTo(t.go),
-          bg: ex ? 'var(--color-surface)' : 'transparent' });
+          bg: ex ? 'var(--color-surface)' : 'transparent', hasFig: !!t.fig, figEl: ex && t.fig ? this.el(t.fig) : null, tagRaw:t.tag, dotTitle:t.text + (checked ? ' (erledigt)' : '') });
       });
       let note = ph.note || '';
       const early = !ph.end && exam && exam < start;
@@ -2110,6 +2307,39 @@ class Component extends DCLogic {
         })(), open:isOpen, chev: isOpen ? '0deg' : '-90deg',
         toggle:() => this.setState(st => ({ phClosed: { ...(st.phClosed || {}), [ph.num]: isOpen } })) };
     });
+    const PICON = { '01':'<path d="M5 21V4"/><path d="M5 4h11l-2 4 2 4H5"/>', '02':'<rect x="4" y="4" width="16" height="16" rx="1"/><path d="M4 9h16M4 14h16"/>',
+      '03':'<ellipse cx="15" cy="12" rx="7" ry="4.5"/><circle cx="4.5" cy="7" r="1.6"/><path d="M4.5 9v5M2.5 11h4M4.5 14l-2 4M4.5 14l2 4"/>',
+      '04':'<circle cx="5" cy="5" r="2" fill="currentColor"/><path d="M5 7v3"/><rect x="2" y="10" width="11" height="5" rx="2.5"/><path d="M13 12.5h3"/><path d="M19 9.5l3 3-3 3-3-3z"/>',
+      '05':'<rect x="3" y="7" width="18" height="12" rx="1"/><path d="M7 7v12M11 7v12M15 7v12M3 7l3-3h12l3 3"/>', '06':'<path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/>',
+      '07':'<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8.5 8l1.5 1.5L12.5 7M8.5 14l1.5 1.5 2.5-2.5M14.5 8.5h1.5M14.5 14.5h1.5"/>' };
+    const PKEYS = { '01':['Aufgabenblatt und Muster','Balzert-Gliederung anlegen','Anwendungsfälle (Blatt 5)'], '02':['Kardinalitäten','Aggregation vs. Komposition','Objektdiagramm'],
+      '03':['Stamm- und Bewegungsdaten','Statisches Produktmodell','FA-01 bis FA-04'], '04':['FA-05 bis FA-08','Aktivitätsdiagramm','1. dynamisches Modell'],
+      '05':['Zustand und Sequenz','NFA-01 bis NFA-08','Docker-Projekt'], '06':['Bewertungskriterien prüfen','Deckblatt und Erklärung','Abgabe 17.01.'], '07':['Theorie wiederholen','Alle Übungen mit Timer','Probeklausur'] };
+    const PGRP = [['Studienarbeit',['Pflichtenheft','Docker','Orga'],'p4'],['UML üben',['UML'],'p1'],['Theorie',['Theorie'],'p5']];
+    const grpOf = tg => (PGRP.find(g => g[1].includes(tg)) || PGRP[0]);
+    const curPh = phases.find(x => x.isCurrent) || phases.find(x => x.doneCount < x.total) || phases[0];
+    const selNum = phases.some(x => x.num === s.planSel) ? s.planSel : curPh.num;
+    phases.forEach(ph => { const on = ph.num === selNum, c = ph.fill;
+      ph.icon = this.el('<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + (PICON[ph.num] || '') + '</svg>');
+      ph.keys = (PKEYS[ph.num] || []).map(t => ({ t })); ph.sel = on; ph.allDone = ph.doneCount === ph.total;
+      ph.cardBorder = on ? c : 'transparent'; ph.cardBg = on ? 'color-mix(in srgb, ' + c + ' 10%, var(--color-surface))' : 'var(--color-surface)';
+      ph.shortRange = ph.range.replace(' (Klausur)', '');
+      ph.dots = ph.tasks.map(t => { const gc = col(grpOf(t.tagRaw)[2]); return { c:gc, bg: t.checked ? gc : 'transparent', title:t.dotTitle }; });
+      ph.select = () => { this.setState({ planSel:ph.num }); setTimeout(() => { const el = document.getElementById('plan-detail'); if (el && el.getBoundingClientRect().top > window.innerHeight * 0.6) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 90, behavior:'smooth' }); }, 40); }; });
+    const pSel = phases.find(x => x.num === selNum);
+    const planGroups = PGRP.map(([label, tags, ck]) => { const ts = pSel.tasks.filter(t => tags.includes(t.tagRaw)); return { label, c:col(ck), count: ts.filter(t => t.checked).length + '/' + ts.length, tasks:ts, has: ts.length > 0 }; }).filter(g => g.has);
+    const planLegend = PGRP.map(([l, , ck]) => ({ l, c:col(ck) }));
+    // UML-Überblick
+    const SHC = { klasse:'p1', objekt:'p1', paket:'p6', anwendungsfall:'p2', aktivitaet:'p3', zustand:'p4', sequenz:'p5', kommunikation:'p5' };
+    const goSheet = k => () => { const el = document.getElementById('sheet-' + k); if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 90, behavior:'smooth' }); };
+    const MI = (name, k, q) => ({ name, q: q || 'nicht Teil von SE I', tag: k ? 'SE I' : '', op: k ? 1 : 0.45, cursor: k ? 'pointer' : 'default', border: k ? 'var(--color-divider)' : 'transparent', bg: k ? 'var(--color-surface)' : 'transparent', go: k ? goSheet(k) : () => {} });
+    const umlMap = [
+      { label:'Strukturdiagramme', sub:'statische Sicht: was es gibt', ck:'p1', items:[MI('Klassendiagramm','klasse','Welche Dinge und Beziehungen?'), MI('Objektdiagramm','objekt','Schnappschuss konkreter Objekte'), MI('Paketdiagramm','paket','Grobe Gliederung des Modells'), MI('Kompositionsdiagramm'), MI('Komponentendiagramm'), MI('Verteilungsdiagramm'), MI('Profildiagramm')] },
+      { label:'Verhaltensdiagramme', sub:'dynamische Sicht: was passiert', ck:'p3', items:[MI('Anwendungsfalldiagramm','anwendungsfall','Was leistet das System für wen?'), MI('Aktivitätsdiagramm','aktivitaet','Wie läuft ein Prozess ab?'), MI('Zustandsdiagramm','zustand','Lebenszyklus eines Objekts')] },
+      { label:'Interaktionsdiagramme', sub:'dynamisch: Objekte im Zusammenspiel', ck:'p5', items:[MI('Sequenzdiagramm','sequenz','Nachrichten in zeitlicher Reihenfolge'), MI('Kommunikationsdiagramm','kommunikation','Wer spricht mit wem?'), MI('Timing-Diagramm'), MI('Interaktionsübersichtsdiagramm')] }
+    ].map(g => { const c = col(g.ck); return { ...g, c, soft:soft(c, 7), ink:ink(c) }; });
+    const umlSheets = D.uml.sheets.map(sh => { const c = col(SHC[sh.k] || 'color-accent'); return { anchor:'sheet-' + sh.k, title:sh.title, q:sh.q, ref:sh.ref, c, ink:ink(c), img:this.el(sh.img), legend:sh.legend }; });
+    const umlCmp = D.uml.compares.map(cp => ({ title:cp.title, l:this.el(cp.l), r:this.el(cp.r), lt:cp.lt, rt:cp.rt, note:cp.note }));
     const tagChips = [['alle','Alle','color-accent']].concat(Object.keys(TAGC).map(k => [k, k, TAGC[k]])).map(([k, l, ck]) => {
       const c = col(ck), pz = pill(c, tagF === k);
       return { label:l, count: k === 'alle' ? totalN : (tagCount[k] || 0), dot:c, bg:pz.bg, border:pz.border, fg:pz.fg, pick:() => this.setState({ tagF:k }) };
@@ -2338,7 +2568,7 @@ class Component extends DCLogic {
     const abgabe = new Date(2027, 0, 17, 22, 0), ad = until(abgabe), pct = totalN ? Math.round(doneN / totalN * 100) : 0;
     const TOOLS = ['quiz','ex','cards','sort','fp'], isUeben = TOOLS.includes(tab);
     const badges = { start:'', plan:pct + '%', ueben:'', pfl: pfcDone + '/' + pfcTotal, pk: s.pkBest != null ? s.pkBest + '%' : '' };
-    const tabs = [['start','Start','color-accent'],['plan','Lernplan','p6'],['ueben','Üben','p1'],['pfl','Pflichtenheft','p4'],['pk','Probeklausur','p5']].map(([k, l, ck]) => {
+    const tabs = [['start','Start','color-accent'],['plan','Lernplan','p6'],['uml','UML-Überblick','p2'],['ueben','Üben','p1'],['pfl','Pflichtenheft','p4'],['pk','Probeklausur','p5']].map(([k, l, ck]) => {
       const c = col(ck), on = k === 'ueben' ? isUeben : tab === k;
       return { label:l, dot:c, badge:badges[k], hasBadge: !!badges[k], current: on ? 'page' : 'false',
         bg: on ? soft('var(--color-accent)', 20) : 'transparent', border: on ? c : 'var(--color-divider)', fg: on ? ink(c) : 'var(--color-text)',
@@ -2382,7 +2612,7 @@ class Component extends DCLogic {
       border: th === t.k ? '2px solid var(--color-accent)' : '1px solid var(--color-divider)', shadow: th === t.k ? '0 0 0 4px ' + soft('var(--color-accent)', 25) : 'none', pick:() => this.setState({ theme:t.k }) }));
 
     return {
-      isStart: tab === 'start', isUeben, tools, cur, todayTasks, hasToday: todayTasks.length > 0, noToday: todayTasks.length === 0,
+      isStart: tab === 'start', isUml: tab === 'uml', umlMap, umlSheets, umlCmp, pSel, planGroups, planLegend, isUeben, tools, cur, todayTasks, hasToday: todayTasks.length > 0, noToday: todayTasks.length === 0,
       curEyebrow: (cur.isCurrent ? 'Diese Woche · Phase ' : 'Als Nächstes · Phase ') + cur.numPad + ' von ' + String(phases.length).padStart(2, '0'),
       abgabeNum: now > abgabe ? '0' : String(ad), abgabeUnit: now > abgabe ? 'Tage · vorbei' : (ad === 1 ? 'Tag' : 'Tage'),
       examNum: exam ? String(until(exam)) : '', examUnit: exam && until(exam) === 1 ? 'Tag' : 'Tage',
