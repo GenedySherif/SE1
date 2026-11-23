@@ -9,7 +9,7 @@
 <x-dc>
 <helmet>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700&amp;family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&amp;family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&amp;display=swap">
   <link rel="stylesheet" href="assets/nocturne.css">
   <script src="assets/nocturne-bundle.js"></script>
   <style>
@@ -44,6 +44,9 @@
     @media (max-width: 640px) {
       .tabnav { position:fixed !important; top:auto !important; bottom:0; left:0; right:0; margin:0 !important; padding:8px 10px calc(8px + env(safe-area-inset-bottom)) !important; border-top:1px solid var(--color-divider); background:color-mix(in srgb, var(--color-bg) 95%, transparent) !important; z-index:40 !important; }
       .tabnav button { padding:8px 12px !important; font-size:13px !important; }
+      .tabnav { justify-content:space-between; gap:2px !important; }
+      .weg-title { display:none; }
+      .tabnav button { padding:8px 10px !important; gap:6px !important; }
       .dg-scroll { padding:12px !important; }
       .dg-scroll svg { min-width:540px; }
       .toast { bottom:84px !important; }
@@ -62,86 +65,215 @@
   </style>
 </helmet>
 <div class="pg-root" style="min-height:100vh; background:var(--page-bg); color:var(--color-text); font-family:var(--font-body);">
-  <div class="no-print" style="max-width:1240px; margin:0 auto; padding:40px clamp(16px, 4vw, 56px) 120px; display:flex; flex-direction:column; gap:24px;">
-
-    <header style="display:flex; flex-wrap:wrap; gap:24px 40px; align-items:flex-end; justify-content:space-between;">
-      <div style="flex:1 1 440px; max-width:740px; display:flex; flex-direction:column; gap:12px;">
-        <div style="display:flex; flex-wrap:wrap; gap:6px 12px; font-size:11px; letter-spacing:0.1em; text-transform:uppercase;">
-          <span style="color:var(--color-accent); font-weight:600;">Software Engineering I</span>
-          <span style="color:color-mix(in srgb, var(--color-text) 62%, transparent);">WS 2026/27 · Prof. Dr. Torsten Zimmer</span>
-        </div>
-        <h1 style="margin:0; font-size:clamp(34px, 5vw, 54px); line-height:1.04; letter-spacing:-0.02em; text-wrap:balance;">Pflichtenheft abgeben, <span style="color:var(--color-accent);">Klausur bestehen.</span></h1>
-        <p style="margin:0; max-width:640px; font-size:15px; line-height:1.6; color:color-mix(in srgb, var(--color-text) 72%, transparent); text-wrap:pretty;">Lernplan, Notationstrainer, 31 Übungen mit Timer, Probeklausur, Karteikarten, Sortierspiele und ein Function-Point-Rechner. Dein Fortschritt bleibt in diesem Browser gespeichert.</p>
-      </div>
-      <div style="display:flex; flex-direction:column; gap:8px;">
-        <div style="font-size:11px; letter-spacing:0.08em; text-transform:uppercase; font-weight:600; color:color-mix(in srgb, var(--color-text) 62%, transparent);">Look wählen</div>
-        <div style="display:grid; grid-template-columns:repeat(2, minmax(0, 96px)); gap:8px;">
-          <sc-for list="{{ themes }}" as="th" hint-placeholder-count="2">
-            <button onClick="{{ th.pick }}" aria-pressed="{{ th.active }}" style="display:flex; flex-direction:column; align-items:flex-start; gap:8px; min-width:0; padding:10px 11px; border-radius:12px; border:{{ th.border }}; box-shadow:{{ th.shadow }}; background:{{ th.bg }}; color:{{ th.fg }}; font-family:{{ th.font }}; font-size:15px; font-weight:600; cursor:pointer; transition:transform .15s, box-shadow .2s;" style-hover="transform:translateY(-2px);">
-              <span style="display:flex; gap:4px;">
-                <sc-for list="{{ th.dots }}" as="d" hint-placeholder-count="4"><span style="width:11px; height:11px; border-radius:50%; background:{{ d.c }};"></span></sc-for>
-              </span>
-              <span>{{ th.name }}</span>
-            </button>
-          </sc-for>
-        </div>
-      </div>
-    </header>
-
-    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(195px, 1fr)); gap:12px;">
-      <div style="display:flex; flex-direction:column; gap:8px; padding:16px 18px; border-radius:var(--radius-lg); background:var(--color-surface); box-shadow:var(--shadow-sm);">
-        <div style="display:flex; align-items:center; gap:8px; font-size:11px; letter-spacing:0.08em; text-transform:uppercase; font-weight:600; color:color-mix(in srgb, var(--color-text) 62%, transparent);"><span style="width:8px; height:8px; border-radius:50%; background:var(--p4);"></span>Abgabe Pflichtenheft</div>
-        <div style="font-size:32px; line-height:1.05; font-weight:700; font-variant-numeric:tabular-nums; color:color-mix(in srgb, var(--p4) 60%, var(--color-text));">{{ abgabeDays }}</div>
-        <div style="font-size:12px; color:color-mix(in srgb, var(--color-text) 62%, transparent);">So 17.01.2027, 22:00 · Mail an zimmer@hm.edu</div>
-      </div>
-      <div style="display:flex; flex-direction:column; gap:8px; padding:16px 18px; border-radius:var(--radius-lg); background:var(--color-surface); box-shadow:var(--shadow-sm);">
-        <div style="display:flex; align-items:center; gap:8px; font-size:11px; letter-spacing:0.08em; text-transform:uppercase; font-weight:600; color:color-mix(in srgb, var(--color-text) 62%, transparent);"><span style="width:8px; height:8px; border-radius:50%; background:var(--p5);"></span>Klausur</div>
-        <div style="font-size:32px; line-height:1.05; font-weight:700; font-variant-numeric:tabular-nums; color:color-mix(in srgb, var(--p5) 60%, var(--color-text));">{{ examValue }}</div>
-        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-          <input type="date" value="{{ examInput }}" onChange="{{ setExam }}" aria-label="Klausurdatum" style="min-height:30px; padding:2px 8px; border-radius:8px; border:1.5px solid var(--color-divider); background:var(--color-surface); color:var(--color-text); font-family:var(--font-body); font-size:12px;">
-          <span style="font-size:12px; color:color-mix(in srgb, var(--color-text) 62%, transparent);">{{ examHint }}</span>
-        </div>
-      </div>
-      <div style="display:flex; flex-direction:column; gap:10px; padding:16px 18px; border-radius:var(--radius-lg); background:var(--color-surface); box-shadow:var(--shadow-sm);">
-        <div style="display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:4px 8px;">
-          <div style="font-size:11px; letter-spacing:0.08em; text-transform:uppercase; font-weight:600; color:color-mix(in srgb, var(--color-text) 62%, transparent);">Fortschritt</div>
-          <div style="font-size:11px; color:color-mix(in srgb, var(--color-text) 62%, transparent);">{{ pkBestLabel }}</div>
-        </div>
-        <div style="display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:10px 12px;">
-          <sc-for list="{{ rings }}" as="r" hint-placeholder-count="4">
-            <button onClick="{{ r.go }}" aria-label="{{ r.aria }}" style="display:flex; align-items:center; gap:9px; min-width:0; padding:0; border:none; background:none; color:var(--color-text); font-family:var(--font-body); text-align:left; cursor:pointer;">
-              <span style="width:42px; height:42px; flex:none; border-radius:50%; background:conic-gradient({{ r.color }} {{ r.deg }}, var(--color-neutral-800) 0); display:grid; place-items:center;"><span style="width:31px; height:31px; border-radius:50%; background:var(--color-surface); display:grid; place-items:center; font-size:10px; font-weight:800; font-variant-numeric:tabular-nums;">{{ r.pct }}</span></span>
-              <span style="display:flex; flex-direction:column; min-width:0;"><span style="font-size:13px; font-weight:700;">{{ r.label }}</span><span style="font-size:11px; font-variant-numeric:tabular-nums; color:color-mix(in srgb, var(--color-text) 62%, transparent);">{{ r.sub }}</span></span>
-            </button>
-          </sc-for>
-        </div>
-      </div>
-      <div style="display:flex; flex-direction:column; gap:8px; padding:16px 18px; border-radius:var(--radius-lg); background:var(--color-surface); box-shadow:var(--shadow-sm);">
-        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:4px 8px;">
-          <div style="display:flex; align-items:center; gap:8px; font-size:11px; letter-spacing:0.08em; text-transform:uppercase; font-weight:600; color:color-mix(in srgb, var(--color-text) 62%, transparent);"><span style="width:8px; height:8px; border-radius:50%; background:var(--p2);"></span>Lernserie</div>
-          <div style="font-size:13px; font-weight:700; white-space:nowrap; color:color-mix(in srgb, var(--p2) 60%, var(--color-text));">{{ streakLabel }}</div>
-        </div>
-        <div style="display:grid; grid-template-columns:repeat(7, 1fr); gap:3px; max-width:150px;">
-          <sc-for list="{{ heat }}" as="d" hint-placeholder-count="35"><div title="{{ d.title }}" style="aspect-ratio:1 / 1; border-radius:3px; background:{{ d.bg }}; outline:{{ d.outline }}; outline-offset:-1px;"></div></sc-for>
-        </div>
-        <div style="font-size:11px; color:color-mix(in srgb, var(--color-text) 62%, transparent);">Letzte 5 Wochen · jede Aktion zählt</div>
+  <header class="no-print" style="position:sticky; top:0; z-index:30; background:color-mix(in srgb, var(--color-bg) 95%, transparent); border-bottom:1px solid color-mix(in srgb, var(--color-text) 10%, transparent);">
+    <div style="max-width:1240px; margin:0 auto; padding:12px clamp(16px, 4vw, 56px); display:flex; flex-wrap:wrap; align-items:center; gap:10px 32px;">
+      <button onClick="{{ goStart }}" aria-label="SE1 Klausur, zur Startseite" style="flex:none; display:flex; flex-direction:column; align-items:flex-start; gap:2px; padding:0; border:none; background:none; color:var(--color-text); cursor:pointer; text-align:left;">
+        <span style="font-family:var(--font-heading); font-weight:var(--font-heading-weight); font-size:20px; line-height:1.1;">SE1 Klausur</span>
+        <span style="font-family:var(--font-body); font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:color-mix(in srgb, var(--color-text) 62%, transparent);">WS 2026/27 · Prof. Zimmer</span>
+      </button>
+      <nav class="tabnav" aria-label="Bereiche" style="flex:1 1 auto; min-width:0; display:flex; gap:4px; overflow-x:auto; scrollbar-width:none;">
+        <sc-for list="{{ tabs }}" as="tb" hint-placeholder-count="5">
+          <button onClick="{{ tb.go }}" aria-current="{{ tb.current }}" style="flex:none; padding:9px 15px; border-radius:999px; border:none; background:{{ tb.bg }}; color:var(--color-text); font-family:var(--font-body); font-size:14px; font-weight:600; white-space:nowrap; cursor:pointer; transition:background .2s;" style-hover="background:color-mix(in srgb, var(--color-text) 7%, transparent);">{{ tb.label }}</button>
+        </sc-for>
+      </nav>
+      <div style="margin-left:auto; display:flex; align-items:center; gap:10px;">
+        <span title="Tage in Folge mit mindestens einer Aktion" style="display:flex; align-items:center; gap:8px; min-height:34px; padding:4px 13px; border-radius:999px; border:1px solid color-mix(in srgb, var(--color-text) 14%, transparent); font-size:13px; font-weight:700; white-space:nowrap; font-variant-numeric:tabular-nums;">
+          <span aria-hidden="true" style="display:flex; gap:3px;"><sc-for list="{{ streakDots }}" as="sd" hint-placeholder-count="4"><span style="width:6px; height:6px; border-radius:2px; background:{{ sd.bg }};"></span></sc-for></span>
+          <span>{{ streakChip }}</span>
+        </span>
+        <button onClick="{{ toggleSettings }}" aria-label="Einstellungen" aria-expanded="{{ settingsOpen }}" style="width:42px; height:42px; flex:none; display:grid; place-items:center; padding:0; border-radius:12px; border:1px solid {{ gearBorder }}; background:{{ gearBg }}; color:var(--color-text); cursor:pointer; transition:background .2s, border-color .2s;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1.08-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1.08 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+        </button>
       </div>
     </div>
+  </header>
 
-    <p style="margin:0; max-width:780px; font-size:13px; line-height:1.6; color:color-mix(in srgb, var(--color-text) 72%, transparent); text-wrap:pretty;"><span style="color:var(--color-accent); font-weight:600;">Wichtig:</span> Laut Aufgabenblatt entsteht die Studienarbeit ohne KI-Unterstützung. Diese Seite liefert deshalb nur Struktur, Checklisten und Übungen, die bewusst nicht im Hotel-Szenario spielen.</p>
+  <div class="no-print" style="max-width:1240px; margin:0 auto; padding:32px clamp(16px, 4vw, 56px) 120px; display:flex; flex-direction:column; gap:24px;">
 
-    <nav class="tabnav" style="position:sticky; top:0; z-index:20; margin:0 calc(-1 * clamp(16px, 4vw, 56px)); padding:10px clamp(16px, 4vw, 56px); display:flex; gap:8px; overflow-x:auto; scrollbar-width:none; background:color-mix(in srgb, var(--color-bg) 86%, transparent); backdrop-filter:blur(10px);">
-      <sc-for list="{{ tabs }}" as="tb" hint-placeholder-count="6">
-        <button onClick="{{ tb.go }}" style="flex:none; display:flex; align-items:center; gap:8px; padding:9px 15px; border-radius:999px; border:1.5px solid {{ tb.border }}; background:{{ tb.bg }}; color:{{ tb.fg }}; font-family:var(--font-body); font-size:14px; font-weight:600; white-space:nowrap; cursor:pointer; transition:background .2s, border-color .2s;">
-          <span style="width:9px; height:9px; border-radius:50%; background:{{ tb.dot }};"></span>
-          <span>{{ tb.label }}</span>
-          <span style="font-size:11px; font-weight:500; opacity:0.75; font-variant-numeric:tabular-nums;">{{ tb.badge }}</span>
-        </button>
-      </sc-for>
-    </nav>
+    <sc-if value="{{ settingsOpen }}">
+      <section aria-label="Einstellungen" style="display:flex; flex-wrap:wrap; gap:20px 40px; align-items:flex-start; padding:20px 22px; border-radius:var(--radius-lg); background:var(--color-surface); box-shadow:var(--shadow-md);">
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <div style="font-size:11px; letter-spacing:0.08em; text-transform:uppercase; font-weight:600; color:color-mix(in srgb, var(--color-text) 62%, transparent);">Look</div>
+          <div role="group" aria-label="Look wählen" style="display:grid; grid-template-columns:repeat(2, minmax(0, 104px)); gap:8px;">
+            <sc-for list="{{ themes }}" as="th" hint-placeholder-count="2">
+              <button onClick="{{ th.pick }}" aria-pressed="{{ th.active }}" style="display:flex; flex-direction:column; align-items:flex-start; gap:8px; min-width:0; padding:10px 11px; border-radius:12px; border:{{ th.border }}; box-shadow:{{ th.shadow }}; background:{{ th.bg }}; color:{{ th.fg }}; font-family:{{ th.font }}; font-size:15px; font-weight:600; cursor:pointer; transition:box-shadow .2s;">
+                <span style="display:flex; gap:4px;">
+                  <sc-for list="{{ th.dots }}" as="d" hint-placeholder-count="4"><span style="width:11px; height:11px; border-radius:50%; background:{{ d.c }};"></span></sc-for>
+                </span>
+                <span>{{ th.name }}</span>
+              </button>
+            </sc-for>
+          </div>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <label for="se1-exam-settings" style="font-size:11px; letter-spacing:0.08em; text-transform:uppercase; font-weight:600; color:color-mix(in srgb, var(--color-text) 62%, transparent);">Klausurdatum</label>
+          <input id="se1-exam-settings" type="date" value="{{ examInput }}" onChange="{{ setExam }}" style="min-height:40px; padding:4px 10px; border-radius:10px; border:1.5px solid var(--color-divider); background:var(--color-bg); color:var(--color-text); font-family:var(--font-body); font-size:14px;">
+          <span style="font-size:12px; color:color-mix(in srgb, var(--color-text) 62%, transparent);">{{ examHint }}</span>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <div style="font-size:11px; letter-spacing:0.08em; text-transform:uppercase; font-weight:600; color:color-mix(in srgb, var(--color-text) 62%, transparent);">Dauer Fokus-Block</div>
+          <div role="group" aria-label="Dauer Fokus-Block" style="display:flex; gap:6px;">
+            <sc-for list="{{ focusPresets }}" as="fp" hint-placeholder-count="3"><button onClick="{{ fp.pick }}" style="min-height:40px; padding:6px 14px; border-radius:999px; border:1.5px solid {{ fp.border }}; background:{{ fp.bg }}; color:{{ fp.fg }}; font-family:var(--font-body); font-size:13px; font-weight:600; cursor:pointer;">{{ fp.label }}</button></sc-for>
+          </div>
+        </div>
+        <button onClick="{{ closeSettings }}" style="margin-left:auto; align-self:flex-end; min-height:40px; padding:8px 18px; border-radius:var(--radius-md); border:1.5px solid var(--color-divider); background:transparent; color:var(--color-text); font-family:var(--font-body); font-size:14px; font-weight:600; cursor:pointer;">Fertig</button>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ isStart }}" hint-placeholder-val="{{ true }}">
+      <section aria-label="Start" style="display:flex; flex-direction:column; gap:40px;">
+        <div style="display:flex; flex-wrap:wrap; gap:16px; align-items:stretch;">
+          <article aria-label="Aktuelle Phase" style="flex:999 1 520px; min-width:0; display:flex; flex-direction:column; gap:20px; padding:clamp(20px, 3vw, 30px); border-radius:var(--radius-lg); background:var(--color-surface); box-shadow:var(--shadow-sm);">
+            <div style="display:flex; flex-wrap:wrap; gap:14px 32px; align-items:flex-end; justify-content:space-between;">
+              <div style="flex:1 1 300px; min-width:0; display:flex; flex-direction:column; gap:8px;">
+                <div style="display:flex; flex-wrap:wrap; align-items:center; gap:8px;">
+                  <span style="font-size:11px; letter-spacing:0.1em; text-transform:uppercase; font-weight:700; color:{{ cur.ink }};">{{ curEyebrow }}</span>
+                  <sc-if value="{{ cur.tight }}"><span style="font-size:11px; font-weight:700; padding:2px 9px; border-radius:999px; background:color-mix(in srgb, var(--bad) 16%, transparent); color:color-mix(in srgb, var(--bad) 60%, var(--color-text));">knapp</span></sc-if>
+                </div>
+                <h2 style="margin:0; font-family:var(--font-heading); font-weight:var(--font-heading-weight); font-size:clamp(30px, 4vw, 40px); line-height:1.08; text-wrap:balance;">{{ cur.title }}</h2>
+                <span style="font-size:13px; color:color-mix(in srgb, var(--color-text) 66%, transparent);">{{ cur.metaLine }}</span>
+              </div>
+              <div style="flex:0 0 150px; display:flex; flex-direction:column; align-items:flex-end; gap:8px; padding-bottom:4px;">
+                <span style="font-size:13px; font-weight:700; font-variant-numeric:tabular-nums;">{{ cur.doneCount }} / {{ cur.total }} erledigt</span>
+                <div style="width:100%; height:5px; border-radius:3px; background:var(--color-neutral-800); overflow:hidden;"><div style="height:100%; width:{{ cur.pctW }}; border-radius:3px; background:{{ cur.fill }}; transition:width .4s;"></div></div>
+              </div>
+            </div>
+
+            <sc-if value="{{ cur.hasNote }}"><p style="margin:0; max-width:720px; font-size:13px; line-height:1.55; color:{{ cur.ink }}; text-wrap:pretty;">{{ cur.note }}</p></sc-if>
+
+            <div style="display:flex; flex-direction:column; gap:4px;">
+              <div style="font-size:11px; letter-spacing:0.1em; text-transform:uppercase; font-weight:600; color:color-mix(in srgb, var(--color-text) 62%, transparent);">Als Nächstes</div>
+              <sc-if value="{{ hasToday }}" hint-placeholder-val="{{ true }}">
+                <div style="display:flex; flex-direction:column;">
+                  <sc-for list="{{ todayTasks }}" as="t" hint-placeholder-count="3">
+                    <div style="display:flex; flex-wrap:wrap; align-items:center; gap:4px 14px; min-height:48px;">
+                      <button onClick="{{ t.toggle }}" aria-pressed="{{ t.checked }}" aria-label="Erledigt: {{ t.text }}" style="width:40px; height:40px; flex:none; margin-left:-9px; display:grid; place-items:center; padding:0; border:none; border-radius:10px; background:transparent; cursor:pointer;" style-hover="background:color-mix(in srgb, var(--color-text) 7%, transparent);"><span style="width:22px; height:22px; display:grid; place-items:center; border-radius:6px; border:2px solid {{ t.checkBorder }}; background:{{ t.checkBg }}; color:var(--color-surface); font-size:13px; font-weight:800; line-height:1;">{{ t.checkMark }}</span></button>
+                      <div style="flex:1 1 240px; min-width:0; margin-left:-6px; display:flex; flex-direction:column; gap:3px;">
+                        <span style="font-size:15px; line-height:1.4; text-wrap:pretty; opacity:{{ t.opacity }}; text-decoration:{{ t.deco }};">{{ t.text }}</span>
+                        <sc-if value="{{ t.hasSub }}"><span style="display:flex; flex-wrap:wrap; gap:4px 10px; align-items:center;">
+                          <sc-if value="{{ t.other }}"><span style="font-size:11px; font-weight:700; color:{{ t.otherInk }};">{{ t.otherLabel }}</span></sc-if>
+                          <sc-if value="{{ t.hasGo }}"><button onClick="{{ t.go }}" style="padding:0; border:none; background:transparent; color:var(--color-accent); font-family:var(--font-body); font-size:12px; font-weight:700; cursor:pointer;">{{ t.goLabel }}</button></sc-if>
+                        </span></sc-if>
+                      </div>
+                      <span style="display:flex; align-items:center; gap:14px; margin-left:auto;">
+                        <span style="font-size:11px; font-weight:700; padding:3px 9px; border-radius:6px; background:{{ t.tagSoft }}; color:{{ t.tagInk }};">{{ t.tag }}</span>
+                        <span style="min-width:46px; text-align:right; font-size:12px; font-variant-numeric:tabular-nums; color:color-mix(in srgb, var(--color-text) 62%, transparent);">{{ t.durLabel }}</span>
+                      </span>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-if>
+              <sc-if value="{{ noToday }}"><p style="margin:8px 0 0; font-size:14px;">Alles abgehakt. Viel Erfolg in der Klausur!</p></sc-if>
+            </div>
+
+            <div style="display:flex; flex-wrap:wrap; gap:12px 20px; align-items:center;">
+              <button onClick="{{ focusToggle }}" style="display:flex; align-items:center; gap:10px; min-height:46px; padding:10px 20px; border-radius:var(--radius-md); border:none; background:linear-gradient(90deg, color-mix(in srgb, var(--color-bg) 26%, transparent) {{ focusFill }}, transparent {{ focusFill }}), var(--color-accent); color:var(--color-bg); font-family:var(--font-body); font-size:15px; font-weight:700; cursor:pointer;">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13" r="8"></circle><path d="M12 9v4l2.5 2"></path><path d="M10 2h4"></path></svg>
+                <span>{{ focusMain }}</span>
+                <span style="font-variant-numeric:tabular-nums;">· {{ focusSub }}</span>
+              </button>
+              <sc-if value="{{ focusActive }}">
+                <button onClick="{{ focusReset }}" style="min-height:40px; padding:6px 12px; border:none; border-radius:8px; background:transparent; color:color-mix(in srgb, var(--color-text) 72%, transparent); font-family:var(--font-body); font-size:13px; font-weight:600; cursor:pointer;" style-hover="background:color-mix(in srgb, var(--color-text) 7%, transparent);">Zurücksetzen</button>
+              </sc-if>
+              <button onClick="{{ goCurPhase }}" style="min-height:40px; padding:6px 4px; border:none; background:transparent; color:var(--color-accent); font-family:var(--font-body); font-size:14px; font-weight:700; cursor:pointer;">Ganze Phase im Lernplan →</button>
+              <span style="margin-left:auto; font-size:12px; color:color-mix(in srgb, var(--color-text) 55%, transparent);">{{ focusSessionsLabel }}</span>
+            </div>
+          </article>
+
+          <div style="flex:1 1 250px; min-width:0; display:flex; flex-direction:column; gap:16px;">
+            <div style="flex:1; display:flex; flex-direction:column; gap:6px; padding:22px 22px 20px; border-radius:var(--radius-lg); background:var(--color-surface); box-shadow:var(--shadow-sm);">
+              <div style="font-size:11px; letter-spacing:0.1em; text-transform:uppercase; font-weight:600; color:color-mix(in srgb, var(--color-text) 62%, transparent);">Abgabe Pflichtenheft</div>
+              <div style="display:flex; align-items:baseline; gap:8px; margin-top:6px;">
+                <span style="font-size:48px; line-height:1; font-weight:700; font-variant-numeric:tabular-nums; color:color-mix(in srgb, var(--p4) 70%, var(--color-text));">{{ abgabeNum }}</span>
+                <span style="font-size:16px; font-weight:600;">{{ abgabeUnit }}</span>
+              </div>
+              <div style="font-size:12px; color:color-mix(in srgb, var(--color-text) 62%, transparent);">So 17.01.2027, 22:00 · per Mail</div>
+              <button onClick="{{ goPfl }}" style="align-self:flex-start; margin-top:8px; padding:4px 0; border:none; background:transparent; color:var(--color-accent); font-family:var(--font-body); font-size:14px; font-weight:700; cursor:pointer;">Checkliste öffnen →</button>
+            </div>
+            <div style="flex:1; display:flex; flex-direction:column; gap:6px; padding:22px 22px 20px; border-radius:var(--radius-lg); background:var(--color-surface); box-shadow:var(--shadow-sm);">
+              <div style="font-size:11px; letter-spacing:0.1em; text-transform:uppercase; font-weight:600; color:color-mix(in srgb, var(--color-text) 62%, transparent);">Klausur</div>
+              <sc-if value="{{ examSet }}">
+                <div style="display:flex; align-items:baseline; gap:8px; margin-top:6px;">
+                  <span style="font-size:48px; line-height:1; font-weight:700; font-variant-numeric:tabular-nums; color:color-mix(in srgb, var(--p5) 70%, var(--color-text));">{{ examNum }}</span>
+                  <span style="font-size:16px; font-weight:600;">{{ examUnit }}</span>
+                </div>
+                <div style="font-size:12px; color:color-mix(in srgb, var(--color-text) 62%, transparent);">{{ examHint }}</div>
+              </sc-if>
+              <sc-if value="{{ examUnset }}" hint-placeholder-val="{{ true }}">
+                <div style="margin-top:4px; font-family:var(--font-heading); font-weight:var(--font-heading-weight); font-size:22px; line-height:1.2;">Datum noch offen</div>
+                <div style="font-size:12px; line-height:1.5; color:color-mix(in srgb, var(--color-text) 62%, transparent);">Sobald es feststeht, zählt hier der Countdown.</div>
+                <sc-if value="{{ examEditOff }}" hint-placeholder-val="{{ true }}">
+                  <button onClick="{{ openExamEdit }}" style="align-self:flex-start; margin-top:8px; min-height:40px; padding:8px 16px; border-radius:var(--radius-md); border:1px solid color-mix(in srgb, var(--color-text) 28%, transparent); background:transparent; color:var(--color-text); font-family:var(--font-body); font-size:14px; font-weight:600; cursor:pointer;" style-hover="background:color-mix(in srgb, var(--color-text) 7%, transparent);">Datum eintragen</button>
+                </sc-if>
+                <sc-if value="{{ examEditOn }}">
+                  <label for="se1-exam-first" style="margin-top:8px; font-size:12px; font-weight:600;">Klausurdatum</label>
+                  <input id="se1-exam-first" type="date" value="{{ examInput }}" onChange="{{ setExamClose }}" style="align-self:flex-start; min-height:40px; padding:4px 10px; border-radius:10px; border:1.5px solid var(--p5); background:var(--color-bg); color:var(--color-text); font-family:var(--font-body); font-size:14px;">
+                </sc-if>
+              </sc-if>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:16px;">
+          <div style="display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:4px 16px;">
+            <h2 style="margin:0; font-family:var(--font-heading); font-weight:var(--font-heading-weight); font-size:26px;">Üben</h2>
+            <button onClick="{{ goUeben }}" style="padding:4px 0; border:none; background:transparent; color:var(--color-accent); font-family:var(--font-body); font-size:14px; font-weight:700; cursor:pointer;">Alle Trainer →</button>
+          </div>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(176px, 1fr)); gap:12px;">
+            <sc-for list="{{ tools }}" as="tl" hint-placeholder-count="5">
+              <button onClick="{{ tl.go }}" aria-label="{{ tl.aria }}" style="display:flex; flex-direction:column; align-items:flex-start; gap:14px; min-width:0; padding:18px; border:none; border-radius:var(--radius-lg); background:var(--color-surface); box-shadow:var(--shadow-sm); color:var(--color-text); font-family:var(--font-body); text-align:left; cursor:pointer; transition:transform .15s;" style-hover="transform:translateY(-2px);">
+                <span style="width:46px; height:46px; flex:none; border-radius:50%; background:conic-gradient({{ tl.ringColor }} {{ tl.deg }}, var(--color-neutral-800) 0); display:grid; place-items:center;"><span style="width:35px; height:35px; border-radius:50%; background:var(--color-surface); display:grid; place-items:center; font-size:11px; font-weight:800; font-variant-numeric:tabular-nums; color:{{ tl.ink }};">{{ tl.pct }}</span></span>
+                <span style="flex:1; display:flex; flex-direction:column; gap:4px; min-width:0;">
+                  <span style="font-size:16px; font-weight:700;">{{ tl.label }}</span>
+                  <span style="font-size:12px; line-height:1.45; color:color-mix(in srgb, var(--color-text) 62%, transparent);">{{ tl.desc }}</span>
+                </span>
+                <span style="font-size:12px; font-weight:700; font-variant-numeric:tabular-nums; color:{{ tl.ink }};">{{ tl.sub }}</span>
+              </button>
+            </sc-for>
+          </div>
+          <button onClick="{{ goPk }}" style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px 20px; padding:20px 22px; border-radius:var(--radius-lg); border:1px solid color-mix(in srgb, var(--color-accent) 24%, transparent); background:color-mix(in srgb, var(--color-accent) 9%, var(--color-surface)); color:var(--color-text); font-family:var(--font-body); text-align:left; cursor:pointer;">
+            <span style="display:flex; flex-direction:column; gap:4px; min-width:0;">
+              <span style="font-size:16px; font-weight:700;">Probeklausur</span>
+              <span style="font-size:13px; color:color-mix(in srgb, var(--color-text) 66%, transparent);">{{ pkDesc }}</span>
+            </span>
+            <span style="font-size:14px; font-weight:700; color:var(--color-accent);">{{ pkCta }}</span>
+          </button>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:16px;">
+          <div style="display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:4px 16px;">
+            <h2 style="margin:0; font-family:var(--font-heading); font-weight:var(--font-heading-weight); font-size:26px;">Dein Weg bis zur Klausur</h2>
+            <button onClick="{{ goPlan }}" style="padding:4px 0; border:none; background:transparent; color:var(--color-accent); font-family:var(--font-body); font-size:14px; font-weight:700; cursor:pointer;">Lernplan öffnen →</button>
+          </div>
+          <div style="display:flex; gap:6px;">
+            <sc-for list="{{ phases }}" as="ph" hint-placeholder-count="7">
+              <button onClick="{{ ph.jumpPlan }}" aria-label="Phase {{ ph.num }}: {{ ph.title }}, {{ ph.doneCount }} von {{ ph.total }} erledigt" style="flex:{{ ph.flex }} 1 0; min-width:0; display:flex; flex-direction:column; gap:7px; padding:0 0 4px; border:none; background:transparent; color:var(--color-text); font-family:var(--font-body); text-align:left; cursor:pointer;">
+                <span style="width:100%; height:6px; border-radius:3px; background:{{ ph.trackBg }}; overflow:hidden;"><span style="display:block; height:100%; width:{{ ph.pctW }}; background:{{ ph.fill }}; border-radius:3px;"></span></span>
+                <span style="font-size:11px; font-weight:700; font-variant-numeric:tabular-nums; color:{{ ph.numInk }};">{{ ph.numPad }}</span>
+                <span class="weg-title" style="font-size:11px; line-height:1.35; color:color-mix(in srgb, var(--color-text) {{ ph.titleMix }}, transparent);">{{ ph.title }}</span>
+              </button>
+            </sc-for>
+          </div>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ isUeben }}">
+      <div role="group" aria-label="Übungsbereiche" style="display:flex; flex-wrap:wrap; gap:8px; padding-bottom:4px;">
+        <sc-for list="{{ tools }}" as="tl" hint-placeholder-count="5">
+          <button onClick="{{ tl.pick }}" aria-pressed="{{ tl.on }}" style="display:flex; align-items:center; gap:7px; min-height:36px; padding:6px 13px; border-radius:var(--radius-md); border:1.5px solid {{ tl.border }}; background:{{ tl.bg }}; color:{{ tl.fg }}; font-family:var(--font-body); font-size:13px; font-weight:600; cursor:pointer;">
+            <span style="width:8px; height:8px; border-radius:50%; background:{{ tl.color }};"></span><span>{{ tl.label }}</span><sc-if value="{{ tl.hasBadge }}"><span style="opacity:0.65; font-variant-numeric:tabular-nums;">{{ tl.badge }}</span></sc-if>
+          </button>
+        </sc-for>
+      </div>
+    </sc-if>
 
     <sc-if value="{{ isPlan }}" hint-placeholder-val="{{ true }}">
       <section style="display:flex; flex-direction:column; gap:22px;">
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <h2 style="margin:0; font-size:30px;">Lernplan</h2>
+          <p style="margin:0; max-width:640px; font-size:14px; line-height:1.55; color:color-mix(in srgb, var(--color-text) 72%, transparent); text-wrap:pretty;">Alle 7 Phasen mit sämtlichen Aufgaben. Hake ab, filtere nach Thema und klapp Details auf. Was heute dran ist, steht auf der Startseite.</p>
+        </div>
         <div style="display:flex; flex-direction:column; gap:12px; padding:16px 18px; border-radius:var(--radius-lg); background:var(--color-surface); box-shadow:var(--shadow-sm);">
           <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:6px 16px; align-items:baseline;">
             <div style="font-size:11px; letter-spacing:0.08em; text-transform:uppercase; font-weight:600; color:color-mix(in srgb, var(--color-text) 62%, transparent);">Zeitstrahl · 7 Phasen bis zur Klausur</div>
@@ -173,46 +305,11 @@
         </div>
 
         <sc-if value="{{ isPfl }}">
-          <section aria-label="Worum es beim Pflichtenheft geht" style="display:flex; flex-direction:column; gap:12px; padding:18px 22px; border-radius:var(--radius-lg); background:var(--color-surface); box-shadow:var(--shadow-sm); border-left:4px solid var(--p4); font-size:14px; line-height:1.6;">
-            <h2 style="margin:0; font-family:var(--font-heading); font-weight:var(--font-heading-weight); font-size:21px; line-height:1.2;">Worum geht es beim Pflichtenheft?</h2>
-            <p style="margin:0; max-width:820px; text-wrap:pretty;">Ein Hotel betreibt seine Buchungs-Webanwendung bisher als Monolithen (3-Schichten-Architektur, Client/Server). Wegen stark schwankender Last soll sie auf Microservices mit Docker und Kubernetes migriert werden. Deine Aufgabe ist das <b>Pflichtenheft für diese Migration</b>: Es dokumentiert die Anforderungen auf Basis der Ausgangssituation im Aufgabenblatt, gegliedert nach der Struktur aus der Vorlesung und dem bereitgestellten Muster.</p>
-            <div style="display:flex; flex-direction:column; gap:4px;">
-              <span style="font-size:11px; letter-spacing:0.08em; text-transform:uppercase; font-weight:600; color:color-mix(in srgb, var(--color-text) 62%, transparent);">Was enthalten sein muss (Einzelabgabe)</span>
-              <ul style="margin:0; padding-left:20px; display:flex; flex-direction:column; gap:3px;">
-                <li style="margin:0;">mind. 8 <b>funktionale Anforderungen</b>, beschrieben mit den Schablonen für primäre und sekundäre Anwendungsfälle, inkl. Reaktionen auf Ausnahmen</li>
-                <li style="margin:0;">mind. 8 <b>nicht-funktionale Anforderungen</b>, ausführlich, verbal und individuell priorisiert (nicht nur als Tabelle)</li>
-                <li style="margin:0;">Definition der <b>Stamm- und Bewegungsdaten</b>; Customizing-Daten sind optional</li>
-                <li style="margin:0;"><b>Produktmodelle</b>: mind. 1 für die statische und mind. 2 für die dynamische Sicht, in unterschiedlichen Modellierungssprachen</li>
-                <li style="margin:0;">optional ein <b>Docker-Projekt</b>, das eine deiner funktionalen Anforderungen umsetzt (gibt Bonus)</li>
-              </ul>
-            </div>
-            <p style="margin:0; max-width:820px; font-size:13px; color:color-mix(in srgb, var(--color-text) 72%, transparent); text-wrap:pretty;">Bewertet wird, ob alles eindeutig, korrekt, vollständig, plausibel, verständlich, nummeriert und gegen die Realwelt prüfbar ist. Zu zweit gelten höhere Mindestzahlen (12 FA, 12 NFA, 2 statische, 3 dynamische Modelle, Customizing und Docker Pflicht). Abgabe bis So 17.01.2027, 22:00 Uhr per Mail, mit Deckblatt und unterschriebener Erklärung.</p>
-            <div style="display:flex; flex-direction:column; gap:10px; padding-top:14px; border-top:1px solid var(--color-divider);">
-              <div style="display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:4px 12px;">
-                <h3 style="margin:0; font-family:var(--font-heading); font-weight:var(--font-heading-weight); font-size:18px;">Checkliste nach Balzert-Gliederung</h3>
-                <span style="font-size:13px; font-weight:700; font-variant-numeric:tabular-nums;">{{ pfcDone }} / {{ pfcTotal }}</span>
-              </div>
-              <div style="height:6px; border-radius:3px; background:var(--color-neutral-800); overflow:hidden;"><div style="height:100%; width:{{ pfcW }}; border-radius:3px; background:var(--p4); transition:width .3s;"></div></div>
-              <p style="margin:0; font-size:12px; color:color-mix(in srgb, var(--color-text) 62%, transparent);">Nur Leitfragen zum Selbstprüfen, keine Inhalte. Die Kapitel 6, 7, 10 und 11 dürfen unter 9 zusammengefasst werden (Folie S. 164).</p>
-              <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:12px 20px;">
-                <sc-for list="{{ pfcGroups }}" as="g" hint-placeholder-count="6">
-                  <div style="display:flex; flex-direction:column; gap:6px;">
-                    <div style="font-size:13px; font-weight:700; color:{{ g.ink }};">{{ g.ch }}</div>
-                    <sc-for list="{{ g.items }}" as="it" hint-placeholder-count="2">
-                      <button onClick="{{ it.toggle }}" aria-pressed="{{ it.checked }}" style="display:flex; gap:9px; align-items:flex-start; padding:0; border:none; background:none; color:var(--color-text); font-family:var(--font-body); font-size:13px; line-height:1.45; text-align:left; cursor:pointer;">
-                        <span style="width:18px; height:18px; flex:none; margin-top:1px; display:grid; place-items:center; border-radius:5px; border:2px solid {{ it.border }}; background:{{ it.bg }}; color:{{ it.fg }}; font-size:11px; font-weight:800; line-height:1;">{{ it.mark }}</span>
-                        <span style="opacity:{{ it.op }};">{{ it.label }}</span>
-                      </button>
-                    </sc-for>
-                  </div>
-                </sc-for>
-              </div>
-            </div>
-          </section>
+          <button onClick="{{ goPfl }}" style="align-self:flex-start; display:flex; align-items:center; gap:8px; padding:10px 16px; border-radius:var(--radius-md); border:1.5px solid var(--p4); background:color-mix(in srgb, var(--p4) 14%, transparent); color:color-mix(in srgb, var(--p4) 60%, var(--color-text)); font-family:var(--font-body); font-size:14px; font-weight:700; cursor:pointer;">Auftrag, Checkliste und Abgabe-Check im Reiter Pflichtenheft →</button>
         </sc-if>
 
-        <div style="display:flex; flex-wrap:wrap; gap:36px; align-items:flex-start;">
-          <div style="flex:999 1 560px; min-width:0; display:flex; flex-direction:column; gap:28px;">
+        <div style="display:flex; flex-direction:column; gap:36px; max-width:900px;">
+          <div style="min-width:0; display:flex; flex-direction:column; gap:28px;">
             <sc-for list="{{ phases }}" as="ph" hint-placeholder-count="3">
               <div id="{{ ph.anchor }}" style="display:flex; flex-direction:column; gap:10px;">
                 <button onClick="{{ ph.toggle }}" aria-expanded="{{ ph.open }}" style="display:flex; align-items:center; gap:14px; flex-wrap:wrap; width:100%; padding:0; border:none; background:none; color:inherit; font-family:var(--font-body); text-align:left; cursor:pointer;">
@@ -259,79 +356,114 @@
             </sc-for>
           </div>
 
-          <aside style="flex:1 1 290px; max-width:390px; display:flex; flex-direction:column; gap:14px;">
-            <div style="display:flex; flex-direction:column; gap:14px; padding:16px 18px; border-radius:var(--radius-lg); background:var(--color-surface); box-shadow:var(--shadow-sm);">
-              <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
-                <div style="display:flex; align-items:center; gap:8px; font-size:11px; letter-spacing:0.08em; text-transform:uppercase; font-weight:600; color:color-mix(in srgb, var(--color-text) 62%, transparent);"><span style="width:8px; height:8px; border-radius:50%; background:var(--p6);"></span>Fokus-Timer</div>
-                <div style="font-size:12px; color:color-mix(in srgb, var(--color-text) 62%, transparent);">{{ focusSessions }} Blöcke heute</div>
-              </div>
-              <div style="display:flex; align-items:center; gap:16px;">
-                <div style="width:104px; height:104px; flex:none; border-radius:50%; background:conic-gradient(var(--p6) {{ focusDeg }}, var(--color-neutral-800) 0); display:grid; place-items:center;">
-                  <div style="width:86px; height:86px; border-radius:50%; background:var(--color-surface); display:grid; place-items:center; font-size:22px; font-weight:700; font-variant-numeric:tabular-nums;">{{ focusTime }}</div>
-                </div>
-                <div style="flex:1; min-width:0; display:flex; flex-direction:column; gap:8px;">
-                  <div style="display:flex; gap:6px; flex-wrap:wrap;">
-                    <sc-for list="{{ focusPresets }}" as="fp" hint-placeholder-count="3"><button onClick="{{ fp.pick }}" style="padding:4px 9px; border-radius:999px; border:1.5px solid {{ fp.border }}; background:{{ fp.bg }}; color:{{ fp.fg }}; font-family:var(--font-body); font-size:12px; font-weight:600; cursor:pointer;">{{ fp.label }}</button></sc-for>
-                  </div>
-                  <div style="display:flex; gap:6px;">
-                    <button onClick="{{ focusToggle }}" style="flex:1; padding:8px 12px; border-radius:var(--radius-md); border:1.5px solid var(--p6); background:color-mix(in srgb, var(--p6) 20%, transparent); color:color-mix(in srgb, var(--p6) 60%, var(--color-text)); font-family:var(--font-body); font-size:14px; font-weight:700; cursor:pointer;" style-hover="background:color-mix(in srgb, var(--p6) 30%, transparent);">{{ focusBtn }}</button>
-                    <button onClick="{{ focusReset }}" aria-label="Timer zurücksetzen" style="padding:8px 11px; border-radius:var(--radius-md); border:1.5px solid var(--color-divider); background:transparent; color:var(--color-text); font-family:var(--font-body); font-size:14px; cursor:pointer;">↺</button>
-                  </div>
-                </div>
-              </div>
-              <div style="font-size:12px; line-height:1.45; color:color-mix(in srgb, var(--color-text) 62%, transparent); text-wrap:pretty;">{{ focusLabel }}</div>
-            </div>
+        </div>
+      </section>
+    </sc-if>
 
-            <div style="display:flex; flex-direction:column; gap:12px; padding:16px 18px; border-radius:var(--radius-lg); background:var(--color-surface); box-shadow:var(--shadow-sm);">
-              <div style="font-size:11px; letter-spacing:0.08em; text-transform:uppercase; font-weight:600; color:color-mix(in srgb, var(--color-text) 62%, transparent);">Als Nächstes</div>
-              <sc-if value="{{ hasNext }}" hint-placeholder-val="{{ true }}">
-                <div style="display:flex; flex-direction:column; gap:10px;">
-                  <sc-for list="{{ nextTasks }}" as="n" hint-placeholder-count="4">
-                    <div style="display:flex; gap:10px; align-items:flex-start;">
-                      <button onClick="{{ n.toggle }}" aria-label="{{ n.text }}" style="width:18px; height:18px; flex:none; margin-top:1px; padding:0; border-radius:6px; border:2px solid {{ n.dot }}; background:transparent; cursor:pointer;" style-hover="background:color-mix(in srgb, var(--color-text) 8%, transparent);"></button>
-                      <span style="flex:1; font-size:13px; line-height:1.45; text-wrap:pretty;">{{ n.text }}</span>
-                      <span style="font-size:11px; font-weight:700; color:{{ n.ink }}; font-variant-numeric:tabular-nums;">{{ n.num }}</span>
-                    </div>
-                  </sc-for>
-                </div>
-              </sc-if>
-              <sc-if value="{{ allDone }}"><p style="margin:0; font-size:13px;">Alles abgehakt. Viel Erfolg in der Klausur!</p></sc-if>
+    <sc-if value="{{ isPflTab }}">
+      <section style="display:flex; flex-wrap:wrap; gap:28px; align-items:flex-start;">
+        <div style="flex:999 1 560px; min-width:0; display:flex; flex-direction:column; gap:20px;">
+          <div style="display:flex; flex-direction:column; gap:6px;">
+            <h2 style="margin:0; font-size:30px;">Pflichtenheft</h2>
+            <p style="margin:0; max-width:680px; font-size:14px; line-height:1.55; color:color-mix(in srgb, var(--color-text) 72%, transparent); text-wrap:pretty;">Alles zur Studienarbeit an einer Stelle: Auftrag, Checkliste, Abgabe-Check und deine Pflichtenheft-Schritte aus dem Lernplan. Bewusst ohne Lösungsinhalte.</p>
+          </div>
+          <section aria-label="Worum es beim Pflichtenheft geht" style="flex:none; display:flex; flex-direction:column; gap:12px; padding:18px 22px; border-radius:var(--radius-lg); background:var(--color-surface); box-shadow:var(--shadow-sm); border-left:4px solid var(--p4); font-size:14px; line-height:1.6;">
+            <h2 style="margin:0; font-family:var(--font-heading); font-weight:var(--font-heading-weight); font-size:21px; line-height:1.2;">Worum geht es beim Pflichtenheft?</h2>
+            <p style="margin:0; max-width:820px; text-wrap:pretty;">Ein Hotel betreibt seine Buchungs-Webanwendung bisher als Monolithen (3-Schichten-Architektur, Client/Server). Wegen stark schwankender Last soll sie auf Microservices mit Docker und Kubernetes migriert werden. Deine Aufgabe ist das <b>Pflichtenheft für diese Migration</b>: Es dokumentiert die Anforderungen auf Basis der Ausgangssituation im Aufgabenblatt, gegliedert nach der Struktur aus der Vorlesung und dem bereitgestellten Muster.</p>
+            <div style="display:flex; flex-direction:column; gap:4px;">
+              <span style="font-size:11px; letter-spacing:0.08em; text-transform:uppercase; font-weight:600; color:color-mix(in srgb, var(--color-text) 62%, transparent);">Was enthalten sein muss (Einzelabgabe)</span>
+              <ul style="margin:0; padding-left:20px; display:flex; flex-direction:column; gap:3px;">
+                <li style="margin:0;">mind. 8 <b>funktionale Anforderungen</b>, beschrieben mit den Schablonen für primäre und sekundäre Anwendungsfälle, inkl. Reaktionen auf Ausnahmen</li>
+                <li style="margin:0;">mind. 8 <b>nicht-funktionale Anforderungen</b>, ausführlich, verbal und individuell priorisiert (nicht nur als Tabelle)</li>
+                <li style="margin:0;">Definition der <b>Stamm- und Bewegungsdaten</b>; Customizing-Daten sind optional</li>
+                <li style="margin:0;"><b>Produktmodelle</b>: mind. 1 für die statische und mind. 2 für die dynamische Sicht, in unterschiedlichen Modellierungssprachen</li>
+                <li style="margin:0;">optional ein <b>Docker-Projekt</b>, das eine deiner funktionalen Anforderungen umsetzt (gibt Bonus)</li>
+              </ul>
             </div>
-
-            <div style="display:flex; flex-direction:column; gap:14px; padding:16px 18px; border-radius:var(--radius-lg); background:var(--color-surface); box-shadow:var(--shadow-sm);">
-              <div style="display:flex; flex-direction:column; gap:2px;">
-                <div style="font-size:11px; letter-spacing:0.08em; text-transform:uppercase; font-weight:600; color:color-mix(in srgb, var(--color-text) 62%, transparent);">Abgabe-Check · Einzelabgabe</div>
-                <div style="font-size:12px; color:color-mix(in srgb, var(--color-text) 62%, transparent);">Mindestanforderungen laut Aufgabenblatt. Punkte antippen zum Zählen.</div>
+            <p style="margin:0; max-width:820px; font-size:13px; color:color-mix(in srgb, var(--color-text) 72%, transparent); text-wrap:pretty;">Bewertet wird, ob alles eindeutig, korrekt, vollständig, plausibel, verständlich, nummeriert und gegen die Realwelt prüfbar ist. Zu zweit gelten höhere Mindestzahlen (12 FA, 12 NFA, 2 statische, 3 dynamische Modelle, Customizing und Docker Pflicht). Abgabe bis So 17.01.2027, 22:00 Uhr per Mail, mit Deckblatt und unterschriebener Erklärung.</p>
+            <div style="display:flex; flex-direction:column; gap:10px; padding-top:14px; border-top:1px solid var(--color-divider);">
+              <div style="display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:4px 12px;">
+                <h3 style="margin:0; font-family:var(--font-heading); font-weight:var(--font-heading-weight); font-size:18px;">Checkliste nach Balzert-Gliederung</h3>
+                <span style="font-size:13px; font-weight:700; font-variant-numeric:tabular-nums;">{{ pfcDone }} / {{ pfcTotal }}</span>
               </div>
-              <sc-for list="{{ counters }}" as="c" hint-placeholder-count="4">
-                <div style="display:flex; flex-direction:column; gap:7px;">
-                  <div style="display:flex; align-items:center; gap:8px;">
-                    <span style="flex:1; font-size:13px; line-height:1.3;">{{ c.label }}</span>
-                    <span style="font-size:13px; font-weight:700; font-variant-numeric:tabular-nums; color:{{ c.color }};">{{ c.value }} / {{ c.min }}</span>
+              <div style="height:6px; border-radius:3px; background:var(--color-neutral-800); overflow:hidden;"><div style="height:100%; width:{{ pfcW }}; border-radius:3px; background:var(--p4); transition:width .3s;"></div></div>
+              <p style="margin:0; font-size:12px; color:color-mix(in srgb, var(--color-text) 62%, transparent);">Nur Leitfragen zum Selbstprüfen, keine Inhalte. Die Kapitel 6, 7, 10 und 11 dürfen unter 9 zusammengefasst werden (Folie S. 164).</p>
+              <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:12px 20px;">
+                <sc-for list="{{ pfcGroups }}" as="g" hint-placeholder-count="6">
+                  <div style="display:flex; flex-direction:column; gap:6px;">
+                    <div style="font-size:13px; font-weight:700; color:{{ g.ink }};">{{ g.ch }}</div>
+                    <sc-for list="{{ g.items }}" as="it" hint-placeholder-count="2">
+                      <button onClick="{{ it.toggle }}" aria-pressed="{{ it.checked }}" style="display:flex; gap:9px; align-items:flex-start; padding:0; border:none; background:none; color:var(--color-text); font-family:var(--font-body); font-size:13px; line-height:1.45; text-align:left; cursor:pointer;">
+                        <span style="width:18px; height:18px; flex:none; margin-top:1px; display:grid; place-items:center; border-radius:5px; border:2px solid {{ it.border }}; background:{{ it.bg }}; color:{{ it.fg }}; font-size:11px; font-weight:800; line-height:1;">{{ it.mark }}</span>
+                        <span style="opacity:{{ it.op }};">{{ it.label }}</span>
+                      </button>
+                    </sc-for>
                   </div>
-                  <div style="display:flex; align-items:center; gap:6px;">
-                    <button onClick="{{ c.dec }}" aria-label="weniger" style="width:28px; height:28px; flex:none; padding:0; border-radius:8px; border:1.5px solid var(--color-divider); background:transparent; color:var(--color-text); font-family:var(--font-body); font-size:15px; cursor:pointer;">−</button>
-                    <div style="flex:1; display:flex; flex-wrap:wrap; align-items:center; gap:5px;">
-                      <sc-for list="{{ c.dots }}" as="d"><button onClick="{{ d.set }}" aria-label="{{ d.label }}" style="width:18px; height:18px; padding:0; border-radius:50%; border:2px solid {{ d.border }}; background:{{ d.bg }}; cursor:pointer; transition:background .15s;"></button></sc-for>
-                      <sc-if value="{{ c.hasExtra }}"><span style="font-size:12px; font-weight:700; color:{{ c.color }};">+{{ c.extra }}</span></sc-if>
-                    </div>
-                    <button onClick="{{ c.inc }}" aria-label="mehr" style="width:28px; height:28px; flex:none; padding:0; border-radius:8px; border:1.5px solid var(--color-divider); background:transparent; color:var(--color-text); font-family:var(--font-body); font-size:15px; cursor:pointer;">+</button>
-                  </div>
-                </div>
-              </sc-for>
-              <div style="display:flex; flex-direction:column; gap:9px; padding-top:4px;">
-                <sc-for list="{{ flags }}" as="f" hint-placeholder-count="3">
-                  <label style="display:flex; gap:10px; align-items:center; font-size:13px; cursor:pointer;">
-                    <input type="checkbox" checked="{{ f.checked }}" onChange="{{ f.toggle }}" style="width:16px; height:16px; margin:0; flex:none;">
-                    <span style="flex:1;">{{ f.label }}</span>
-                    <span style="font-size:11px; font-weight:700; padding:2px 9px; border-radius:999px; background:{{ f.reqBg }}; color:{{ f.reqFg }};">{{ f.req }}</span>
-                  </label>
                 </sc-for>
               </div>
-              <p style="margin:0; font-size:12px; line-height:1.5; color:color-mix(in srgb, var(--color-text) 62%, transparent); text-wrap:pretty;">Dynamische Modelle: mind. 2 in unterschiedlichen Modellierungssprachen. Alle Anforderungen nummerieren.</p>
             </div>
-          </aside>
+          </section>
+
+          <div style="display:flex; flex-direction:column; gap:10px; padding:18px 20px; border-radius:var(--radius-lg); background:var(--color-surface); box-shadow:var(--shadow-sm);">
+            <div style="display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:4px 12px;">
+              <h3 style="margin:0; font-family:var(--font-heading); font-weight:var(--font-heading-weight); font-size:18px;">Deine Schritte aus dem Lernplan</h3>
+              <span style="font-size:13px; font-weight:700; font-variant-numeric:tabular-nums;">{{ pflTasksDone }} / {{ pflTasksTotal }}</span>
+            </div>
+            <sc-for list="{{ pflTasks }}" as="t" hint-placeholder-count="8">
+              <div style="display:flex; gap:12px; align-items:flex-start; padding:8px 0; border-top:1px solid var(--color-divider);">
+                <button onClick="{{ t.toggle }}" aria-pressed="{{ t.checked }}" aria-label="{{ t.text }}" style="width:22px; height:22px; flex:none; margin-top:1px; padding:0; display:grid; place-items:center; border-radius:7px; border:2px solid {{ t.checkBorder }}; background:{{ t.checkBg }}; color:{{ t.checkFg }}; font-size:13px; font-weight:800; line-height:1; cursor:pointer;">{{ t.checkMark }}</button>
+                <div style="flex:1; min-width:0; display:flex; flex-direction:column; gap:5px;">
+                  <span style="font-size:14px; line-height:1.45; text-wrap:pretty; opacity:{{ t.opacity }}; text-decoration:{{ t.deco }};">{{ t.text }}</span>
+                  <div style="display:flex; flex-wrap:wrap; gap:6px 10px; align-items:center;">
+                    <span style="font-size:11px; font-weight:700; padding:2px 9px; border-radius:999px; background:{{ t.phSoft }}; color:{{ t.phInk }};">Phase {{ t.num }} · {{ t.range }}</span>
+                    <span style="font-size:12px; color:color-mix(in srgb, var(--color-text) 62%, transparent);">{{ t.hLabel }}</span>
+                    <sc-if value="{{ t.hasDetail }}"><button onClick="{{ t.toggleDetail }}" style="padding:2px 8px; border:none; border-radius:6px; background:transparent; color:var(--color-accent); font-family:var(--font-body); font-size:12px; font-weight:700; cursor:pointer;">{{ t.detailLabel }}</button></sc-if>
+                  </div>
+                  <sc-if value="{{ t.expanded }}"><p style="margin:0; max-width:680px; font-size:13px; line-height:1.6; color:color-mix(in srgb, var(--color-text) 88%, transparent); text-wrap:pretty;">{{ t.detail }}</p></sc-if>
+                </div>
+              </div>
+            </sc-for>
+          </div>
         </div>
+        <aside style="flex:1 1 290px; max-width:390px; display:flex; flex-direction:column; gap:14px;">
+          <div style="display:flex; flex-direction:column; gap:8px; padding:16px 18px; border-radius:var(--radius-lg); background:var(--color-surface); box-shadow:var(--shadow-sm);">
+            <div style="display:flex; align-items:center; gap:8px; font-size:11px; letter-spacing:0.08em; text-transform:uppercase; font-weight:600; color:color-mix(in srgb, var(--color-text) 62%, transparent);"><span style="width:8px; height:8px; border-radius:50%; background:var(--p4);"></span>Abgabe</div>
+            <div style="font-size:32px; line-height:1.05; font-weight:700; font-variant-numeric:tabular-nums; color:color-mix(in srgb, var(--p4) 60%, var(--color-text));">{{ abgabeDays }}</div>
+            <div style="font-size:12px; color:color-mix(in srgb, var(--color-text) 62%, transparent);">So 17.01.2027, 22:00 · Mail an zimmer@hm.edu</div>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:14px; padding:16px 18px; border-radius:var(--radius-lg); background:var(--color-surface); box-shadow:var(--shadow-sm);">
+            <div style="display:flex; flex-direction:column; gap:2px;">
+              <div style="font-size:11px; letter-spacing:0.08em; text-transform:uppercase; font-weight:600; color:color-mix(in srgb, var(--color-text) 62%, transparent);">Abgabe-Check · Einzelabgabe</div>
+              <div style="font-size:12px; color:color-mix(in srgb, var(--color-text) 62%, transparent);">Mindestanforderungen laut Aufgabenblatt. Punkte antippen zum Zählen.</div>
+            </div>
+            <sc-for list="{{ counters }}" as="c" hint-placeholder-count="4">
+              <div style="display:flex; flex-direction:column; gap:7px;">
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <span style="flex:1; font-size:13px; line-height:1.3;">{{ c.label }}</span>
+                  <span style="font-size:13px; font-weight:700; font-variant-numeric:tabular-nums; color:{{ c.color }};">{{ c.value }} / {{ c.min }}</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:6px;">
+                  <button onClick="{{ c.dec }}" aria-label="weniger" style="width:28px; height:28px; flex:none; padding:0; border-radius:8px; border:1.5px solid var(--color-divider); background:transparent; color:var(--color-text); font-family:var(--font-body); font-size:15px; cursor:pointer;">−</button>
+                  <div style="flex:1; display:flex; flex-wrap:wrap; align-items:center; gap:5px;">
+                    <sc-for list="{{ c.dots }}" as="d"><button onClick="{{ d.set }}" aria-label="{{ d.label }}" style="width:18px; height:18px; padding:0; border-radius:50%; border:2px solid {{ d.border }}; background:{{ d.bg }}; cursor:pointer; transition:background .15s;"></button></sc-for>
+                    <sc-if value="{{ c.hasExtra }}"><span style="font-size:12px; font-weight:700; color:{{ c.color }};">+{{ c.extra }}</span></sc-if>
+                  </div>
+                  <button onClick="{{ c.inc }}" aria-label="mehr" style="width:28px; height:28px; flex:none; padding:0; border-radius:8px; border:1.5px solid var(--color-divider); background:transparent; color:var(--color-text); font-family:var(--font-body); font-size:15px; cursor:pointer;">+</button>
+                </div>
+              </div>
+            </sc-for>
+            <div style="display:flex; flex-direction:column; gap:9px; padding-top:4px;">
+              <sc-for list="{{ flags }}" as="f" hint-placeholder-count="3">
+                <label style="display:flex; gap:10px; align-items:center; font-size:13px; cursor:pointer;">
+                  <input type="checkbox" checked="{{ f.checked }}" onChange="{{ f.toggle }}" style="width:16px; height:16px; margin:0; flex:none;">
+                  <span style="flex:1;">{{ f.label }}</span>
+                  <span style="font-size:11px; font-weight:700; padding:2px 9px; border-radius:999px; background:{{ f.reqBg }}; color:{{ f.reqFg }};">{{ f.req }}</span>
+                </label>
+              </sc-for>
+            </div>
+            <p style="margin:0; font-size:12px; line-height:1.5; color:color-mix(in srgb, var(--color-text) 62%, transparent); text-wrap:pretty;">Dynamische Modelle: mind. 2 in unterschiedlichen Modellierungssprachen. Alle Anforderungen nummerieren.</p>
+          </div>
+        </aside>
       </section>
     </sc-if>
 
@@ -824,6 +956,10 @@
         </sc-if>
       </section>
     </sc-if>
+
+    <footer style="margin-top:24px; max-width:720px; padding-top:18px; border-top:1px solid color-mix(in srgb, var(--color-text) 12%, transparent);">
+      <p style="margin:0; font-size:12px; line-height:1.6; color:color-mix(in srgb, var(--color-text) 62%, transparent); text-wrap:pretty;">Hinweis: Die Studienarbeit entsteht laut Aufgabenblatt ohne KI. Diese Seite liefert nur Struktur, Checklisten und Übungen außerhalb des Hotel-Szenarios.</p>
+    </footer>
   </div>
   <div class="print-only">
     <sc-for list="{{ printList }}" as="pe" hint-placeholder-count="1">
@@ -1203,7 +1339,7 @@ class Component extends DCLogic {
     const phases = [
       { num:'01', title:'Start & Struktur', start:'2026-11-19', end:'2026-11-29', weeks:1.5, tasks:[
         { id:'p1a', tag:'Orga', h:0.25, text:'Anmeldung zur Studienarbeit im ZPA prüfen', detail:'Ohne ZPA-Anmeldung kein Schein, ohne Schein keine Klausurzulassung.', ref:'85' },
-        { id:'p1b', tag:'Pflichtenheft', h:0.5, text:'Aufgabenblatt lesen und Mindestanforderungen markieren', detail:'Einzelabgabe: mind. 8 funktionale und 8 nicht-funktionale Anforderungen, Stamm- und Bewegungsdaten (muss), Customizing (kann), mind. 1 statisches und 2 dynamische Produktmodelle in unterschiedlichen Modellierungssprachen, Docker-Projekt (kann, gibt Bonus). Die Zähler rechts helfen beim Mitzählen.', ref:'82–85' },
+        { id:'p1b', tag:'Pflichtenheft', h:0.5, text:'Aufgabenblatt lesen und Mindestanforderungen markieren', detail:'Einzelabgabe: mind. 8 funktionale und 8 nicht-funktionale Anforderungen, Stamm- und Bewegungsdaten (muss), Customizing (kann), mind. 1 statisches und 2 dynamische Produktmodelle in unterschiedlichen Modellierungssprachen, Docker-Projekt (kann, gibt Bonus). Die Zähler im Reiter Pflichtenheft helfen beim Mitzählen.', ref:'82–85' },
         { id:'p1c', tag:'Pflichtenheft', h:0.25, text:'Pflichtenheft-Muster (sews2026-pflichtenheft.pdf) besorgen', detail:'Wird laut Vorlesung bereitgestellt. Falls du es nicht findest: im Praktikum nachfragen.', ref:'164' },
         { id:'p1d', tag:'Pflichtenheft', h:0.5, text:'Dokument mit der Balzert-Gliederung anlegen', detail:'1 Zielbestimmung (Muss-, Wunsch-, Abgrenzungskriterien) · 2 Produkteinsatz · 3 Produktübersicht · 4 Produktfunktionen · 5 Produktdaten · 6 Produktleistungen · 7 Qualitätsanforderungen · 8 Benutzungsoberfläche · 9 Nicht-funktionale Anforderungen · 10 Technische Produktumgebung · 11 Entwicklungsumgebung · 12 Gliederung in Teilprodukte · 13 Ergänzungen. Die Punkte 6, 7, 10 und 11 dürfen unter 9 zusammengefasst werden.', ref:'163–164' },
         { id:'p1e', tag:'Pflichtenheft', h:1, text:'Ausgangssituation durcharbeiten: Substantive, Verben und Restriktionen markieren', detail:'Substantive sind Kandidaten für Klassen und Produktdaten, Verben für Anwendungsfälle. Restriktionen getrennt sammeln: Aus ihnen werden später Kardinalitäten und Ausnahmen.', ref:'82–83' },
@@ -1748,9 +1884,9 @@ class Component extends DCLogic {
 
 
   static KEY = 'se1-lernplan-v1';
-  static SAVE = ['theme','tab','done','open','phClosed','tagF','hideDone','counts','flags','exam','qf','qmode','qstats','qstreak','qbest','exSel','exChecks','exDone','fcTopic','fcBox','sortSet','sortPlaced','sortBest','fp','act','focus','focusLog','exT','pk','pkBest','pfc'];
+  static SAVE = ['theme','uebTool','done','open','phClosed','tagF','hideDone','counts','flags','exam','qf','qmode','qstats','qstreak','qbest','exSel','exChecks','exDone','fcTopic','fcBox','sortSet','sortPlaced','sortBest','fp','act','focus','focusLog','exT','pk','pkBest','pfc'];
 
-  state = { theme:'nacht', tab:'plan', done:{}, open:{}, phClosed:{}, tagF:'alle', hideDone:false, counts:{ fa:0, nfa:0, stat:0, dyn:0 }, flags:{}, exam:'',
+  state = { theme:'nacht', tab:'start', uebTool:'quiz', settingsOpen:false, justDone:{}, examEdit:false, done:{}, open:{}, phClosed:{}, tagF:'alle', hideDone:false, counts:{ fa:0, nfa:0, stat:0, dyn:0 }, flags:{}, exam:'',
     qf:'alle', qmode:'alle', qpos:0, qpick:null, qstats:{}, qstreak:0, qbest:0, qround:0,
     exSel:'ex1', exHint:false, exSol:false, exChecks:{}, exDone:{},
     fcTopic:'alle', fcBox:{}, fcPos:0, fcFlip:false, fcRound:0,
@@ -1758,7 +1894,7 @@ class Component extends DCLogic {
     fp:null, act:{}, focus:{ dur:1500, left:1500, end:null }, focusLog:{}, exT:{ dur:900, left:900, end:null }, toast:null, exStep:3, pk:null, pkBest:null, pfc:{}, printMode:null };
 
   componentDidMount() {
-    try { const s = JSON.parse(localStorage.getItem(Component.KEY) || 'null'); if (s && typeof s === 'object') this.setState(s); } catch (e) {}
+    try { const s = JSON.parse(localStorage.getItem(Component.KEY) || 'null'); if (s && typeof s === 'object') { delete s.tab; delete s.settingsOpen; this.setState(s); } } catch (e) {}
     this._ready = true;
     this.applyTheme();
     this._tick = setInterval(() => this.tick(), 1000);
@@ -1770,6 +1906,8 @@ class Component extends DCLogic {
   componentWillUnmount() { clearInterval(this._tick); clearTimeout(this._toastT); window.removeEventListener('keydown', this._onKey); window.removeEventListener('afterprint', this._onAfterPrint); }
   componentDidUpdate() {
     this.applyTheme();
+    const tb = this.state.tab;
+    if (['quiz','ex','cards','sort','fp'].includes(tb) && this.state.uebTool !== tb) this.setState({ uebTool:tb });
     if (!this._ready) return;
     try {
       const o = {}; Component.SAVE.forEach(k => { o[k] = this.state[k]; });
@@ -1834,7 +1972,7 @@ class Component extends DCLogic {
   bump(k, d) { this.setState(s => ({ counts: { ...(s.counts || {}), [k]: Math.max(0, ((s.counts || {})[k] || 0) + d) } })); }
   scrollTop() { try { window.scrollTo({ top:0, behavior:'smooth' }); } catch (e) {} }
   goTo(t) {
-    if (['quiz','cards','sort','fp','pk'].includes(t)) this.setState({ tab:t });
+    if (['quiz','cards','sort','fp','pk','pfl'].includes(t)) this.setState({ tab:t });
     else this.selectEx(t, true);
     this.scrollTop();
   }
@@ -1925,7 +2063,7 @@ class Component extends DCLogic {
     const until = d => Math.max(0, Math.ceil((d - now) / DAY));
     const TAGC = { Pflichtenheft:'p4', UML:'p1', Theorie:'p5', Docker:'p6', Orga:'p3' };
     const GOL = { pk:'Zur Probeklausur →', quiz:'Zum Notationstrainer →', cards:'Zu den Karteikarten →', sort:'Zum Sortierspiel →', fp:'Zum FP-Rechner →' };
-    const tab = s.tab || 'plan';
+    const tab = s.tab || 'start';
 
     // ----- Lernplan -----
     const done = s.done || {}, opened = s.open || {}, closed = s.phClosed || {}, tagF = s.tagF || 'alle';
@@ -1959,7 +2097,17 @@ class Component extends DCLogic {
         isCurrent, todayPos: isCurrent ? Math.min(94, Math.round((now - start) / DAY / span * 100)) + '%' : '0%',
         doneCount:dn, total:ph.tasks.length, pctW: Math.round(dn / ph.tasks.length * 100) + '%', hasNote: !!note, note, tasks, empty: tasks.length === 0,
         fill:c, soft:soft(c, 15), fillSoft:soft(c, 45), ink:ink(c), flex: Math.max(3, Math.round(span)),
-        anchor:'phase-' + ph.num, jump:() => this.jump('phase-' + ph.num, ph.num), open:isOpen, chev: isOpen ? '0deg' : '-90deg',
+        anchor:'phase-' + ph.num, jump:() => this.jump('phase-' + ph.num, ph.num),
+        jumpPlan:() => { this.setState({ tab:'plan' }); this.jump('phase-' + ph.num, ph.num); }, roadBorder: isCurrent ? c : soft(c, 45),
+        numPad: String(ph.num).padStart(2, '0'), numInk: isCurrent ? ink(c) : muted, trackBg: isCurrent ? soft(c, 25) : 'var(--color-neutral-800)', titleMix: isCurrent ? '92%' : '58%',
+        metaLine: (() => {
+          const mo = d => d.toLocaleDateString('de-DE', { month:'short' }).replace('.', '');
+          const r = start.getMonth() === endD.getMonth() && start.getFullYear() === endD.getFullYear()
+            ? start.getDate() + '.–' + endD.getDate() + '. ' + mo(endD)
+            : start.getDate() + '. ' + mo(start) + ' – ' + endD.getDate() + '. ' + mo(endD);
+          const dl = until(endD);
+          return r + (isCurrent ? ' · noch ' + dl + (dl === 1 ? ' Tag' : ' Tage') : '') + ' · ca. ' + n1(effort) + ' h';
+        })(), open:isOpen, chev: isOpen ? '0deg' : '-90deg',
         toggle:() => this.setState(st => ({ phClosed: { ...(st.phClosed || {}), [ph.num]: isOpen } })) };
     });
     const tagChips = [['alle','Alle','color-accent']].concat(Object.keys(TAGC).map(k => [k, k, TAGC[k]])).map(([k, l, ck]) => {
@@ -2103,6 +2251,14 @@ class Component extends DCLogic {
         pkParts: [{ label:'Teil A · Notation', val: sc.a + ' / 8' }, { label:'Teil B · Function Points', val: sc.b + ' / 4' }, { label:'Teil C · Diagramm (Selbstcheck)', val: sc.c + ' / ' + sc.nC }] };
     }
 
+    // ----- Pflichtenheft-Reiter: Schritte aus dem Lernplan -----
+    const pflTasks = []; let pflTasksDone = 0;
+    D.phases.forEach(ph => { const c = col(ph.color), st = new Date(ph.start + 'T00:00:00');
+      ph.tasks.filter(t => t.tag === 'Pflichtenheft' || t.tag === 'Orga').forEach(t => { const checked = !!done[t.id], ex = !!t.detail && !!opened[t.id]; if (checked) pflTasksDone++;
+        pflTasks.push({ text:t.text, num:ph.num, range: ph.end ? dd(st) + '–' + dd(new Date(ph.end + 'T00:00:00')) : 'ab ' + dd(st), phSoft:soft(c, 18), phInk:ink(c), hLabel:'≈ ' + n1(t.h) + ' h', checked,
+          toggle:() => this.toggleDone(t.id), checkBg: checked ? soft(c, 28) : 'transparent', checkBorder: checked ? c : 'color-mix(in srgb, var(--color-text) 35%, transparent)', checkFg:ink(c), checkMark: checked ? '✓' : '',
+          opacity: checked ? 0.55 : 1, deco: checked ? 'line-through' : 'none', hasDetail: !!t.detail, expanded:ex, detailLabel: ex ? 'Weniger' : 'Details', toggleDetail:() => this.toggleOpen(t.id, ex), detail:t.detail || '' }); }); });
+
     // ----- Pflichtenheft-Checkliste -----
     const pfcS = s.pfc || {}; let pfcDone = 0, pfcTotal = 0;
     const pfcGroups = D.pfc.map((g, gi) => ({ ch:g.ch, ink:ink('var(--p4)'), items: g.items.map((label, i) => { const k = gi + '-' + i, on = !!pfcS[k]; pfcTotal++; if (on) pfcDone++;
@@ -2180,12 +2336,45 @@ class Component extends DCLogic {
 
     // ----- Kopf -----
     const abgabe = new Date(2027, 0, 17, 22, 0), ad = until(abgabe), pct = totalN ? Math.round(doneN / totalN * 100) : 0;
-    const badges = { pk: s.pkBest != null ? s.pkBest + '%' : '', plan:pct + '%', quiz:qMastered + '/' + D.quiz.length, ex:exDoneN + '/' + D.exercises.length, cards:cardsSitzt + '/' + D.cards.length, sort:sortPerfect + '/' + D.sorts.length, fp:'' };
-    const tabs = [['plan','Lernplan','p6'],['quiz','Notation','p1'],['ex','Übungen','p3'],['cards','Karteikarten','p5'],['sort','Sortieren','p2'],['fp','Function Points','p4'],['pk','Probeklausur','color-accent']].map(([k, l, ck]) => {
-      const c = col(ck), on = tab === k;
-      return { label:l, dot:c, badge:badges[k], bg: on ? soft(c, 20) : 'var(--color-surface)', border: on ? c : 'var(--color-divider)', fg: on ? ink(c) : 'var(--color-text)', go:() => this.setState({ tab:k }) };
+    const TOOLS = ['quiz','ex','cards','sort','fp'], isUeben = TOOLS.includes(tab);
+    const badges = { start:'', plan:pct + '%', ueben:'', pfl: pfcDone + '/' + pfcTotal, pk: s.pkBest != null ? s.pkBest + '%' : '' };
+    const tabs = [['start','Start','color-accent'],['plan','Lernplan','p6'],['ueben','Üben','p1'],['pfl','Pflichtenheft','p4'],['pk','Probeklausur','p5']].map(([k, l, ck]) => {
+      const c = col(ck), on = k === 'ueben' ? isUeben : tab === k;
+      return { label:l, dot:c, badge:badges[k], hasBadge: !!badges[k], current: on ? 'page' : 'false',
+        bg: on ? soft('var(--color-accent)', 20) : 'transparent', border: on ? c : 'var(--color-divider)', fg: on ? ink(c) : 'var(--color-text)',
+        go:() => this.setState(st => ({ tab: k === 'ueben' ? (TOOLS.includes(st.uebTool) ? st.uebTool : 'quiz') : k, settingsOpen:false })) };
     });
     const rp = (n, t) => t ? Math.round(n / t * 100) : 0;
+    const tools = [['quiz','Notation erkennen','UML-Elemente auf einen Blick', qMastered, D.quiz.length, 'sicher', 'p1'],
+      ['ex','Übungen', D.exercises.length + ' Aufgaben mit Timer und Lösung', exDoneN, D.exercises.length, 'gelöst', 'p3'],
+      ['cards','Karteikarten','Theorie im Kurzformat', cardsSitzt, D.cards.length, 'sitzen', 'p5'],
+      ['sort','Sortieren','FA/NFA, Daten, Prozesse, CI/CD', sortPerfect, D.sorts.length, 'Spiele', 'p2'],
+      ['fp','Function Points','Rechner mit 14 Einflussfaktoren', null, null, '', 'p4']].map(([k, l, desc, n, t, unit, ck]) => {
+      const c = col(ck), on = tab === k, has = t != null, v = has ? rp(n, t) : 0, pz = pill(c, on);
+      return { label:l, desc, color:c, ink:ink(c), ringColor: has ? c : soft(c, 45), deg: has ? Math.round(v * 3.6) + 'deg' : '360deg', pct: has ? v + '%' : 'FP',
+        sub: has ? n + ' / ' + t + ' ' + unit : 'Werkzeug', badge: has ? n + '/' + t : '', hasBadge: has, on,
+        bg:pz.bg, border:pz.border, fg:pz.fg, aria: has ? l + ': ' + n + ' von ' + t + ' ' + unit : l,
+        pick:() => this.setState({ tab:k }), go:() => { this.setState({ tab:k }); this.scrollTop(); } };
+    });
+
+    // ----- Start -----
+    let curIdx = phases.findIndex(x => x.isCurrent);
+    if (curIdx < 0) curIdx = phases.findIndex(x => x.doneCount < x.total);
+    if (curIdx < 0) curIdx = phases.length - 1;
+    const cur = phases[curIdx];
+    const jd = s.justDone || {}, pool = [];
+    D.phases.forEach(ph => ph.tasks.forEach(t => { if (!done[t.id] || jd[t.id]) pool.push({ t, num:ph.num, c:col(ph.color) }); }));
+    const todayTasks = pool.slice(0, 3).map(({ t, num, c }) => {
+      const tc = col(TAGC[t.tag] || 'color-accent'), late = num < cur.num, checked = !!done[t.id], other = num !== cur.num, hasGo = !!t.go && !checked;
+      return { text:t.text, tag:t.tag, tagSoft:soft(tc, 18), tagInk:ink(tc),
+        durLabel: t.h < 1 ? Math.round(t.h * 60) + ' min' : n1(t.h) + ' h', checked,
+        checkBorder: checked ? 'var(--ok)' : 'color-mix(in srgb, var(--color-text) 38%, transparent)', checkBg: checked ? 'var(--ok)' : 'transparent', checkMark: checked ? '✓' : '',
+        opacity: checked ? 0.5 : 1, deco: checked ? 'line-through' : 'none',
+        other, otherLabel: (late ? 'Nachholen aus Phase ' : 'Vorziehen aus Phase ') + num, otherInk: ink(late ? 'var(--bad)' : c),
+        hasSub: other || hasGo, hasGo, goLabel: GOL[t.go] || 'Zur Übung →', go:() => this.goTo(t.go),
+        toggle:() => { this.setState(st => ({ justDone: { ...(st.justDone || {}), [t.id]: true } })); this.toggleDone(t.id); } };
+    });
+    const foRun = !!fo.end, foIdle = !foRun && foLeft >= fo.dur, fSess = (s.focusLog || {})[todayK] || 0;
     const rings = [['Lernplan', doneN, totalN, 'p6', 'plan'], ['Übungen', exDoneN, D.exercises.length, 'p3', 'ex'], ['Notation', qMastered, D.quiz.length, 'p1', 'quiz'], ['Karten', cardsSitzt, D.cards.length, 'p5', 'cards']].map(([l, n, t, ck, tb]) => {
       const v = rp(n, t); return { label:l, sub:n + ' / ' + t, pct:v + '%', deg:Math.round(v * 3.6) + 'deg', color:col(ck), aria:l + ': ' + n + ' von ' + t, go:() => this.setState({ tab:tb }) }; });
     const th = s.theme === 'pop' ? 'pop' : 'nacht';
@@ -2193,7 +2382,32 @@ class Component extends DCLogic {
       border: th === t.k ? '2px solid var(--color-accent)' : '1px solid var(--color-divider)', shadow: th === t.k ? '0 0 0 4px ' + soft('var(--color-accent)', 25) : 'none', pick:() => this.setState({ theme:t.k }) }));
 
     return {
-      themes, tabs, isPfl: (s.tagF || 'alle') === 'Pflichtenheft', isPlan: tab === 'plan', isQuiz: tab === 'quiz', isEx: tab === 'ex', isCards: tab === 'cards', isSort: tab === 'sort', isFp: tab === 'fp', isPk: tab === 'pk', rings,
+      isStart: tab === 'start', isUeben, tools, cur, todayTasks, hasToday: todayTasks.length > 0, noToday: todayTasks.length === 0,
+      curEyebrow: (cur.isCurrent ? 'Diese Woche · Phase ' : 'Als Nächstes · Phase ') + cur.numPad + ' von ' + String(phases.length).padStart(2, '0'),
+      abgabeNum: now > abgabe ? '0' : String(ad), abgabeUnit: now > abgabe ? 'Tage · vorbei' : (ad === 1 ? 'Tag' : 'Tage'),
+      examNum: exam ? String(until(exam)) : '', examUnit: exam && until(exam) === 1 ? 'Tag' : 'Tage',
+      examEditOn: !!s.examEdit, examEditOff: !s.examEdit, openExamEdit:() => this.setState({ examEdit:true }),
+      setExamClose: e => this.setState({ exam: e.target.value, examEdit: !/^\d{4}-\d{2}-\d{2}$/.test(e.target.value) }),
+      streakDots: [0, 1, 2, 3].map(i => ({ bg: i < Math.min(streak, 4) ? 'var(--p2)' : 'color-mix(in srgb, var(--color-text) 22%, transparent)' })),
+      goStart:() => this.setState({ tab:'start', settingsOpen:false }),
+      goUeben:() => { this.setState(st => ({ tab: TOOLS.includes(st.uebTool) ? st.uebTool : 'quiz' })); this.scrollTop(); },
+      goPlan:() => { this.setState({ tab:'plan' }); this.scrollTop(); },
+      goPk:() => { this.setState({ tab:'pk' }); this.scrollTop(); },
+      pkDesc: 'Notation, Function Points und ein Diagramm unter Zeitdruck' + (s.pkBest != null ? ' · Bestwert ' + s.pkBest + ' %' : ''),
+      pkCta: s.pk && s.pk.q && !s.pk.done ? 'Weiter →' : 'Starten →',
+      curCardBg: 'linear-gradient(' + soft(cur.fill, 8) + ', ' + soft(cur.fill, 8) + '), var(--color-surface)',
+      goCurPhase:() => { this.setState({ tab:'plan' }); this.jump(cur.anchor, cur.num); },
+      todayLabel: now.toLocaleDateString('de-DE', { weekday:'long', day:'numeric', month:'long' }),
+      focusMain: foRun ? 'Pause' : (foIdle ? 'Fokus-Block starten' : 'Fokus-Block fortsetzen'),
+      focusSub: foIdle ? Math.round(fo.dur / 60) + ' min' : mmss(foLeft), focusFill: foIdle ? '0%' : Math.round((1 - foLeft / fo.dur) * 100) + '%',
+      focusIdle: foIdle, focusActive: !foIdle,
+      focusSessionsLabel: fSess === 0 ? 'Heute noch kein Block' : (fSess === 1 ? '1 Block heute' : fSess + ' Blöcke heute'),
+      settingsOpen: !!s.settingsOpen, toggleSettings:() => this.setState(st => ({ settingsOpen: !st.settingsOpen })), closeSettings:() => this.setState({ settingsOpen:false }),
+      gearBg: s.settingsOpen ? soft('var(--color-accent)', 18) : 'var(--color-surface)', gearBorder: s.settingsOpen ? 'var(--color-accent)' : 'var(--color-divider)',
+      examSet: !!exam, examUnset: !exam,
+      streakChip: streak === 0 ? 'Noch keine Serie' : (streak === 1 ? '1 Tag Serie' : streak + ' Tage Serie'),
+      streakBg: streak > 0 ? soft('var(--p2)', 16) : 'var(--color-surface)', streakFg: streak > 0 ? ink('var(--p2)') : muted, streakDot: streak > 0 ? 'var(--p2)' : 'var(--color-neutral-500)',
+      themes, tabs, isPfl: (s.tagF || 'alle') === 'Pflichtenheft', isPflTab: tab === 'pfl', goPfl:() => { this.setState({ tab:'pfl' }); this.scrollTop(); }, pflTasks, pflTasksDone, pflTasksTotal: pflTasks.length, isPlan: tab === 'plan', isQuiz: tab === 'quiz', isEx: tab === 'ex', isCards: tab === 'cards', isSort: tab === 'sort', isFp: tab === 'fp', isPk: tab === 'pk', rings,
       pkIdle: !pkActive, pkActive, pkRunning: pkActive && !pkDoneB, pkDone: pkDoneB, pkStart:() => this.pkNew(), pkSubmit:() => this.pkSubmit(false), pkCancel:() => this.setState({ pk:null }),
       pkBestLabel: s.pkBest != null ? 'Bestwert Probeklausur: ' + s.pkBest + ' %' : 'Noch keine Probeklausur', ...pkV,
       pfcGroups, pfcDone, pfcTotal, pfcW: Math.round(pfcDone / Math.max(1, pfcTotal) * 100) + '%', printList, printAll:() => this.doPrint('all'),
