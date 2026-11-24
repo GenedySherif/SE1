@@ -41,6 +41,12 @@
     .stp[data-step="1"] [data-l="2"], .stp[data-step="1"] [data-l="3"], .stp[data-step="2"] [data-l="3"] { opacity:0; }
     .stp[data-step] [data-l="1"] [data-l] { opacity:1; }
     .print-only { display:none; }
+    .site-hdr { transition:top .28s ease, box-shadow .28s ease; }
+    html.hdr-hidden .site-hdr { top:calc(-1 * var(--hdr-h, 160px)) !important; box-shadow:none; }
+    @media (max-height: 520px) {
+      .site-hdr > div { padding-top:6px !important; padding-bottom:6px !important; flex-wrap:nowrap !important; gap:10px 16px !important; }
+      .hdr-sub, .hdr-streak { display:none !important; }
+    }
     @media (max-width: 640px) {
       .tabnav { position:fixed !important; top:auto !important; bottom:0; left:0; right:0; margin:0 !important; padding:8px 10px calc(8px + env(safe-area-inset-bottom)) !important; border-top:1px solid var(--color-divider); background:color-mix(in srgb, var(--color-bg) 95%, transparent) !important; z-index:40 !important; }
       .tabnav button { padding:8px 12px !important; font-size:13px !important; }
@@ -65,11 +71,11 @@
   </style>
 </helmet>
 <div class="pg-root" style="min-height:100vh; background:var(--page-bg); color:var(--color-text); font-family:var(--font-body);">
-  <header class="no-print" style="position:sticky; top:0; z-index:30; background:color-mix(in srgb, var(--color-bg) 95%, transparent); border-bottom:1px solid color-mix(in srgb, var(--color-text) 10%, transparent);">
+  <header class="no-print site-hdr" style="position:sticky; top:0; z-index:30; background:color-mix(in srgb, var(--color-bg) 95%, transparent); border-bottom:1px solid color-mix(in srgb, var(--color-text) 10%, transparent);">
     <div style="max-width:1240px; margin:0 auto; padding:12px clamp(16px, 4vw, 56px); display:flex; flex-wrap:wrap; align-items:center; gap:10px 32px;">
       <button onClick="{{ goStart }}" aria-label="SE1 Klausur, zur Startseite" style="flex:none; display:flex; flex-direction:column; align-items:flex-start; gap:2px; padding:0; border:none; background:none; color:var(--color-text); cursor:pointer; text-align:left;">
         <span style="font-family:var(--font-heading); font-weight:var(--font-heading-weight); font-size:20px; line-height:1.1;">SE1 Klausur</span>
-        <span style="font-family:var(--font-body); font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:color-mix(in srgb, var(--color-text) 62%, transparent);">WS 2026/27 · Prof. Zimmer</span>
+        <span class="hdr-sub" style="font-family:var(--font-body); font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:color-mix(in srgb, var(--color-text) 62%, transparent);">WS 2026/27 · Prof. Zimmer</span>
       </button>
       <nav class="tabnav" aria-label="Bereiche" style="flex:1 1 auto; min-width:0; display:flex; gap:4px; overflow-x:auto; scrollbar-width:none;">
         <sc-for list="{{ tabs }}" as="tb" hint-placeholder-count="5">
@@ -77,7 +83,7 @@
         </sc-for>
       </nav>
       <div style="margin-left:auto; display:flex; align-items:center; gap:10px;">
-        <span title="Tage in Folge mit mindestens einer Aktion" style="display:flex; align-items:center; gap:8px; min-height:34px; padding:4px 13px; border-radius:999px; border:1px solid color-mix(in srgb, var(--color-text) 14%, transparent); font-size:13px; font-weight:700; white-space:nowrap; font-variant-numeric:tabular-nums;">
+        <span class="hdr-streak" title="Tage in Folge mit mindestens einer Aktion" style="display:flex; align-items:center; gap:8px; min-height:34px; padding:4px 13px; border-radius:999px; border:1px solid color-mix(in srgb, var(--color-text) 14%, transparent); font-size:13px; font-weight:700; white-space:nowrap; font-variant-numeric:tabular-nums;">
           <span aria-hidden="true" style="display:flex; gap:3px;"><sc-for list="{{ streakDots }}" as="sd" hint-placeholder-count="4"><span style="width:6px; height:6px; border-radius:2px; background:{{ sd.bg }};"></span></sc-for></span>
           <span>{{ streakChip }}</span>
         </span>
@@ -399,6 +405,18 @@
                     <li style="display:flex; gap:8px; align-items:flex-start; font-size:12.5px; line-height:1.4;"><span style="width:20px; height:20px; flex:none; display:grid; place-items:center; border-radius:50%; background:var(--color-accent); color:var(--color-bg); font-size:11px; font-weight:800;">{{ lg.n }}</span><span><b>{{ lg.t }}</b> · {{ lg.d }}</span></li>
                   </sc-for>
                 </ol>
+                <button onClick="{{ sh.sfToggle }}" aria-expanded="{{ sh.sfOpen }}" style="align-self:flex-start; display:flex; align-items:center; gap:8px; padding:8px 14px; border-radius:var(--radius-md); border:1.5px solid {{ sh.c }}; background:{{ sh.sfBg }}; color:{{ sh.ink }}; font-family:var(--font-body); font-size:13px; font-weight:700; cursor:pointer;">{{ sh.sfLabel }}</button>
+                <sc-if value="{{ sh.sfOpen }}">
+                  <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 250px), 1fr)); gap:10px;">
+                    <sc-for list="{{ sh.sf }}" as="sf" hint-placeholder-count="4">
+                      <div style="display:flex; flex-direction:column; gap:8px; padding:12px; border-radius:var(--radius-md); background:var(--color-bg); border:1px solid var(--color-divider);">
+                        <div style="display:flex; justify-content:space-between; align-items:baseline; gap:8px;"><span style="font-size:13px; font-weight:800;">{{ sf.t }}</span><span style="flex:none; font-size:10.5px; color:color-mix(in srgb, var(--color-text) 62%, transparent);">S. {{ sf.ref }}</span></div>
+                        <div style="padding:4px 0;">{{ sf.img }}</div>
+                        <span style="font-size:12.5px; line-height:1.45; color:color-mix(in srgb, var(--color-text) 84%, transparent); text-wrap:pretty;">{{ sf.d }}</span>
+                      </div>
+                    </sc-for>
+                  </div>
+                </sc-if>
               </article>
             </sc-for>
           </div>
@@ -1052,7 +1070,7 @@ class Component extends DCLogic {
     const esc = v => String(v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
     const svg = (w,h,b) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" style="width:100%;max-width:${w}px;height:auto;display:block;font-family:var(--font-body);overflow:visible">${b}</svg>`;
     const FS = 1.12, G = v => `<g data-l="1">${v}</g>`;
-    const tx = (x,y,v,o={}) => `<text data-l="3" x="${x}" y="${y}" text-anchor="${o.a||'middle'}" font-size="${+((o.fs||12)*FS).toFixed(2)}" style="fill:${o.c||C.t};${o.u?'text-decoration:underline;':''}${o.i?'font-style:italic;':''}${o.w?'font-weight:'+o.w+';':''}">${esc(v)}</text>`;
+    const tx = (x,y,v,o={}) => `<text data-l="3" x="${x}" y="${y}" text-anchor="${o.a||'middle'}" font-size="${+((o.fs||12)*FS).toFixed(2)}" style="fill:${o.c||C.t};${o.u?'text-decoration:underline;':''}${o.i?'font-style:italic;':''}${o.w?'font-weight:'+o.w+';':''}">${esc(String(v).replace(/([▶◀])/g,'$1\uFE0E'))}</text>`;
     const txr = (x,y,html,o={}) => `<text data-l="3" x="${x}" y="${y}" text-anchor="${o.a||'middle'}" font-size="${+((o.fs||11.5)*FS).toFixed(2)}" style="fill:${C.t}">${html}</text>`;
     const hi = v => `<tspan style="fill:${C.a};font-weight:500">${esc(v)}</tspan>`;
     const sk = (c,sw,d) => `stroke:${c};stroke-width:${sw};${d?'stroke-dasharray:5 4;':''}`;
@@ -1299,11 +1317,11 @@ class Component extends DCLogic {
     const eb=cls(250,270,120,'EBike',['Akkustand'],['laden()']), cb=cls(410,270,120,'Citybike',['Gänge'],[]);
     const au=cls(580,20,160,'Ausleihe',['Beginn','Ende','/ Preis'],['berechnePreis()']), ku=cls(580,270,160,'Kunde',['Kundennummer','Name'],['registrieren()']);
     const sol2 = svg(760,365,
-      ar(110,270,110,sta.b,'dfilled')+mult(118,sta.b+16,'1')+mult(118,264,'1..*')+tx(118,195,'besteht aus',{a:'start',fs:11,c:C.m})
-      +ln(200,50,290,50)+mult(206,44,'1')+mult(284,44,'0..30','end')+tx(245,66,'steht an',{fs:11,c:C.m})
+      ar(110,270,110,sta.b,'dfilled')+mult(118,sta.b+16,'1')+mult(118,264,'1..*')+tx(118,195,'besteht aus ▼',{a:'start',fs:11,i:true,c:C.m})
+      +ln(200,50,290,50)+mult(206,44,'1')+mult(284,44,'0..30','end')+tx(245,66,'◀ steht an',{fs:11,i:true,c:C.m})
       +pl([[310,270],[310,215],[470,215],[470,270]])+ar(380,215,380,fa.b,'hollow')
-      +ln(470,60,580,60)+mult(476,54,'1')+mult(574,54,'*','end')+tx(525,76,'betrifft',{fs:11,c:C.m})
-      +ln(660,270,660,au.b)+mult(668,au.b+16,'*')+mult(668,264,'1')+tx(668,200,'tätigt',{a:'start',fs:11,c:C.m})
+      +ln(470,60,580,60)+mult(476,54,'1')+mult(574,54,'*','end')+tx(525,76,'◀ betrifft',{fs:11,i:true,c:C.m})
+      +ln(660,270,660,au.b)+mult(668,au.b+16,'*')+mult(668,264,'1')+tx(668,200,'tätigt ▲',{a:'start',fs:11,i:true,c:C.m})
       +sta.s+ste.s+fa.s+eb.s+cb.s+au.s+ku.s);
 
     const sol3 = svg(500,510,
@@ -1477,7 +1495,7 @@ class Component extends DCLogic {
     const sol9 = svg(720,335,
       tx(10,16,'a) mit assoziativer Klasse',{a:'start',fs:11,c:C.m,w:500})
       + ln(160,60,330,60) + mult(166,54,'*') + mult(324,54,'*','end') + ln(245,60,245,110,{d:true,c:C.a})
-      + ln(480,60,570,60) + mult(486,54,'*') + mult(564,54,'1','end') + tx(525,76,'leitet',{fs:11,c:C.m})
+      + ln(480,60,570,60) + mult(486,54,'*') + mult(564,54,'1','end') + tx(525,76,'◀ leitet',{fs:11,i:true,c:C.m})
       + t9a.s + k9a.s + l9.s + a9.s
       + tx(10,226,'b) aufgelöst (Lehrkraft unverändert)',{a:'start',fs:11,c:C.m,w:500})
       + ln(160,270,255,270) + mult(166,264,'1') + mult(249,264,'*','end')
@@ -1591,10 +1609,10 @@ class Component extends DCLogic {
     const pe16=cls(520,390,150,'Person',['Name','E-Mail'],null,{i:true,prop:'{abstract}'}), en16=cls(20,230,160,'StatusET',['immatrikuliert','beurlaubt','exmatrikuliert'],null,{st:'Enumeration'});
     const sol16 = svg(800,480,
       ar(240,60,170,60,'dfilled') + mult(190,52,'1') + mult(234,52,'1..*','end')
-      + ln(390,60,450,60) + mult(396,52,'1') + mult(444,52,'1..*','end') + tx(420,76,'bietet an',{fs:11,c:C.m})
+      + ln(390,60,450,60) + mult(396,52,'1') + mult(444,52,'1..*','end') + tx(420,78,'bietet',{fs:11,i:true,c:C.m}) + tx(420,92,'an ▶',{fs:11,i:true,c:C.m})
       + ar(680,60,600,60,'dhollow') + mult(622,52,'*') + mult(674,52,'1..*','end')
-      + ln(525,230,525,sg16.b) + mult(533,sg16.b+16,'1') + mult(533,224,'*') + tx(517,190,'eingeschrieben in',{a:'end',fs:11,c:C.m})
-      + ln(735,230,735,mo16.b) + mult(743,mo16.b+16,'*') + mult(743,224,'1') + tx(727,190,'verantwortet',{a:'end',fs:11,c:C.m})
+      + ln(525,230,525,sg16.b) + mult(533,sg16.b+16,'1') + mult(533,224,'*') + tx(517,190,'eingeschrieben in ▲',{a:'end',fs:11,i:true,c:C.m})
+      + ln(735,230,735,mo16.b) + mult(743,mo16.b+16,'*') + mult(743,224,'1') + tx(727,190,'verantwortet ▲',{a:'end',fs:11,i:true,c:C.m})
       + pl([[525,st16.b],[525,360],[735,360],[735,pr16.b]]) + ar(595,360,595,390,'hollow')
       + ln(180,262,450,262,{d:true}) + head(450,262,180,262,'open') + tx(315,254,'nutzt',{fs:11,c:C.m})
       + hs16.s+fk16.s+sg16.s+mo16.s+st16.s+pr16.s+pe16.s+en16.s);
@@ -1720,12 +1738,12 @@ class Component extends DCLogic {
     const pk29 = cls(230,210,120,'PKW',['Sitzplätze'],null), lk29 = cls(410,210,120,'LKW',['Nutzlast'],null);
     const given29 = svg(720,275,
       ar(160,62,300,62,'dfilled') + mult(166,54,'0..*') + mult(276,54,'1..*','end')
-      + ln(460,62,580,62) + mult(466,54,'*') + mult(574,54,'*','end') + tx(520,80,'fährt',{fs:11,c:C.m})
+      + ln(460,62,580,62) + mult(466,54,'*') + mult(574,54,'*','end') + tx(520,80,'◀ fährt',{fs:11,i:true,c:C.m})
       + ar(355,fzW29.b,295,210,'hollow') + ar(405,fzW29.b,465,210,'hollow')
       + fp29.s + fzW29.s + fa29.s + pk29.s + lk29.s);
     const sol29 = svg(720,275,
       ar(300,62,160,62,'dfilled') + mult(184,54,'1') + mult(294,54,'1..*','end')
-      + ln(460,62,580,62) + mult(466,54,'*') + mult(574,54,'*','end') + tx(520,80,'fährt',{fs:11,c:C.m})
+      + ln(460,62,580,62) + mult(466,54,'*') + mult(574,54,'*','end') + tx(520,80,'◀ fährt',{fs:11,i:true,c:C.m})
       + pl([[290,210],[290,180],[470,180],[470,210]]) + ar(380,180,380,fzR29.b,'hollow')
       + fp29.s + fzR29.s + fa29.s + pk29.s + lk29.s);
 
@@ -1943,12 +1961,12 @@ class Component extends DCLogic {
     ];
     // ---------- UML-Überblick: Spickzettel, Vergleiche, Theorie-Schaubilder ----------
     const co = (x,y,n) => `<g data-l="3"><circle cx="${x}" cy="${y}" r="10" style="fill:var(--color-accent)"/><text x="${x}" y="${y+4.2}" text-anchor="middle" font-size="12" style="fill:var(--color-bg);font-weight:800">${n}</text></g>`;
-    const box = (x,y,w,h,label,o={}) => G(rc(x,y,w,h,{r:o.r||8,c:o.c||'var(--dg-cls, var(--color-neutral-400))',f:o.f||'var(--dg-cls-fill, var(--color-surface))'}) + (Array.isArray(label) ? label : [label]).map((l,i,a) => tx(x+w/2,y+h/2+4+(i-(a.length-1)/2)*14,l,{fs:o.fs||11.5,w:o.w})).join(''));
+    const box = (x,y,w,h,label,o={}) => G(rc(x,y,w,h,{r:o.r||8,c:o.c||'var(--dg-cls, var(--color-neutral-400))',f:o.f||'var(--dg-cls-fill, var(--color-surface))'}) + (Array.isArray(label) ? label : [label]).map((l,i,a) => tx(x+w/2,y+h/2+4+(i-(a.length-1)/2)*14,l,{fs:o.fs||11.5,w:o.w,u:o.u||/^:/.test(l)})).join(''));
     const S = (k,title,q,ref,img,legend) => ({ k, title, q, ref, img, legend: legend.map(([t,d],i) => ({ n:String(i+1), t, d })) });
 
     // 1 Klassendiagramm
     const uK1 = cls(20,30,160,'Kunde',['Name','/ Alter'],['bestellen()']), uK2 = cls(330,30,150,'Auftrag',['Datum'],null), uK3 = cls(330,190,150,'Position',['Menge'],null), uK4 = cls(20,210,160,'Privatkunde',['Geburtsdatum'],null);
-    const imgK = svg(520,270, ln(180,58,330,58) + mult(186,50,'1') + mult(324,50,'*','end') + tx(255,76,'erteilt',{fs:11,c:C.m})
+    const imgK = svg(520,270, ln(180,58,330,58) + mult(186,50,'1') + mult(324,50,'*','end') + tx(255,76,'erteilt ▶',{fs:11,i:true,c:C.m})
       + ar(405,190,405,uK2.b,'dfilled') + mult(413,uK2.b+18,'1') + mult(413,184,'1..*')
       + ar(100,210,100,uK1.b,'hollow')
       + uK1.s + uK2.s + uK3.s + uK4.s
@@ -1994,7 +2012,7 @@ class Component extends DCLogic {
       + co(26,20,1) + co(222,12,2) + co(186,232,3) + co(340,97,4) + co(335,122,5) + co(410,152,6) + co(340,197,7));
     // 8 Kommunikationsdiagramm
     const imgC = svg(560,240, ln(42,96,180,96) + ln(300,90,420,40) + ln(300,104,420,180)
-      + actor(30,75,'Kunde') + box(180,80,120,30,':Kasse',{r:0}) + box(420,25,120,30,':Position',{r:0}) + box(420,165,120,30,':Zahlung',{r:0})
+      + actor(30,75,'Kunde') + box(180,80,120,30,':Kasse',{r:0.5}) + box(420,25,120,30,':Position',{r:0.5}) + box(420,165,120,30,':Zahlung',{r:0.5})
       + ar(80,84,130,84,'filled') + tx(105,72,'1: kaufen()',{fs:10.5})
       + ar(345,58,380,44,'filled') + tx(330,36,'1.1*: p = gibPreis()',{fs:10.5})
       + ar(345,138,380,155,'filled') + tx(318,178,'1.2 [p>0]: zahle(p)',{fs:10.5})
@@ -2029,7 +2047,7 @@ class Component extends DCLogic {
         'Raute: Zusammenführen, weiter sobald EIN Pfad ankommt', 'Balken: Synchronisation, weiter erst wenn ALLE angekommen sind', 'Alternative Pfade nie mit einem Balken zusammenführen, sonst wartet der Ablauf ewig. Folie S. 285–286.'),
       cmpBox('Sequenz- vs. Kommunikationsdiagramm',
         svg(250,130, life(40,4,':Kunde',125,{w:70}) + life(205,4,':Kasse',125,{w:70}) + actv(205,48,100) + msg(45,200,50,'kaufen()') + msg(200,45,96,'beleg','open',{d:true})),
-        svg(250,130, box(10,50,80,28,':Kunde',{r:0}) + box(160,50,80,28,':Kasse',{r:0}) + ln(90,64,160,64) + ar(105,52,140,52,'filled') + tx(125,40,'1: kaufen()',{fs:10})),
+        svg(250,130, box(10,50,80,28,':Kunde',{r:0.5}) + box(160,50,80,28,':Kasse',{r:0.5}) + ln(90,64,160,64) + ar(105,52,140,52,'filled') + tx(125,40,'1: kaufen()',{fs:10})),
         'Zeitachse nach unten: betont die Reihenfolge', 'Links und Nummern: betont, wer mit wem verbunden ist', 'Gleicher Inhalt, andere Sicht. Antworten im Kommunikationsdiagramm per Zuweisung. Folien S. 302–310.')
     ];
 
@@ -2075,6 +2093,151 @@ class Component extends DCLogic {
     phases.forEach(ph => ph.tasks.forEach(t => { if (FIGMAP[t.id]) t.fig = FIGMAP[t.id]; }));
     const THFIG = { ex23:figLC, ex24:figCI, ex25:figDock, ex26:figProz, ex27:figQ, ex28:figSch };
     exercises.forEach(e => { if (THFIG[e.id] && e.sol.indexOf('<svg') !== 0) e.sol = '<div style="width:100%;display:flex;flex-direction:column;gap:18px;align-items:center">' + THFIG[e.id] + e.sol + '</div>'; });
+    // ---------- Sonderfälle je Diagrammtyp ----------
+    const SF = (t, img, d, ref) => ({ t, img, d, ref });
+    const N = (...a) => nb(...a).s, O = (x,y,w,name) => cls(x,y,w,name,null,null,{u:true}).s, OV = (...a) => obj(...a).s, CL = (...a) => cls(...a).s;
+    const SFS = {
+      anwendungsfall: [
+        SF('Zwei Akteure, gemeinsame und getrennte Fälle', svg(320,170, rc(90,8,222,154,{f:'transparent'}) + tx(100,24,'Shop',{a:'start',fs:10.5,w:500})
+          + actor(36,10,'Kunde') + actor(36,96,'Lagerist') + uc(200,48,62,20,'Bestellen') + uc(200,96,62,20,'Status prüfen') + uc(200,140,62,20,'Kommissionieren')
+          + ln(50,31,138,46) + ln(50,35,140,92) + ln(50,117,140,100) + ln(50,121,140,136)),
+          'Jeder Akteur wird nur mit den Fällen verbunden, an denen er beteiligt ist. Ein Fall kann mehrere Akteure haben. Untereinander werden Akteure nur über Generalisierung verbunden.', '171, 174'),
+        SF('Kardinalitäten am Akteur', svg(320,110, rc(120,8,192,94,{f:'transparent'}) + tx(130,24,'Seminarorganisation',{a:'start',fs:10.5,w:500})
+          + actor(40,30,'Kunde') + uc(230,60,62,20,'Verkaufen') + ln(54,51,168,60) + mult(62,45,'1') + mult(160,52,'*','end')),
+          'Am Akteur: wie viele Akteure an einem Ablauf des Falls beteiligt sind (z. B. 2 beim Vier-Augen-Prinzip). Am Anwendungsfall: an wie vielen Abläufen ein Akteur beteiligt sein kann.', '192'),
+        SF('Externes System als Akteur', svg(320,130, rc(80,8,160,114,{f:'transparent'}) + tx(90,24,'Shop',{a:'start',fs:10.5,w:500})
+          + actor(34,32,'Kunde') + uc(160,66,62,22,'Bezahlen') + actor(286,32,'Zahlungsdienst') + ln(48,54,98,64) + ln(272,54,222,64)),
+          'Akteure sind Rollen: Menschen oder externe Systeme. Beide stehen außerhalb der Systemgrenze und werden gleich notiert.', '171'),
+        SF('Generalisierung zwischen Akteuren', svg(320,120, actor(70,10,'Anwender') + actor(250,10,'Administrator') + ar(232,31,88,31,'hollow') + tx(160,96,'Administrator erbt alle Fälle des Anwenders',{fs:10,c:C.m})),
+          'Pfeil vom speziellen zum allgemeinen Akteur, z. B. um unterschiedliche Berechtigungen darzustellen.', '171, 179'),
+        SF('Generalisierung zwischen Anwendungsfällen', svg(320,130, uc(160,30,74,22,'Krankenhaus-|aufnahme') + uc(70,100,62,22,'Einweisung|durch Arzt') + uc(250,100,62,22,'Notfall-|aufnahme')
+          + ar(98,80,128,50,'hollow') + ar(222,80,192,50,'hollow')),
+          'Spezielle Fälle erben vom allgemeinen Fall. Der Pfeil mit geschlossener Spitze zeigt vom speziellen zum allgemeinen Element.', '179–180'),
+        SF('Sekundärer Anwendungsfall', svg(320,130, uc(70,36,58,22,'Buchen') + uc(70,100,58,22,'Stornieren') + uc(250,68,62,26,'Kunde|identifizieren')
+          + tx(250,30,'«secondary»',{fs:10}) + ar(128,40,190,60,'open',{d:true}) + ar(128,96,190,76,'open',{d:true}) + tx(160,40,'«include»',{fs:9.5}) + tx(160,110,'«include»',{fs:9.5})),
+          'Unvollständiger Teilablauf, der in mehreren Fällen gleich vorkommt. Stereotyp «secondary», eingebunden per «include».', '178'),
+        SF('Geschäftsanwendungsfall', svg(320,100, uc(160,50,90,30,'Seminar|organisieren') + ln(213,82,239,58,{sw:2})),
+          'Geschäftlicher Ablauf ohne Blick auf die Technik, zeitliche Unterbrechungen erlaubt. Notation: Schrägstrich rechts unten an der Ellipse.', '176')
+      ],
+      klasse: [
+        SF('Mehrere Assoziationen mit Rollen', svg(320,120, N(10,'Dozent',30,80) + N(212,'Veranstaltung',30,106) + ln(90,38,212,38) + ln(90,62,212,62)
+          + mult(96,32,'1..*') + mult(206,32,'*','end') + tx(96,52,'Referent',{a:'start',fs:10.5,c:C.m}) + mult(96,76,'*') + mult(206,76,'*','end') + tx(96,90,'Seminarleiter',{a:'start',fs:10.5,c:C.m})
+          + ar(160,62,160,40,'open',{d:true}) + tx(166,54,'{subset}',{a:'start',fs:10})),
+          'Gibt es zwischen zwei Klassen mehr als eine Assoziation, sind Rollennamen Pflicht. {subset}: Jeder Seminarleiter ist auch Referent.', '249'),
+        SF('Reflexive Assoziation', svg(320,110, N(110,'Angestellter',50,110) + pl([[220,63],[262,63],[262,22],[165,22],[165,50]]) + tx(226,80,'Mitarbeiter  *',{a:'start',fs:10.5}) + tx(158,40,'Chef  0..1',{a:'end',fs:10.5})),
+          'Assoziation einer Klasse mit sich selbst. Rollennamen geben an, wer welche Funktion hat.', '243, 250'),
+        SF('Geordnete Assoziation', svg(320,90, N(10,'Kunde',30,70) + N(204,'Veranstaltung',30,108) + ln(80,45,204,45) + mult(86,39,'*') + mult(198,39,'*','end')
+          + tx(150,30,'bucht ▶',{fs:10.5,i:true}) + tx(198,62,'{ordered}',{a:'end',fs:10}) + tx(86,62,'Teilnehmer',{a:'start',fs:10.5,c:C.m})),
+          '{ordered}: Die verknüpften Objekte haben eine Reihenfolge, z. B. 1. und 2. Veranstaltung. ▶ gibt die Leserichtung des Namens an.', '251'),
+        SF('Restriktion {or}', svg(320,130, N(10,'Patient',50,74) + N(210,'Ersatzkasse',14,100) + N(210,'Privatkasse',86,100)
+          + ln(84,58,210,30) + ln(84,72,210,100) + mult(204,24,'1','end') + mult(204,96,'1','end') + mult(90,52,'*') + mult(90,86,'*')
+          + ln(150,44,150,86,{d:true}) + tx(156,70,'{or}',{a:'start',fs:10.5})),
+          'Restriktionen stehen in geschweiften Klammern. {or}: Ein Patient ist entweder Mitglied der Ersatz- oder der Privatkasse.', '252'),
+        SF('Abgeleitete Assoziation', svg(320,120, N(10,'Kunde',20,70) + N(125,'Artikel',20,70) + N(240,'Lieferant',20,74)
+          + ln(80,35,125,35) + ln(195,35,240,35) + mult(84,29,'*') + mult(121,29,'*','end') + mult(199,29,'*') + mult(236,29,'1','end')
+          + pl([[45,50],[45,90],[277,90],[277,50]]) + tx(161,84,'◀ / liefert an',{fs:10.5,i:true}) + mult(51,66,'*') + mult(271,66,'*','end')),
+          'Schrägstrich vor dem Namen: Die Assoziation lässt sich aus anderen ableiten, hier über die bestellten Artikel.', '253'),
+        SF('Assoziative Klasse', svg(320,140, N(10,'Kunde',20,80) + N(204,'Veranstaltung',20,108) + ln(90,35,204,35) + mult(96,29,'*') + mult(198,29,'*','end')
+          + ln(160,35,160,66,{d:true}) + CL(100,66,120,'Buchung',['Angemeldet am','Abgemeldet am'],['anmelden()'])),
+          'Die Assoziation hat selbst Attribute und Operationen. Notation: Klasse, gestrichelt an die Assoziationslinie gehängt.', '254–255'),
+        SF('Höherwertige Assoziation', svg(320,140, N(110,'Projekt',8,100) + N(4,'Programmierer',96,104) + N(182,'Programmiersprache',96,136)
+          + pg([[160,88],[174,100],[160,112],[146,100]],'var(--dg-act-fill, var(--color-surface))') + ln(160,38,160,88) + ln(108,111,146,100) + ln(174,100,182,111)
+          + mult(166,52,'*') + mult(112,104,'*') + mult(178,104,'*','end')),
+          'n-äre Assoziation: mehr als zwei Klassen über eine Raute verbunden, z. B. wer in welchem Projekt welche Sprache nutzt.', '261'),
+        SF('Diskriminator', svg(320,130, N(110,'Mitarbeiter',10,100) + N(4,'Vollzeitkraft',90,96) + N(112,'Teilzeitkraft',90,96) + N(220,'freier Mitarb.',90,96)
+          + pl([[52,90],[52,66],[268,66],[268,90]]) + ln(160,66,160,90) + ar(160,66,160,40,'hollow') + tx(272,60,'Arbeitszeit',{a:'end',fs:10.5,i:true})),
+          'Der Diskriminator nennt das Merkmal, nach dem spezialisiert wird. Mehrere Hierarchien nach verschiedenen Merkmalen sind möglich.', '271'),
+        SF('Mehrfachvererbung', svg(320,150, N(100,'Uhr-Anzeige',8,120) + N(10,'Digital-Anzeige',62,120) + N(190,'Analog-Anzeige',62,120) + N(95,'Digital-Analog-Anz.',116,130)
+          + ar(70,62,140,38,'hollow') + ar(250,62,180,38,'hollow') + ar(130,116,70,92,'hollow') + ar(190,116,250,92,'hollow')),
+          'Eine Klasse erbt von mehreren Oberklassen gleichzeitig, hier von Digital- und Analog-Anzeige.', '272')
+      ],
+      objekt: [
+        SF('Drei Schreibweisen für Objekte', svg(320,80, O(6,20,90,':Klasse') + O(110,20,90,'einObjekt') + O(206,20,112,'einObjekt: Klasse') + tx(51,74,'anonym',{fs:10,c:C.m}) + tx(155,74,'nur Name',{fs:10,c:C.m}) + tx(262,74,'Name + Klasse',{fs:10,c:C.m})),
+          'Immer unterstrichen. Ohne Name heißt das Objekt anonym, ohne Klasse ist nur der Objektname bekannt.', '301'),
+        SF('Mehrere Links mit Rollen', svg(320,120, O(100,8,110,':Dozent') + O(100,84,120,':Veranstaltung') + ln(130,38,130,84) + ln(185,38,185,84)
+          + tx(124,64,'Referent',{a:'end',fs:10.5,c:C.m}) + tx(191,64,'Seminarleiter',{a:'start',fs:10.5,c:C.m})),
+          'Rollennamen aus dem Klassendiagramm stehen auch an den Links, keine Kardinalitäten.', '249, 260'),
+        SF('Links zwischen Objekten derselben Klasse', svg(320,130, O(110,8,110,':Angestellter') + O(10,92,110,':Angestellter') + O(200,92,110,':Angestellter')
+          + ln(140,38,65,92) + ln(190,38,255,92) + tx(96,58,'Chef',{a:'end',fs:10,c:C.m}) + tx(60,86,'Mitarbeiter',{a:'end',fs:10,c:C.m}) + tx(232,58,'Chef',{a:'start',fs:10,c:C.m}) + tx(262,86,'Mitarbeiter',{a:'start',fs:10,c:C.m})),
+          'Ausprägung einer reflexiven Assoziation: Links zwischen verschiedenen Objekten derselben Klasse, mit Rollennamen.', '250'),
+        SF('Objekt einer Unterklasse', svg(320,100, OV(50,10,220,'objektB: KlasseB',['AttributA = Wert2','AttributB = Wert3']) + tx(160,92,'AttributA ist von KlasseA geerbt',{fs:10,c:C.m})),
+          'Ein Objekt zeigt alle Attribute seiner Klasse, auch die geerbten der Oberklassen.', '266')
+      ],
+      paket: [
+        SF('Paket ohne Inhalt', svg(320,90, rc(80,14,46,14) + rc(80,28,160,50,{c:'var(--dg-cls, var(--color-neutral-400))',f:'var(--dg-cls-fill, var(--color-surface))'}) + tx(160,58,'Paketname',{fs:12})),
+          'Werden keine Inhalte gezeigt, steht der Name im großen Kasten statt im Reiter.', '274'),
+        SF('Pakete in Paketen', svg(320,150, pkg(10,8,300,134,'Handelssystem') + pkg(30,44,100,40,'Einkauf') + pkg(190,44,100,40,'Verkauf') + pkg(110,96,100,40,'Lager')
+          + ar(80,84,130,96,'open',{d:true}) + ar(240,84,190,96,'open',{d:true})),
+          'Ein Paket kann selbst Pakete enthalten. Abhängigkeiten zeigen vom nutzenden zum genutzten Paket.', '274–275'),
+        SF('Schlechter Schnitt', svg(320,120, pkg(10,10,140,100,'Kunden') + pkg(170,10,140,100,'Vertrieb') + mini(35,60,90,'Person') + mini(195,60,90,'Kunde') + ar(195,72,125,72,'hollow')),
+          'Vererbung über die Paketgrenze vermeiden: Oberklassen gehören ins Paket ihrer Unterklassen. Auch Aggregationen nicht zerschneiden.', '276–277')
+      ],
+      aktivitaet: [
+        SF('Partitionen', svg(320,140, rc(10,8,150,124,{f:'transparent'}) + rc(160,8,150,124,{f:'transparent'}) + ln(10,28,310,28) + tx(85,22,'Vertrieb',{fs:10.5,w:500}) + tx(235,22,'Rechnungswesen',{fs:10.5,w:500})
+          + start(85,46) + ar(85,54,85,66,'open') + act(85,82,'Auftrag erhalten',120) + par([[145,82],[235,82],[235,98]]) + act(235,114,'Rechnung senden',120)),
+          'Ordnen Aktionen Verantwortungsbereichen zu: anfangs Akteure und ganzes System, später Komponenten.', '287'),
+        SF('Objektfluss, zwei Schreibweisen', svg(320,135, act(50,50,'Schritt 1',80) + act(270,50,'Schritt 2',80) + rc(90,45,10,10,{c:'var(--dg-obj, var(--color-neutral-400))'}) + rc(220,45,10,10,{c:'var(--dg-obj, var(--color-neutral-400))'}) + ar(100,50,220,50,'open') + tx(92,26,'Objekt',{a:'start',fs:10}) + tx(92,39,'[Zustand]',{a:'start',fs:10}) + tx(228,26,'Objekt',{a:'end',fs:10}) + tx(228,39,'[Zustand]',{a:'end',fs:10})
+          + act(50,110,'Schritt 1',80) + onode(160,110,'Objekt','[Zustand]',80) + act(270,110,'Schritt 2',80) + ar(90,110,120,110,'open') + ar(200,110,230,110,'open')),
+          'Oben mit Pins: kleine Kästchen an den Aktionen, Objekt und [Zustand] stehen an jedem Pin. Unten als eigener Objektknoten zwischen den Aktionen.', '288'),
+        SF('Schleife über Zusammenführen', svg(320,140, dec(60,22) + ar(60,35,60,52,'open') + act(60,68,'Eingeben',90) + ar(60,84,60,100,'open') + dec(60,113)
+          + par([[73,113],[150,113],[150,22],[73,22]]) + tx(156,70,'[ungültig]',{a:'start',fs:10.5}) + ar(47,113,20,113,'open') + tx(26,132,'[gültig]',{a:'start',fs:10.5})),
+          'Ein Rücksprung endet in einer Raute (Zusammenführen) vor dem zu wiederholenden Schritt, nicht direkt an der Aktion.', '285'),
+        SF('Ablaufende in einem Zweig', svg(320,110, barV(40,15,80) + ar(45,30,90,30,'open') + ar(45,80,90,80,'open') + act(140,30,'Protokollieren',100) + act(140,80,'Bearbeiten',100)
+          + ar(190,30,230,30,'open') + fend(242,30) + ar(190,80,230,80,'open') + end(242,80)),
+          'Das Ablaufende beendet nur seinen eigenen Fluss, der andere Zweig läuft weiter. Erst der Endknoten beendet alles.', '283–284'),
+        SF('Entscheidung mit mehreren Ausgängen', svg(320,120, ar(20,60,77,60,'open') + dec(90,60) + par([[90,47],[90,20],[150,20]]) + ar(103,60,150,60,'open') + par([[90,73],[90,100],[150,100]])
+          + tx(160,24,'[x<0]',{a:'start',fs:10.5}) + tx(160,64,'[x=0]',{a:'start',fs:10.5}) + tx(160,104,'[x>0]',{a:'start',fs:10.5})),
+          'Beliebig viele Ausgänge sind erlaubt, solange die Bedingungen alle Fälle abdecken und sich nicht überlappen.', '285'),
+        SF('Hierarchische Verfeinerung', svg(330,178, start(12,22) + ar(20,22,34,22,'open') + act(70,22,'Schritt 1',72) + ar(106,22,124,22,'open') + act(160,22,'Schritt 2',72) + ar(196,22,214,22,'open') + act(250,22,'Schritt 3',72) + ar(286,22,300,22,'open') + end(313,22)
+          + ln(160,29,160,36) + ln(156,32,164,32) + ln(156,32,156,36) + ln(164,32,164,36)
+          + ln(124,38,30,62,{d:true,c:C.m}) + ln(196,38,300,62,{d:true,c:C.m}) + rc(12,62,306,110,{r:12,f:'transparent'}) + tx(22,78,'Schritt 2',{a:'start',fs:10.5})
+          + start(30,120) + ar(38,120,52,120,'open') + act(74,120,'S 21',44) + ar(96,120,116,120,'open') + barV(116,84,72)
+          + ar(121,96,140,96,'open') + act(165,96,'S221',50) + ar(121,144,140,144,'open') + act(165,144,'S222',50) + ar(190,96,212,96,'open') + ar(190,144,212,144,'open') + barV(212,84,72)
+          + ar(217,120,234,120,'open') + act(256,120,'S 23',44) + ar(278,120,290,120,'open') + end(302,120)),
+          'Eine Aktion (hier Schritt 2, erkennbar am Gabelsymbol) wird selbst durch eine Aktivität mit eigenem Aktivitätsdiagramm beschrieben (Clustering).', '289')
+      ],
+      zustand: [
+        SF('Selbsttransition', svg(320,110, state(100,40,130,40,'Teilweise|reserviert'.replace('|',' ')) + par([[200,40],[200,18],[260,18],[260,52],[230,52]]) + tx(266,28,'reservieren()',{a:'start',fs:10}) + tx(266,42,'[freiePlaetze>1]',{a:'start',fs:10})),
+          'Ein Pfeil kann auf denselben Zustand zurückführen: Das Ereignis tritt ein, der Zustand bleibt.', '295–296'),
+        SF('Ein Ereignis, verschiedene Ziele', svg(320,120, state(10,60,110,40,'Ohne Res.') + state(190,60,120,40,'Teilweise res.') + ar(190,88,120,88,'open') + tx(155,106,'stornieren()',{fs:10}) + tx(155,118,'[reserviertePlaetze=1]',{fs:9.5})
+          + par([[250,60],[250,30],[290,30],[290,60]]) + tx(270,14,'stornieren()',{fs:10}) + tx(270,26,'[reserviertePlaetze>1]',{fs:9.5})),
+          'Dasselbe Ereignis führt je nach Bedingung zu einem anderen Folgezustand. Die Bedingungen dürfen sich nicht überschneiden.', '296'),
+        SF('Zeitereignisse', svg(320,100, state(10,40,90,36,'Aktiv') + state(220,40,90,36,'Gesperrt') + ar(100,52,220,52,'open') + tx(160,46,'after(30 Min)',{fs:10.5}) + ar(220,68,100,68,'open') + tx(160,86,'at(06:00)',{fs:10.5})),
+          'after(Dauer): nach einer Zeitspanne. at(Zeitpunkt): zu einem bestimmten Zeitpunkt.', '293, 295'),
+        SF('Ereignis am Start, mehrere Wege zum Ende', svg(320,110, start(20,40) + ar(28,40,90,40,'open') + tx(58,32,'einrichten()',{fs:10}) + state(90,22,110,36,'Offen') + state(90,70,110,36,'Geschlossen')
+          + ar(145,58,145,70,'open') + ar(200,40,272,40,'open') + tx(236,32,'streichen()',{fs:10}) + ar(200,88,272,52,'open') + tx(250,90,'streichen()',{fs:10}) + end(284,40)),
+          'Schon der Übergang aus dem Startzustand kann ein Ereignis tragen, und mehrere Zustände dürfen zum Endzustand führen.', '296')
+      ],
+      sequenz: [
+        SF('Nachricht an sich selbst', svg(320,130, life(160,6,':Konto',125,{w:90}) + actv(160,44,110) + actv(166,64,94) + ar(40,48,155,48,'filled') + tx(98,42,'abheben()',{fs:10.5})
+          + pl([[165,56],[200,56],[200,72],[172,72]]) + head(200,72,172,72,'filled') + tx(206,60,'pruefe()',{a:'start',fs:10.5})),
+          'Das Objekt ruft eine eigene Operation auf. Ein zweiter, versetzter Aktivierungsbalken zeigt die geschachtelte Ausführung.', '305'),
+        SF('Erzeugen und Löschen', svg(320,130, life(60,6,':Maske',125,{w:90}) + actv(60,40,110) + msg(65,200,60,'new()','open',{d:true}) + life(245,46,':Sitzung',100,{w:90}) + actv(245,76,96)
+          + msg(65,240,90,'delete()') + ln(235,100,255,116,{sw:2.2}) + ln(235,116,255,100,{sw:2.2})),
+          'Neues Objekt: Pfeil auf seinen Kopf, die Lebenslinie beginnt erst dort. Löschen: X beendet die Lebenslinie.', '303–305'),
+        SF('Alternativen', svg(320,130, life(60,6,':Maske',125,{w:90}) + life(250,6,':Kunde',125,{w:90}) + actv(60,40,115)
+          + tx(155,46,'[Neukunde]',{fs:10.5,w:600}) + tx(155,59,'erfassen()',{fs:10.5}) + ar(65,65,245,65,'filled') + tx(155,90,'[ELSE]',{fs:10.5,w:600}) + tx(155,103,'aktualisieren()',{fs:10.5}) + ar(65,109,245,109,'filled')),
+          'Wie im Folienbeispiel: Bedingung über der ersten Nachricht jedes Zweigs, [ELSE] für den anderen Fall.', '307'),
+        SF('Mehrere Aufrufe des Akteurs', svg(320,130, ln(40,60,40,126,{d:true,c:C.m}) + actor(40,0,'Kunde') + life(220,6,':Shop',125,{w:90}) + actv(220,62,82) + actv(220,96,116)
+          + msg(42,215,66,'suchen()') + msg(42,215,100,'bestellen()')),
+          'Ein Sequenzdiagramm kann mehrere nacheinander ausgeführte Operationen eines Akteurs zeigen, aber immer nur ein Szenario.', '302')
+      ],
+      kommunikation: [
+        SF('{new} und {transient}', svg(320,120, box(110,10,100,40,'',{r:0.5}) + tx(160,28,':Klasse1',{u:true}) + tx(204,44,'{transient}',{a:'end',fs:9.5,c:C.m})
+          + box(20,74,100,40,'',{r:0.5}) + tx(70,92,':Klasse2',{u:true}) + tx(114,108,'{new}',{a:'end',fs:9.5,c:C.m}) + ln(130,50,90,74) + ln(190,50,230,74) + box(200,74,100,40,':Klasse4',{r:0.5})),
+          '{new}: Objekt wird während der Interaktion erzeugt. {transient}: Objekt existiert nur während der Interaktion (wird erzeugt und wieder gelöscht). Beide stehen im Objektkasten. Bedeutung nach UML-Standard, die Folie zeigt nur die Notation.', '309'),
+        SF('Verschachtelte Nummern', svg(320,150, box(110,8,100,30,':A',{r:0.5}) + box(20,90,100,30,':B',{r:0.5}) + box(200,90,100,30,':C',{r:0.5}) + ln(130,38,90,90) + ln(190,38,230,90)
+          + tx(60,56,'2: op2() ↙',{fs:10.5}) + tx(260,56,'↘ 3: op3()',{fs:10.5}) + tx(70,138,'2.1: op4()',{fs:10.5})),
+          '2.1 ist die erste Nachricht, die während Nachricht 2 ausgelöst wird. Die Nummerierung ersetzt die Zeitachse.', '309'),
+        SF('Bedingung mit Rückgabewert', svg(320,80, box(10,30,90,30,':Kasse',{r:0.5}) + box(220,30,90,30,':Bank',{r:0.5}) + ln(100,45,220,45) + tx(160,24,'1.2 [Bedingung]: antw = nachricht()',{fs:10}) + ar(140,34,180,34,'filled')),
+          'Reihenfolge der Bestandteile: Nummer, Bedingung in [ ], Doppelpunkt, Zuweisung, Nachricht.', '310'),
+        SF('Iteration', svg(320,80, box(10,30,90,30,':Auftrag',{r:0.5}) + box(220,30,90,30,':Position',{r:0.5}) + ln(100,45,220,45) + tx(160,24,'1.1*: pruefe()',{fs:10.5}) + ar(140,34,180,34,'filled')),
+          'Stern nach der Nummer: Die Nachricht wird wiederholt gesendet, z. B. an jede Position.', '310')
+      ]
+    };
+    sheets.forEach(sh => { sh.sf = SFS[sh.k] || []; });
+
+
     const uml = { sheets, compares };
 
     return { phases, quiz, cats, exercises, cards, cardTopics, sorts, fpTypes, fpFactors, fpSlide, themes, pfc, uml };
@@ -2100,8 +2263,19 @@ class Component extends DCLogic {
     window.addEventListener('keydown', this._onKey);
     this._onAfterPrint = () => this.setState({ printMode:null });
     window.addEventListener('afterprint', this._onAfterPrint);
+    this._lastY = window.scrollY || 0;
+    this._onScroll = () => {
+      const root = document.documentElement, h = document.querySelector('.site-hdr'); if (!h) return;
+      const y = window.scrollY || 0, dy = y - this._lastY;
+      const small = window.innerWidth < 900 || window.innerHeight < 560;
+      if (!small || this.state.settingsOpen || y < 60) { root.classList.remove('hdr-hidden'); this._lastY = y; return; }
+      if (dy > 8) { root.style.setProperty('--hdr-h', (h.offsetHeight + 2) + 'px'); root.classList.add('hdr-hidden'); this._lastY = y; }
+      else if (dy < -8) { root.classList.remove('hdr-hidden'); this._lastY = y; }
+    };
+    window.addEventListener('scroll', this._onScroll, { passive:true });
+    window.addEventListener('resize', this._onScroll);
   }
-  componentWillUnmount() { clearInterval(this._tick); clearTimeout(this._toastT); window.removeEventListener('keydown', this._onKey); window.removeEventListener('afterprint', this._onAfterPrint); }
+  componentWillUnmount() { clearInterval(this._tick); clearTimeout(this._toastT); window.removeEventListener('keydown', this._onKey); window.removeEventListener('afterprint', this._onAfterPrint); window.removeEventListener('scroll', this._onScroll); window.removeEventListener('resize', this._onScroll); document.documentElement.classList.remove('hdr-hidden'); }
   componentDidUpdate() {
     this.applyTheme();
     const tb = this.state.tab;
@@ -2338,7 +2512,9 @@ class Component extends DCLogic {
       { label:'Verhaltensdiagramme', sub:'dynamische Sicht: was passiert', ck:'p3', items:[MI('Anwendungsfalldiagramm','anwendungsfall','Was leistet das System für wen?'), MI('Aktivitätsdiagramm','aktivitaet','Wie läuft ein Prozess ab?'), MI('Zustandsdiagramm','zustand','Lebenszyklus eines Objekts')] },
       { label:'Interaktionsdiagramme', sub:'dynamisch: Objekte im Zusammenspiel', ck:'p5', items:[MI('Sequenzdiagramm','sequenz','Nachrichten in zeitlicher Reihenfolge'), MI('Kommunikationsdiagramm','kommunikation','Wer spricht mit wem?'), MI('Timing-Diagramm'), MI('Interaktionsübersichtsdiagramm')] }
     ].map(g => { const c = col(g.ck); return { ...g, c, soft:soft(c, 7), ink:ink(c) }; });
-    const umlSheets = D.uml.sheets.map(sh => { const c = col(SHC[sh.k] || 'color-accent'); return { anchor:'sheet-' + sh.k, title:sh.title, q:sh.q, ref:sh.ref, c, ink:ink(c), img:this.el(sh.img), legend:sh.legend }; });
+    const umlSheets = D.uml.sheets.map(sh => { const c = col(SHC[sh.k] || 'color-accent'); const op = !!(s.umlSf || {})[sh.k], n = (sh.sf || []).length; return { anchor:'sheet-' + sh.k, title:sh.title, q:sh.q, ref:sh.ref, c, ink:ink(c), img:this.el(sh.img), legend:sh.legend,
+      sfOpen:op, sfBg: op ? soft(c, 18) : 'transparent', sfLabel: (op ? 'Sonderfälle ausblenden' : 'Sonderfälle anzeigen') + ' (' + n + ')', sfToggle:() => this.setState(st => ({ umlSf: { ...(st.umlSf || {}), [sh.k]: !(st.umlSf || {})[sh.k] } })),
+      sf: op ? sh.sf.map(x => ({ t:x.t, d:x.d, ref:x.ref, img:this.el(x.img) })) : [] }; });
     const umlCmp = D.uml.compares.map(cp => ({ title:cp.title, l:this.el(cp.l), r:this.el(cp.r), lt:cp.lt, rt:cp.rt, note:cp.note }));
     const tagChips = [['alle','Alle','color-accent']].concat(Object.keys(TAGC).map(k => [k, k, TAGC[k]])).map(([k, l, ck]) => {
       const c = col(ck), pz = pill(c, tagF === k);
