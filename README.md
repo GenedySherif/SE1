@@ -19,3 +19,4 @@ Sicherungen des Lernplans „Klausurvorbereitung UML-Diagramme“ (Software Engi
 | v9 | 25.11.2026 | Klick auf den aktiven Reiter springt an den Seitenanfang |
 | v10 | 25.11.2026 | UML-Überblick: Level 1/Level 2 je Typ (16 Klausur-Diagramme mit Schritt-für-Schritt-Leseanleitung), Bedingungen im Zustandsdiagramm, Objektzustände im Aktivitätsdiagramm, Regeln aus Folien und Musterlösungen ergänzt |
 | v11 | 25.11.2026 | Objektfluss im Aktivitätsdiagramm gestrichelt (wie Praktikumslösung Sauce Hollandaise) |
+| v12 | 25.11.2026 | 6 neue Übungen im Aufbau der Übungsblätter 5–7 (Kreditvergabe, Kfz-Werkstatt, Werkzeugverleih, Pfannkuchen, Notenberechnung, Arztpraxis interpretieren) |

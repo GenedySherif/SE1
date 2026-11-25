@@ -2065,6 +2065,110 @@ class Component extends DCLogic {
         checks:['Bedingung »Wert >= 100 €« steht nicht in eckigen Klammern', 'Bedingungen überlappen bei genau 100 €', 'Alternative Pfade mit Synchronisationsbalken zusammengeführt: Der Ablauf würde ewig warten, richtig ist eine Raute', 'Endknoten fehlt'] }
     );
 
+    // ---------- Übungen im Stil der Übungsblätter 5–7 ----------
+    const xNote = (x,y,w,h,lines) => G(pg([[x,y],[x+w-10,y],[x+w,y+10],[x+w,y+h],[x,y+h]], 'var(--color-surface)', {c:C.m}) + pl([[x+w-10,y],[x+w-10,y+10],[x+w,y+10]],{c:C.m}) + lines.map((v,i) => tx(x+w/2,y+18+i*14,v,{fs:10.5})).join(''));
+    const xLane = (x,y,w,h,heads) => { let s = rc(x,y,w,h,{f:'transparent'}) + ln(x,y+24,x+w,y+24); heads.forEach(([hx,hw,name]) => { s += tx(hx+hw/2,y+17,name,{fs:11,w:700}); if (hx > x) s += ln(hx,y,hx,y+h); }); return s; };
+    const DS = {d:true};
+    const xCo = (x,y,n) => `<g data-l="3"><circle cx="${x}" cy="${y}" r="10" style="fill:var(--color-accent)"/><text x="${x}" y="${y+4.2}" text-anchor="middle" font-size="12" style="fill:var(--color-bg);font-weight:800">${n}</text></g>`;
+    const sol32 = svg(720,430, rc(170,10,540,410,{f:'transparent'}) + tx(180,28,'Kreditvergabe',{a:'start',fs:11,w:500})
+      + actor(70,40,'Kreditsachbearbeiter') + ln(84,61,302,78) + mult(92,56,'2') + mult(294,70,'*','end')
+      + uc(380,80,80,22,'Kredit vergeben',{i:true}) + uc(590,62,82,22,'Bonität prüfen') + ar(458,74,510,64,'open',DS) + tx(484,52,'«include»',{fs:10.5})
+      + uc(260,200,86,38,'Ratenkredit vergeben',{ep:'Versicherung'}) + uc(430,200,80,22,'Autokredit vergeben') + uc(605,200,92,22,'Baufinanzierung|vergeben')
+      + ar(285,164,350,100,'hollow') + ar(425,178,392,102,'hollow') + ar(585,178,420,98,'hollow')
+      + uc(275,345,92,26,'Restschuldversiche-|rung abschließen') + ar(272,319,262,240,'open',DS) + tx(276,292,'«extend»',{a:'start',fs:10.5}) + tx(276,306,'[Versicherung gewünscht]',{a:'start',fs:10,c:C.m})
+      + uc(520,350,80,22,'Sicherheit erfassen') + ar(440,222,495,330,'open',DS) + ar(595,222,545,330,'open',DS) + tx(460,284,'«include»',{a:'end',fs:10.5}) + tx(582,284,'«include»',{a:'start',fs:10.5}));
+    const sol33 = (() => { const ku = cls(40,20,170,'Kunde',['Kundennummer','Telefon'],['benachrichtigen()'],{i:true,prop:'{abstract}'}), au = cls(430,20,180,'Auftrag',['Datum','Gesamtpreis'],['berechnePreis()']),
+        fz = cls(250,170,150,'Fahrzeug',['Kennzeichen','Modell'],null), pk = cls(10,300,130,'Privatkunde',['Vorname','Nachname'],null), fk = cls(150,300,140,'Firmenkunde',['Firmenname'],null),
+        po = cls(450,250,190,'Position',['Menge','Preis'],['berechneSumme()']), le = cls(460,400,170,'Leistung',['Bezeichnung','Preis'],null,{i:true,prop:'{abstract}'}),
+        et = cls(380,530,140,'Ersatzteil',['Teilenummer'],null), al = cls(560,530,150,'Arbeitsleistung',['Stunden'],null);
+      return svg(730,600, ln(210,60,430,60) + mult(216,52,'1') + mult(424,52,'*','end') + tx(320,52,'erteilt ▶',{fs:11,i:true,c:C.m})
+        + pl([[180,ku.b],[180,200],[250,200]]) + mult(188,ku.b+16,'1') + mult(244,192,'1..*','end')
+        + pl([[470,au.b],[470,200],[400,200]]) + mult(478,au.b+16,'*') + mult(406,192,'1') + tx(462,160,'betrifft ▼',{a:'end',fs:11,i:true,c:C.m})
+        + ln(545,au.b,545,250) + mult(553,au.b+16,'1') + mult(553,244,'1..15') + tx(553,190,'enthält ▼',{a:'start',fs:11,i:true,c:C.m})
+        + ln(545,po.b,545,400) + mult(553,po.b+16,'*') + mult(553,394,'1')
+        + pl([[75,300],[75,272],[220,272],[220,300]]) + ar(125,272,125,ku.b,'hollow') + pl([[450,530],[450,505],[635,505],[635,530]]) + ar(545,505,545,le.b,'hollow')
+        + ku.s + au.s + fz.s + pk.s + fk.s + po.s + le.s + et.s + al.s); })();
+    const sol34 = (() => { const fi = cls(20,30,140,'Filiale',['Ort'],['zeigeBestand()']), ex = cls(300,30,170,'Werkzeugexemplar',['Inventarnummer'],['ausleihen()']), ty = cls(560,30,150,'Werkzeugtyp',['Bezeichnung','Mietpreis'],null),
+        ku = cls(300,180,170,'Kunde',['Name'],['zahlen()']);
+      const e2 = cls(40,300,170,'Werkzeugexemplar',null,null), k2 = cls(40,450,170,'Kunde',null,null), a2 = cls(200,360,120,'Ausleihe',['Beginn','Rückgabe'],null);
+      const e3 = cls(470,290,170,'Werkzeugexemplar',null,null), a3 = cls(470,370,170,'Ausleihe',['Beginn','Rückgabe'],null), k3 = cls(470,480,170,'Kunde',null,null);
+      const nord = obj(20,600,160,'nord: Filiale',['Ort = »Nord«']), b1 = obj(260,580,190,'b1: Werkzeugexemplar',['Inventarnummer = 4711']), b2 = obj(260,690,190,'b2: Werkzeugexemplar',['Inventarnummer = 4712']),
+        li = obj(540,560,170,'lisa: Kunde',['Name = »Lisa«']), bo = obj(530,670,190,'bohr: Werkzeugtyp',['Bezeichnung = »Bohrer«','Mietpreis = 12']);
+      return svg(740,780, tx(10,16,'1. Klassendiagramm',{a:'start',fs:11,w:700,c:C.m})
+        + ln(160,60,300,60) + mult(166,52,'1') + mult(294,52,'*','end') + tx(230,78,'verfügt über ▶',{fs:11,i:true,c:C.m})
+        + ln(470,60,560,60) + mult(476,52,'*') + mult(554,52,'1','end') + ln(385,ex.b,385,180) + mult(393,ex.b+16,'0..3') + mult(393,174,'0..1') + tx(377,145,'leiht ▲',{a:'end',fs:11,i:true,c:C.m})
+        + fi.s + ex.s + ty.s + ku.s
+        + ln(10,268,730,268,{d:true,c:C.m}) + tx(10,286,'2. Assoziative Klasse und Auflösung',{a:'start',fs:11,w:700,c:C.m})
+        + ln(125,e2.b,125,450) + mult(133,e2.b+16,'0..3') + mult(133,444,'0..1') + ln(125,391,200,391,{d:true}) + e2.s + k2.s + a2.s
+        + ar(345,395,420,395,'open') + tx(382,385,'auflösen',{fs:10,c:C.m})
+        + ln(555,e3.b,555,370) + mult(563,e3.b+16,'1') + mult(563,364,'0..1') + ln(555,a3.b,555,480) + mult(563,a3.b+16,'0..3') + mult(563,474,'1') + e3.s + a3.s + k3.s
+        + ln(10,530,730,530,{d:true,c:C.m}) + tx(10,548,'3. Objektdiagramm',{a:'start',fs:11,w:700,c:C.m})
+        + ln(180,620,260,600) + ln(180,630,260,712) + ln(450,600,540,582) + ln(450,610,530,694) + ln(450,712,530,712)
+        + nord.s + b1.s + b2.s + li.s + bo.s); })();
+    const sol35 = svg(720,770, start(200,24) + ar(200,32,200,58,'open') + act(200,74,'Pfanne erhitzen',150) + onode(55,74,'Pfanne','[kalt]',90) + ar(100,74,125,74,'open',DS)
+      + ar(200,90,200,118,'open',DS) + onode(200,137,'Pfanne','[heiß]',100) + ar(200,156,200,430,'open',DS)
+      + start(500,24) + ar(500,32,500,58,'open') + act(500,74,'Teig anrühren',150) + onode(650,74,'Zutaten','[abgewogen]',100) + ar(600,74,575,74,'open',DS)
+      + ar(500,90,500,118,'open',DS) + onode(500,137,'Teig','[glatt]',100) + ar(500,156,500,184,'open',DS) + bar(360,184,280)
+      + ar(430,189,430,220,'open') + act(430,236,'Teig ruhen lassen',140) + ar(580,189,580,220,'open') + act(580,236,'Belag schneiden',120)
+      + ar(430,252,430,300,'open') + ar(580,252,580,300,'open') + bar(360,300,280) + ar(500,305,500,430,'open') + bar(150,430,400)
+      + ar(350,435,350,460,'open') + act(350,476,'Teig in Pfanne geben',180) + ar(350,492,350,512,'open') + act(350,528,'Backen',120) + ar(350,544,350,564,'open') + act(350,580,'Wenden',120)
+      + ar(350,596,350,616,'open',DS) + onode(350,635,'Pfannkuchen','[fertig]',130) + ar(350,654,350,680,'open',DS) + act(350,696,'Servieren',120) + ar(350,712,350,732,'open') + end(350,744));
+    const sol36 = svg(740,660, start(300,20) + ar(300,28,300,46,'open') + act(300,62,'Punkte p einlesen',160) + ar(300,78,300,97,'open') + dec(300,110)
+      + par([[287,110],[120,110],[120,150]]) + tx(200,102,'[p >= 90]',{fs:10.5}) + act(120,166,'Note = 1',120) + par([[120,182],[120,540],[287,540]])
+      + par([[313,110],[400,110],[400,160]]) + tx(360,102,'[p < 90]',{fs:10.5}) + dec(400,173)
+      + par([[387,173],[300,173],[300,210]]) + tx(340,165,'[p >= 75]',{fs:10.5}) + act(300,226,'Note = 2',110) + par([[300,242],[300,470],[387,470]])
+      + par([[413,173],[500,173],[500,223]]) + tx(460,165,'[p < 75]',{fs:10.5}) + dec(500,236)
+      + par([[487,236],[420,236],[420,273]]) + tx(453,228,'[p >= 60]',{fs:10.5}) + act(420,289,'Note = 3',100) + par([[420,305],[420,410],[487,410]])
+      + par([[513,236],[600,236],[600,286]]) + tx(556,228,'[p < 60]',{fs:10.5}) + dec(600,299)
+      + par([[587,299],[540,299],[540,330]]) + tx(563,291,'[p >= 50]',{fs:10.5}) + act(540,346,'Note = 4',90) + par([[540,362],[540,380],[587,380]])
+      + par([[613,299],[680,299],[680,330]]) + tx(646,291,'[p < 50]',{fs:10.5}) + act(680,346,'Note = 5',90) + par([[680,362],[680,380],[613,380]])
+      + dec(600,380) + par([[600,393],[600,410],[513,410]]) + dec(500,410) + par([[500,423],[500,470],[413,470]]) + dec(400,470) + par([[400,483],[400,540],[313,540]]) + dec(300,540)
+      + ar(300,553,300,575,'open') + act(300,591,'Note ausgeben',140) + ar(300,607,300,627,'open') + end(300,639));
+    const g37 = withCo => svg(660,620, xLane(10,8,640,604,[[10,220,'Empfang'],[230,220,'Ärztin'],[450,200,'Labor']])
+      + start(120,60) + ar(120,68,120,84,'open') + act(120,100,'Patient anmelden',150) + ar(120,116,120,138,'open') + dec(120,151)
+      + ar(120,164,120,190,'open') + tx(128,182,'[kein Termin]',{a:'start',fs:10.5}) + act(120,206,'Wartezeit mitteilen',160) + par([[120,222],[120,250],[327,250]])
+      + par([[133,151],[340,151],[340,237]]) + tx(236,143,'[Termin vorhanden]',{fs:10.5}) + dec(340,250)
+      + ar(340,263,340,285,'open') + act(340,301,'Patient untersuchen',170) + ar(340,317,340,337,'open') + bar(260,337,300)
+      + ar(340,342,340,372,'open') + act(340,388,'Rezept ausstellen',150) + ar(340,404,340,428,'open',DS) + onode(340,447,'Rezept','[unterschrieben]',130)
+      + par([[275,447],[120,447],[120,488]],'open',DS) + act(120,504,'Rezept aushändigen',160) + ar(120,520,120,550,'open') + end(120,562)
+      + ar(540,342,540,372,'open') + act(540,388,'Blut analysieren',140) + ar(540,404,540,428,'open',DS) + onode(540,447,'Befund','[erstellt]',110) + ar(540,466,540,494,'open',DS) + fend(540,506)
+      + xNote(520,546,110,44,['Ergebnis nach','2 Tagen']) + ln(605,404,590,546,{d:true,c:C.m})
+      + (withCo ? xCo(30,54,1) + xCo(148,146,2) + xCo(366,250,3) + xCo(578,337,4) + xCo(418,447,5) + xCo(566,506,6) + xCo(148,562,7) + xCo(640,560,8) : ''));
+    const given37 = g37(false), sol37 = g37(true);
+    exercises.push(
+      { id:'ex32', num:'32', title:'Kreditvergabe', type:'Anwendungsfalldiagramm', isNew:true,
+        paras:['Eine Bank vergibt drei Arten von Krediten: Ratenkredit, Autokredit und Baufinanzierung.', 'Jede Kreditvergabe muss immer von genau 2 Kreditsachbearbeitern durchgeführt werden (Vier-Augen-Prinzip). Ein Sachbearbeiter kann an beliebig vielen Kreditvergaben beteiligt sein.', 'Bei jeder Kreditvergabe muss die Bonität geprüft werden. Beim Ratenkredit kann zusätzlich eine Restschuldversicherung abgeschlossen werden, beim Autokredit und bei der Baufinanzierung muss eine Sicherheit erfasst werden.', 'Modelliere den Sachverhalt mit einem UML-Anwendungsfalldiagramm. Betrachte dabei alle Notationselemente des Anwendungsfalldiagramms. (Aufbau wie Übungsblatt 5, Übung 6b)'],
+        hints:['Welche Zahl steht an der Assoziation am Akteur, wenn immer zwei Personen beteiligt sind?', 'Drei Kreditarten mit gemeinsamem Ablauf: allgemeiner Fall und Spezialisierungen.', 'Muss → «include», kann → «extend» mit Bedingung und Extension Point.'],
+        sol:sol32, solNote:'Aufbau wie die Musterlösung zu Blatt 5, Übung 6b: 2 am Akteur, * am Anwendungsfall, abstrakter Fall mit Spezialisierungen. Die Musterlösung schreibt den abstrakten Fall als „(abstract)“, die Folien setzen ihn kursiv (S. 192).',
+        checks:['Systemgrenze mit Namen, Akteur außerhalb', 'Kardinalität 2 am Akteur, * am Anwendungsfall', 'Kredit vergeben abstrakt, drei Spezialisierungen mit Pfeil zum allgemeinen Fall', '«include» Bonität prüfen am allgemeinen Fall', '«include» Sicherheit erfassen bei Autokredit und Baufinanzierung', '«extend» Restschuldversicherung zum Ratenkredit, mit Bedingung und Extension Point'] },
+      { id:'ex33', num:'33', title:'Kfz-Werkstatt', type:'Klassendiagramm', isNew:true,
+        paras:['Eine Kfz-Werkstatt möchte ihre Reparaturaufträge verwalten. Ein Kunde ist entweder ein Privatkunde oder ein Firmenkunde und besitzt mindestens ein Fahrzeug, jedes Fahrzeug gehört genau einem Kunden.', 'Jeder Kunde kann mehrere Reparaturaufträge erteilen, ein Auftrag ist immer genau einem Kunden zugeordnet und betrifft genau ein Fahrzeug. Ein Auftrag speichert Datum und Gesamtpreis und muss mindestens eine, darf aber höchstens 15 Positionen enthalten.', 'Einer Position ist immer entweder genau ein Ersatzteil oder genau eine Arbeitsleistung zugeordnet; sie speichert Menge und Preis. Ersatzteile und Arbeitsleistungen werden als Leistungen verwaltet.', 'Erstelle ein UML-Klassendiagramm in der Phase Analyse mit allen Klassen, Kardinalitäten und Assoziationen. Gib geeignete Attribute und Operationen sowie 2–3 Assoziationsnamen an. (Aufbau wie Übungsblatt 6, Übung 7a)'],
+        hints:['„Entweder … oder“ zweimal im Text: Welche Struktur drückt das ohne Zusatzzeichen aus?', 'Mindestens eine, höchstens 15: Wie schreibt man das als Kardinalität?', 'Analyse: keine Navigationspfeile, keine Datentypen.'],
+        sol:sol33, solNote:'Aufbau wie die Musterlösung zu Blatt 6, Übung 7a: „entweder … oder“ über abstrakte Oberklassen (Kunde, Leistung), Obergrenze als 1..15, Assoziationsnamen mit Leserichtung.',
+        checks:['Kunde und Leistung abstrakt (kursiv bzw. {abstract})', 'Privat- und Firmenkunde erben von Kunde, Ersatzteil und Arbeitsleistung von Leistung', 'Kunde 1 —— * Auftrag, Kunde 1 —— 1..* Fahrzeug, Auftrag * —— 1 Fahrzeug', 'Auftrag 1 —— 1..15 Position, Position * —— 1 Leistung', '2–3 Assoziationsnamen mit ▶ bzw. ▼', 'Keine Navigationspfeile, keine Datentypen'] },
+      { id:'ex34', num:'34', title:'Werkzeugverleih', type:'Klassendiagramm', isNew:true,
+        paras:['Ein Baumarkt verleiht Werkzeugexemplare an Kunden. Ein Werkzeugexemplar bezieht sich auf genau einen Werkzeugtyp, zu einem Werkzeugtyp gibt es mehrere Exemplare. Ein Kunde darf höchstens 3 Exemplare gleichzeitig ausgeliehen haben, ein Exemplar ist höchstens an einen Kunden verliehen.', 'Erweiterung: Der Baumarkt hat mehrere Filialen. Jedes Exemplar gehört genau einer Filiale, eine Filiale verfügt über kein oder mehrere Exemplare.', '1. Modelliere den Sachverhalt als UML-Klassendiagramm. Verwende eine Assoziation mit Assoziationsnamen zwischen Kunde und Werkzeugexemplar, gib die Kardinalitäten an und je 1–2 Attribute und Operationen.', '2. Erzeuge aus der Beziehung zwischen Kunde und Werkzeugexemplar eine assoziative Klasse und löse sie dann in eine eigene Klasse auf. Achte auf die geänderten Kardinalitäten.', '3. Zeichne ein passendes UML-Objektdiagramm. (Aufbau wie Übungsblatt 6, Übung 7b)'],
+        hints:['„Höchstens 3 gleichzeitig“ und „höchstens an einen“: Welche Untergrenze gilt jeweils?', 'Beim Auflösen bekommt die neue Klasse auf beiden Seiten eine 1, die alten Zahlen wandern ans andere Ende.', 'Im Objektdiagramm: unterstrichene Namen, Attributwerte, keine Kardinalitäten.'],
+        sol:sol34, solNote:'Auflösen nach Folie S. 255: Aus Kunde 0..1 —— 0..3 Werkzeugexemplar mit Ausleihe wird Kunde 1 —— 0..3 Ausleihe 0..1 —— 1 Werkzeugexemplar. Im Objektdiagramm ist b2 nicht verliehen; das erlaubt die 0..1.',
+        checks:['Kunde 0..1 —— 0..3 Werkzeugexemplar mit Assoziationsnamen', 'Werkzeugexemplar * —— 1 Werkzeugtyp, Filiale 1 —— * Werkzeugexemplar', 'Ausleihe gestrichelt an der Assoziation, danach als eigene Klasse mit 1 an Kunde und Exemplar', 'Objektdiagramm: unterstrichene Objektnamen, Werte statt Typen, keine Kardinalitäten', 'Jeder Link passt zu einer Assoziation, kein Exemplar hat zwei Kunden'] },
+      { id:'ex35', num:'35', title:'Pfannkuchen', type:'Aktivitätsdiagramm', isNew:true,
+        paras:['Die Zubereitung von Pfannkuchen soll über ein UML-Aktivitätsdiagramm modelliert werden. Sie beginnt mit den nebenläufig durchgeführten Aktionen Pfanne erhitzen (Anfangszustand Pfanne = kalt) und Teig anrühren (Anfangszustand Zutaten = abgewogen). Mehrere Startknoten sind erlaubt.', 'Nach dem Erhitzen ist die Pfanne im Zustand heiß, nach dem Anrühren der Teig im Zustand glatt. Danach werden nebenläufig die Aktionen Teig ruhen lassen und Belag schneiden durchgeführt.', 'Sind die Pfanne heiß, der Teig geruht und der Belag geschnitten, wird der Teig in die Pfanne gegeben, gebacken und gewendet. Als Ergebnis erhält man einen Pfannkuchen im Zustand fertig. Nach dem Servieren endet die Zubereitung.', 'Zeichne den Kontroll- und den Objektfluss mit Objekten (mit Zustand), Aktionen, Kontrollknoten, Start- und Endknoten. (Aufbau wie Übungsblatt 7, Übung 8a)'],
+        hints:['Zwei unabhängige Anfänge: zwei Startknoten.', 'Jeder Zustandswechsel eines Objekts wird ein eigener Objektknoten mit [Zustand].', 'Worauf muss vor „Teig in Pfanne geben“ gewartet werden? Synchronisation.'],
+        sol:sol35, solNote:'Objektflüsse gestrichelt wie in der Praktikumslösung zur Sauce Hollandaise. Wie der Anfangszustand (Pfanne [kalt]) genau angebunden wird, mit dieser Lösung vergleichen; hier fließt das Objekt in die Aktion.',
+        checks:['Zwei Startknoten für die nebenläufigen Anfänge', 'Pfanne [kalt] → Pfanne erhitzen → Pfanne [heiß]', 'Zutaten [abgewogen] → Teig anrühren → Teig [glatt]', 'Aufspalten nach dem Teig, Synchronisation nach Ruhen und Schneiden', 'Zweite Synchronisation mit der heißen Pfanne vor Teig in Pfanne geben', 'Pfannkuchen [fertig], Servieren, ein Endknoten'] },
+      { id:'ex36', num:'36', title:'Notenberechnung', type:'Aktivitätsdiagramm', isNew:true,
+        paras:['Wie können verschachtelte If-else-Verzweigungen im UML-Aktivitätsdiagramm dargestellt werden? Gib dazu ein Beispiel an.', 'Beispiel: Eine Aktivität liest die Punktzahl p einer Klausur ein und gibt die Note aus: ab 90 Punkten eine 1, ab 75 eine 2, ab 60 eine 3, ab 50 eine 4, darunter eine 5. (Aufbau wie Übungsblatt 7, Übung 8b)'],
+        hints:['Jedes if-else wird eine Raute mit zwei Bedingungen.', 'Das else-Paket enthält die nächste Raute: so entsteht die Verschachtelung.', 'Jede Ebene wird mit einer eigenen Raute wieder zusammengeführt.'],
+        sol:sol36, solNote:'Jede Ebene ist eine Entscheidung mit zwei Bedingungen, die sich ausschließen und alles abdecken. Die Zusammenführungen spiegeln die Verschachtelung von innen nach außen (S. 285).',
+        checks:['Bedingungen in eckigen Klammern', 'Pro Raute zwei Bedingungen ohne Überschneidung, z. B. [p >= 75] und [p < 75]', 'Die Rauten sind verschachtelt, nicht nebeneinander', 'Jede Ebene wird über eine Raute zusammengeführt, keine zwei Pfeile direkt in eine Aktion', 'Ein Startknoten, ein Endknoten'] },
+      { id:'ex37', num:'37', title:'Arztpraxis', type:'Aktivitätsdiagramm', isNew:true,
+        paras:['Interpretiere alle möglichen Abläufe, die durch das folgende UML-Aktivitätsdiagramm modelliert wurden. Welche Notationselemente wurden mit welcher Semantik verwendet? (Aufbau wie Übungsblatt 7, Übung 8c)'],
+        given:given37, givenLabel:'Aktivitätsdiagramm zum Interpretieren',
+        hints:['Erst die Partitionen und Knotenarten benennen, dann den Pfaden folgen.', 'Was unterscheidet den Endknoten links unten vom Kreis mit X rechts?', 'Was passiert mit dem Laborstrang, wenn der Rezeptstrang zuerst fertig ist?'],
+        sol:sol37, solNote:'Zwei Wege bis zur Untersuchung (mit oder ohne Termin), danach laufen Rezept- und Laborstrang parallel. Achtung: Erreicht der Rezeptstrang den Endknoten, endet die gesamte Aktivität sofort, auch wenn das Labor noch arbeitet (S. 283). Das Ablaufende beendet nur den Laborstrang.',
+        checks:['① Drei Partitionen: Empfang, Ärztin, Labor als Verantwortungsbereiche (S. 287)', '② Entscheidung [kein Termin] / [Termin vorhanden], vollständig und überschneidungsfrei', '③ Zusammenführung: Beide Wege laufen zur Untersuchung (logisches ODER)', '④ Aufspalten: Rezept und Blutanalyse laufen parallel', '⑤ Objektknoten mit Zustand, Objektfluss gestrichelt', '⑥ Ablaufende: beendet nur den Laborstrang', '⑦ Endknoten: beendet die ganze Aktivität, ggf. auch das Labor', '⑧ Notiz: Kommentar ohne Ablaufbedeutung'] }
+    );
+
     // ---------- Pflichtenheft-Checkliste (nur Leitfragen, keine Inhalte) ----------
     const pfc = [
       { ch:'1 Zielbestimmung', items:['Muss-, Wunsch- und Abgrenzungskriterien getrennt aufgeführt?'] },
