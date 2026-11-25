@@ -15,3 +15,4 @@ Sicherungen des Lernplans „Klausurvorbereitung UML-Diagramme“ (Software Engi
 | v5 | 23.11.2026 | Lernplan als visuelle Roadmap, Reiter UML-Überblick (Übersichtskarte, 8 Spickzettel, 4 Vergleiche), Theorie-Schaubilder |
 | v6 | 24.11.2026 | Handy: Kopfzeile blendet beim Scrollen aus; Sonderfälle je UML-Typ; Zimmer-Abgleich (Leserichtung ▶, Pins, Verfeinerung S. 289, Kardinalitäten am Akteur S. 192) |
 | v7 | 25.11.2026 | Reiter Pflichtenheft: 14 Schritte am Muster (Fallstudie Lagerverwaltung) erklärt, überflüssige Schritte entfernt; UML-Überblick: »Worauf achten« je Typ, Sonderfälle groß |
+| v8 | 25.11.2026 | UML-Überblick: 15 Bildpaare »Falsch vs. richtig« (u. a. Raute vs. Balken, BPMN-Gateway) |
