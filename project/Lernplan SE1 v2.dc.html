@@ -3001,7 +3001,7 @@ class Component extends DCLogic {
       const c = col(ck), on = k === 'ueben' ? isUeben : tab === k;
       return { label:l, dot:c, badge:badges[k], hasBadge: !!badges[k], current: on ? 'page' : 'false',
         bg: on ? soft('var(--color-accent)', 20) : 'transparent', border: on ? c : 'var(--color-divider)', fg: on ? ink(c) : 'var(--color-text)',
-        go:() => this.setState(st => ({ tab: k === 'ueben' ? (TOOLS.includes(st.uebTool) ? st.uebTool : 'quiz') : k, settingsOpen:false })) };
+        go:() => { if (on) { this.scrollTop(); return; } this.setState(st => ({ tab: k === 'ueben' ? (TOOLS.includes(st.uebTool) ? st.uebTool : 'quiz') : k, settingsOpen:false })); } };
     });
     const rp = (n, t) => t ? Math.round(n / t * 100) : 0;
     const tools = [['quiz','Notation erkennen','UML-Elemente auf einen Blick', qMastered, D.quiz.length, 'sicher', 'p1'],
