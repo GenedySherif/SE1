@@ -395,12 +395,13 @@
           <h3 style="margin:0; font-family:var(--font-heading); font-weight:var(--font-heading-weight); font-size:24px;">Spickzettel je Diagrammtyp</h3>
           <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 480px), 1fr)); gap:16px;">
             <sc-for list="{{ umlSheets }}" as="sh" hint-placeholder-count="4">
-              <article id="{{ sh.anchor }}" style="display:flex; flex-direction:column; gap:12px; padding:18px; border-radius:var(--radius-lg); background:var(--color-surface); box-shadow:var(--shadow-sm); border-top:4px solid {{ sh.c }}; scroll-margin-top:90px;">
+              <article id="{{ sh.anchor }}" style="grid-column:{{ sh.span }}; display:flex; flex-direction:column; gap:12px; padding:18px; border-radius:var(--radius-lg); background:var(--color-surface); box-shadow:var(--shadow-sm); border-top:4px solid {{ sh.c }}; scroll-margin-top:90px;">
                 <div style="display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:4px 12px;">
                   <h4 style="margin:0; font-size:18px; font-weight:800;">{{ sh.title }}</h4>
                   <span style="font-size:11px; color:color-mix(in srgb, var(--color-text) 62%, transparent);">Folien S. {{ sh.ref }}</span>
                 </div>
                 <div style="font-size:13px; font-weight:600; color:{{ sh.ink }};">{{ sh.q }}</div>
+                <span style="align-self:flex-start; font-size:11px; letter-spacing:0.06em; text-transform:uppercase; font-weight:800; padding:3px 10px; border-radius:999px; background:{{ sh.soft }}; color:{{ sh.ink }};">Level 1 · Basis</span>
                 <div class="dg-scroll" style="padding:14px; border-radius:var(--radius-md); background:var(--color-bg); overflow-x:auto;">{{ sh.img }}</div>
                 <ol style="margin:0; padding:0; list-style:none; display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:6px 14px;">
                   <sc-for list="{{ sh.legend }}" as="lg" hint-placeholder-count="4">
@@ -413,6 +414,32 @@
                     <sc-for list="{{ sh.tips }}" as="tp" hint-placeholder-count="5"><li style="margin:0; text-wrap:pretty;">{{ tp.v }} <span style="font-size:11px; white-space:nowrap; color:color-mix(in srgb, var(--color-text) 55%, transparent);">{{ tp.r }}</span></li></sc-for>
                   </ul>
                 </div></sc-if>
+                <sc-if value="{{ sh.hasL2 }}"><button onClick="{{ sh.l2Toggle }}" aria-expanded="{{ sh.l2Open }}" style="align-self:flex-start; padding:8px 14px; border-radius:var(--radius-md); border:2px solid {{ sh.c }}; background:{{ sh.l2Bg }}; color:{{ sh.ink }}; font-family:var(--font-body); font-size:13px; font-weight:800; cursor:pointer;">{{ sh.l2Label }}</button></sc-if>
+                <sc-if value="{{ sh.l2Open }}">
+                  <div style="display:flex; flex-direction:column; gap:14px;">
+                    <sc-for list="{{ sh.l2 }}" as="lv" hint-placeholder-count="2">
+                      <div style="display:flex; flex-direction:column; gap:10px; padding:14px; border-radius:var(--radius-md); background:var(--color-bg); border:1.5px solid color-mix(in srgb, {{ sh.c }} 45%, transparent);">
+                        <div style="display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:4px 10px;">
+                          <span style="font-size:15px; font-weight:800;">Level 2 · {{ lv.t }}</span>
+                          <span style="font-size:11px; font-weight:700; padding:2px 9px; border-radius:999px; background:{{ sh.soft }}; color:{{ sh.ink }};">{{ lv.src }}</span>
+                        </div>
+                        <span style="font-size:13px; line-height:1.5; color:color-mix(in srgb, var(--color-text) 80%, transparent); text-wrap:pretty;">{{ lv.desc }}</span>
+                        <div class="dg-scroll l2-img" style="max-width:820px; padding:10px; border-radius:var(--radius-md); background:var(--color-surface); overflow-x:auto;">{{ lv.img }}</div>
+                        <span style="font-size:12.5px; color:color-mix(in srgb, var(--color-text) 70%, transparent);">Erst selbst lesen, dann Schritt für Schritt aufdecken.</span>
+                        <sc-if value="{{ lv.hasSteps }}"><ol style="margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:8px;">
+                          <sc-for list="{{ lv.steps }}" as="st" hint-placeholder-count="3"><li style="display:flex; gap:10px; align-items:flex-start; padding:10px 12px; border-radius:10px; background:var(--color-surface);">
+                            <div style="display:flex; flex-direction:column; gap:2px; font-size:13.5px; line-height:1.5;"><span style="font-weight:800;">{{ st.h }}</span><span style="text-wrap:pretty;">{{ st.v }}</span></div>
+                          </li></sc-for>
+                        </ol></sc-if>
+                        <div style="display:flex; flex-wrap:wrap; gap:8px;">
+                          <sc-if value="{{ lv.more }}"><button onClick="{{ lv.next }}" style="padding:7px 14px; border-radius:999px; border:none; background:{{ sh.c }}; color:var(--color-bg); font-family:var(--font-body); font-size:12.5px; font-weight:800; cursor:pointer;">{{ lv.nextLabel }}</button></sc-if>
+                          <sc-if value="{{ lv.more }}"><button onClick="{{ lv.showAll }}" style="padding:7px 14px; border-radius:999px; border:1.5px solid var(--color-divider); background:transparent; color:var(--color-text); font-family:var(--font-body); font-size:12.5px; font-weight:700; cursor:pointer;">Alle zeigen</button></sc-if>
+                          <sc-if value="{{ lv.hasSteps }}"><button onClick="{{ lv.reset }}" style="padding:7px 14px; border-radius:999px; border:1.5px solid var(--color-divider); background:transparent; color:var(--color-text); font-family:var(--font-body); font-size:12.5px; font-weight:700; cursor:pointer;">Zurücksetzen</button></sc-if>
+                        </div>
+                      </div>
+                    </sc-for>
+                  </div>
+                </sc-if>
                 <sc-if value="{{ sh.hasFr }}"><button onClick="{{ sh.frToggle }}" aria-expanded="{{ sh.frOpen }}" style="align-self:flex-start; padding:8px 14px; border-radius:var(--radius-md); border:1.5px solid {{ sh.c }}; background:{{ sh.frBg }}; color:{{ sh.ink }}; font-family:var(--font-body); font-size:13px; font-weight:700; cursor:pointer;">{{ sh.frLabel }}</button></sc-if>
                 <sc-if value="{{ sh.frOpen }}">
                   <div style="display:flex; flex-direction:column; gap:12px;">
@@ -1187,12 +1214,12 @@ class Component extends DCLogic {
     };
     const uc = (cx,cy,rx,ry,label,o={}) => { const ls = label.split('|'), c = o.c||'var(--dg-uc, var(--color-neutral-400))';
       let s = `<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" style="fill:var(--dg-uc-fill, var(--color-surface));${sk(c,1.4)}"/>`;
-      if (!o.ep) return G(s + ls.map((v,i) => tx(cx,cy+4+(i-(ls.length-1)/2)*14,v,{fs:11.5})).join(''));
+      if (!o.ep) return G(s + ls.map((v,i) => tx(cx,cy+4+(i-(ls.length-1)/2)*14,v,{fs:11.5,i:o.i})).join(''));
       const es = o.ep.split('|'), ly = cy - 4 - es.length*6, sy = ly + 8, hw = rx*Math.sqrt(Math.max(0, 1 - Math.pow((sy-cy)/ry, 2)));
-      s += ls.map((v,i) => tx(cx,ly-(ls.length-1-i)*14,v,{fs:11.5,w:500})).join('') + ln(cx-hw,sy,cx+hw,sy,{c});
+      s += ls.map((v,i) => tx(cx,ly-(ls.length-1-i)*14,v,{fs:11.5,w:500,i:o.i})).join('') + ln(cx-hw,sy,cx+hw,sy,{c});
       s += tx(cx,sy+14,'Extension point:',{fs:10}) + es.map((v,i) => tx(cx,sy+27+i*12,v,{fs:10})).join('');
       return G(s); };
-    const actor = (cx,y,label,o={}) => { const c=o.c||'var(--dg-actor, var(--color-text))'; return G(`<circle cx="${cx}" cy="${y+7}" r="7" style="fill:none;${sk(c,1.4)}"/>` + ln(cx,y+14,cx,y+34,{c}) + ln(cx-12,y+21,cx+12,y+21,{c}) + ln(cx,y+34,cx-10,y+48,{c}) + ln(cx,y+34,cx+10,y+48,{c}) + tx(cx,y+64,label,{fs:11.5})); };
+    const actor = (cx,y,label,o={}) => { const c=o.c||'var(--dg-actor, var(--color-text))'; return G(`<circle cx="${cx}" cy="${y+7}" r="7" style="fill:none;${sk(c,1.4)}"/>` + ln(cx,y+14,cx,y+34,{c}) + ln(cx-12,y+21,cx+12,y+21,{c}) + ln(cx,y+34,cx-10,y+48,{c}) + ln(cx,y+34,cx+10,y+48,{c}) + tx(cx,y+64,label,{fs:11.5,i:o.i})); };
     const pkg = (x,y,w,h,name,o={}) => { const tw = Math.min(w-20, name.length*7.8+24); return G(rc(x,y,tw,18,{c:o.c}) + rc(x,y+18,w,h-18,{c:o.c,f:o.f||'transparent'}) + tx(x+10,y+13,name,{a:'start',fs:11,w:500,c:o.c?C.a:C.t})); };
     const life = (cx,y,name,yEnd,o={}) => { const w=o.w||110; return G(ln(cx,y+28,cx,yEnd,{d:true,c:C.m}) + rc(cx-w/2,y,w,28,{c:o.c||'var(--dg-cls, var(--color-neutral-400))',f:'var(--dg-cls-fill, var(--color-surface))'}) + tx(cx,y+19,name,{u:true})); };
     const actv = (cx,y1,y2,o={}) => G(rc(cx-5,y1,10,y2-y1,{c:o.c,f:o.f}));
@@ -2158,18 +2185,18 @@ class Component extends DCLogic {
     // 5 Aktivitätsdiagramm
     const imgA = svg(560,300, start(60,30) + ar(60,38,60,58,'open') + act(60,74,'Bestellen',100)
       + ar(110,74,150,74,'open') + dec(163,74)
-      + par([[163,87],[163,150],[190,150]]) + tx(170,118,'[nicht lieferbar]',{a:'start',fs:10.5}) + act(250,150,'Absagen',110) + ar(305,150,330,150,'open') + fend(342,150)
+      + par([[163,87],[163,150],[190,150]]) + tx(170,118,'[nicht lieferbar]',{a:'start',fs:10.5}) + act(250,150,'Absagen',110) + ar(305,150,330,150,'open') + onode(390,150,'Bestellung','[storniert]',120) + ar(450,150,470,150,'open') + fend(482,150)
       + ar(176,74,240,74,'open') + tx(206,66,'[lieferbar]',{fs:10}) + barV(240,40,68)
       + ar(245,52,290,52,'open') + ar(245,96,290,96,'open') + act(345,52,'Rechnen',100) + act(345,96,'Packen',100)
       + ar(395,52,440,52,'open') + ar(395,96,440,96,'open') + barV(440,40,68) + ar(445,74,480,74,'open') + end(494,74)
-      + co(42,22,1) + co(60,52,2) + co(150,58,3) + co(242,28,4) + co(510,58,5) + co(360,150,6));
+      + co(42,22,1) + co(60,52,2) + co(150,58,3) + co(242,28,4) + co(510,58,5) + co(506,132,6) + co(390,120,7));
     // 6 Zustandsdiagramm
-    const imgZ = svg(560,260, start(14,60) + ar(22,60,80,60,'open') + tx(50,52,'anlegen()',{fs:10})
+    const imgZ = svg(560,294, '<g transform="translate(0,34)">' + par([[120,30],[120,6],[200,6],[200,30]]) + tx(160,-20,'bezahlen(b) [b<summe]',{fs:10.5}) + tx(160,-7,'/ teilzahlungBuchen()',{fs:10.5}) + co(250,-14,6) + start(14,60) + ar(22,60,80,60,'open') + tx(50,52,'anlegen()',{fs:10})
       + state(80,30,170,64,'Offen',['entry / bestätigen()'])
-      + ar(250,52,420,52,'open') + tx(335,34,'bezahlen(b)',{fs:10.5}) + tx(335,46,'[b=summe] /quittieren()',{fs:10.5})
+      + ar(250,52,420,52,'open') + tx(335,34,'bezahlen(b)',{fs:10.5}) + tx(335,46,'[b>=summe] /quittieren()',{fs:10.5})
       + state(420,30,120,44,'Bezahlt') + ar(480,74,480,190,'open') + tx(488,136,'zustellen()',{a:'start',fs:10.5}) + end(480,202)
       + ar(165,94,165,170,'open') + tx(173,136,'after(14 Tage)',{a:'start',fs:10.5}) + state(100,170,130,44,'Storniert')
-      + co(14,40,1) + co(78,26,2) + co(335,66,3) + co(150,132,4) + co(502,206,5));
+      + co(14,40,1) + co(78,26,2) + co(335,66,3) + co(150,132,4) + co(502,206,5) + '</g>');
     // 7 Sequenzdiagramm
     const imgS = svg(560,280, ln(50,74,50,270,{d:true,c:C.m}) + actor(50,4,'Kunde')
       + life(200,20,':Maske',270,{w:100}) + life(370,20,':Lager',270,{w:100}) + life(505,146,':Beleg',270,{w:90})
@@ -2190,8 +2217,8 @@ class Component extends DCLogic {
       S('objekt','Objektdiagramm','Wie sieht es zu einem Zeitpunkt konkret aus?','222–229', imgO, [['Objekt','name: Klasse, unterstrichen'],['Attributwerte','Attribut = Wert'],['Link','Verbindung konkreter Objekte, keine Kardinalitäten'],['Anonymes Objekt',':Klasse ohne Namen']]),
       S('paket','Paketdiagramm','Wie gliedere ich das Modell grob?','274–277', imgP, [['Paket','Kasten mit Reiter, kann Pakete enthalten'],['Inhalt','Klassen gehören genau einem Paket'],['Abhängigkeit','gestrichelt mit offener Spitze, zum genutzten Paket']]),
       S('anwendungsfall','Anwendungsfalldiagramm','Was leistet das System für wen?','171–184', imgU, [['Akteur','Strichmännchen, immer außerhalb'],['Systemgrenze','Kasten mit Systemnamen'],['Anwendungsfall','Ellipse, mit Akteur verbunden'],['«include»','immer, Pfeil zum eingebundenen Fall'],['«extend»','nur bei Bedingung, Pfeil zum erweiterten Fall'],['Extension point','Stelle der Erweiterung im erweiterten Fall']]),
-      S('aktivitaet','Aktivitätsdiagramm','Wie läuft ein Prozess ab, auch parallel?','281–288', imgA, [['Startknoten','gefüllter Kreis'],['Aktion','abgerundetes Rechteck'],['Entscheidung','Raute, Bedingungen in [ ] ohne Überlappung'],['Fork / Join','Balken: parallel aufteilen bzw. auf alle warten'],['Endknoten','beendet die ganze Aktivität'],['Ablaufende','Kreis mit X, beendet nur diesen Fluss']]),
-      S('zustand','Zustandsdiagramm','Welche Zustände durchläuft ein Objekt?','292–296', imgZ, [['Startzustand','gefüllter Kreis'],['Zustand','abgerundet, mit entry / do / exit'],['Transition','ereignis [bedingung] /aktion'],['Zeitereignis','after(Dauer) oder at(Zeitpunkt)'],['Endzustand','Kreis mit Punkt']]),
+      S('aktivitaet','Aktivitätsdiagramm','Wie läuft ein Prozess ab, auch parallel?','281–288', imgA, [['Startknoten','gefüllter Kreis'],['Aktion','abgerundetes Rechteck'],['Entscheidung','Raute, Bedingungen in [ ] ohne Überlappung'],['Fork / Join','Balken: parallel aufteilen bzw. auf alle warten'],['Endknoten','beendet die ganze Aktivität'],['Ablaufende','Kreis mit X, beendet nur diesen Fluss'],['Objektknoten','eckig, Zustand in [ ], z. B. [storniert]']]),
+      S('zustand','Zustandsdiagramm','Welche Zustände durchläuft ein Objekt?','292–296', imgZ, [['Startzustand','gefüllter Kreis'],['Zustand','abgerundet, mit entry / do / exit'],['Transition','ereignis [bedingung] /aktion'],['Zeitereignis','after(Dauer) oder at(Zeitpunkt)'],['Endzustand','Kreis mit Punkt'],['Bedingungen prüfen','gleiches Ereignis an zwei Pfeilen: [b<summe] und [b>=summe] decken alles ab, ohne Überschneidung']]),
       S('sequenz','Sequenzdiagramm','Welche Nachrichten in welcher zeitlichen Reihenfolge?','302–307', imgS, [['Akteur','löst das Szenario aus'],['Objekt + Lebenslinie',':Klasse, gestrichelte Linie nach unten'],['Aktivierungsbalken','Objekt hat gerade die Steuerung'],['Synchrone Nachricht','gefüllte Spitze, Sender wartet'],['Antwort','gestrichelt, offene Spitze'],['Objekterzeugung','gestrichelt auf den Kopf des neuen Objekts'],['Asynchrone Nachricht','offene Spitze, Sender wartet nicht']]),
       S('kommunikation','Kommunikationsdiagramm','Wer spricht mit wem über welche Verbindung?','308–310', imgC, [['Link','Verbindung, über die Nachrichten laufen'],['Sequenzausdruck','Nummer: 1, 1.1, 1.2 statt Zeitachse'],['Iteration','* nach der Nummer: wiederholt'],['Bedingung','[…] nach der Nummer'],['Zuweisung','antwort = nachricht()'] ])
     ];
@@ -2405,7 +2432,7 @@ class Component extends DCLogic {
     sheets.forEach(sh => { sh.sf = SFS[sh.k] || []; });
     const TIPS = {
       anwendungsfall: [['Systemgrenze als Rahmen mit Systemnamen, Akteure immer außerhalb.','191'],['Akteur und Anwendungsfall nur mit einfacher Linie verbinden, ohne Pfeilspitze. Kardinalitäten sind erlaubt.','191–192'],['«include»: Fall wird immer eingebunden, Pfeil zum eingebundenen Fall. «extend»: nur unter Bedingung, Pfeil zum erweiterten Fall.','181–184'],['Bei «extend» Extension Points unter einem Trennstrich im erweiterten Fall, Bedingung neben die Beziehung.','183'],['Generalisierung: geschlossene Spitze, vom speziellen zum allgemeinen Element.','180'],['Akteure untereinander nur über Generalisierung verbinden, nie mit einer Linie.',''],['Keine Reihenfolge einzeichnen: Das Diagramm zeigt was, nicht wann.','']],
-      klasse: [['Klassenname: Substantiv im Singular, Großbuchstabe am Anfang.','234'],['Attribute (deutsch) groß, Operationen klein mit Verb: berechnePreis().','235–236'],['Jede Assoziation mit Kardinalität an beiden Enden, Name mit Leserichtung ▶.','245–247'],['In der Analyse keine Navigationspfeile, Assoziationen sind bidirektional.','240'],['Komposition: Kardinalität am Ganzen höchstens 1.','258'],['Generalisierung ohne Kardinalität: Sie verbindet Klassen, nicht Objekte.','240'],['Abstrakte Klasse kursiv oder {abstract}, abgeleitetes Attribut mit /.','207, 268'],['Aufzählungstyp mit Endung ET und «Enumeration».','235']],
+      klasse: [['Klassenname: Substantiv im Singular, Großbuchstabe am Anfang.','234'],['Operationen klein mit Verb: berechnePreis(). Attribute laut Folie deutsch groß, die Musterlösung zu Blatt 6 schreibt sie klein: einheitlich bleiben.','235–236'],['Jede Assoziation mit Kardinalität an beiden Enden, Name mit Leserichtung ▶.','245–247'],['In der Analyse keine Navigationspfeile, Assoziationen sind bidirektional.','240'],['Komposition: Kardinalität am Ganzen höchstens 1.','258'],['Generalisierung ohne Kardinalität: Sie verbindet Klassen, nicht Objekte.','240'],['Abstrakte Klasse kursiv oder {abstract}, abgeleitetes Attribut mit /.','207, 268'],['Aufzählungstyp mit Endung ET und «Enumeration».','235']],
       objekt: [['Keine Kardinalitäten: Ein Link verbindet genau zwei konkrete Objekte.',''],['Name unterstrichen: einKunde: Kunde oder anonym :Kunde.','227, 234'],['Objektnamen beginnen klein.','234'],['Attribute mit konkreten Werten (Name = »Anna«), ohne Typ.','225'],['Keine Operationen, die stehen nur in der Klasse.','230'],['Keine Generalisierung zwischen Objekten, jedes Objekt gehört direkt zu seiner Klasse.','']],
       paket: [['Vererbungsstrukturen nicht schneiden: Oberklassen ins Paket der Unterklasse.','277'],['Keine Aggregation oder Komposition durchtrennen.','277'],['Möglichst wenige Assoziationen über Paketgrenzen.','277'],['Abhängigkeit gestrichelt mit offener Spitze zum genutzten Paket.','275'],['Pakete dürfen selbst Pakete enthalten.','274']],
       aktivitaet: [['Mindestens ein Startknoten und ein Endknoten.','283'],['Endknoten beendet alle Aktionen sofort, Ablaufende (Kreis mit X) nur den eigenen Fluss.','283'],['Bedingungen in [ ], sie dürfen sich nicht überlappen.','285'],['Alternative Pfade über eine Raute zusammenführen.','285'],['Parallelität mit Balken: Aufspalten und Synchronisation.','286'],['Aktion abgerundet, Objekt eckig mit [Zustand].','284, 288'],['Nicht für die Zusammenarbeit von Objekten (Interaktionsdiagramm) oder den Lebenslauf eines Objekts (Zustandsdiagramm).','282']],
@@ -2413,6 +2440,15 @@ class Component extends DCLogic {
       sequenz: [['Zeigt ein Szenario, nicht alle möglichen Ablaufpfade.','302'],['Synchron: gefüllte Spitze. Asynchron: offene Spitze. Antwort (optional): gestrichelt, offene Spitze.','304'],['Objekt erzeugen: gestrichelter Pfeil mit offener Spitze zum neuen Objekt.','304'],['Steuerungsfokus als Balken auf der Lebenslinie.','304'],['Nachrichten in der Form nachricht(argumente).','304'],['Keine Nummern nötig, die Zeit läuft von oben nach unten.','']],
       kommunikation: [['Objekte mit Links wie im Objektdiagramm, keine Lebenslinien.','308–309'],['Reihenfolge nur über hierarchische Nummern 1, 1.1, 1.2.','309–310'],['Bedingung: 1.2 [Bedingung]: nachricht(). Iteration: 1.1*: nachricht().','310'],['Antwort speichern: antw = nachricht(argumente).','310'],['{new} und {transient} stehen im Objektkasten.','309'],['Keine Kardinalitäten an den Links, es sind Objekte.','']]
     };
+    TIPS.zustand.unshift(['Bedingungen prüfen: Führt dasselbe Ereignis über mehrere Pfeile aus einem Zustand, müssen die Bedingungen alle Fälle abdecken und dürfen sich nicht überschneiden.','293, 296'], ['Ein Ereignis ist nur in Zuständen erlaubt, aus denen ein Pfeil mit diesem Ereignis führt.','292']);
+    TIPS.zustand.push(['Bedingungen prüfen Attributwerte des Objekts, z. B. [Lagerbestand < 100].','293'], ['Ereignisse sind Operationen der Klasse: Eine Botschaft löst die Operation gleichen Namens aus.','291']);
+    TIPS.anwendungsfall.push(['Name mit aktivem Verb, er beschreibt eine Tätigkeit.','174'], ['Abstrakter Akteur oder Fall: Name kursiv. Die Musterlösung zu Blatt 5 schreibt zusätzlich „(abstract)“.','192'], ['Kardinalität am Akteur: wie viele Akteure an einem Fall beteiligt sind, z. B. 2 beim Vier-Augen-Prinzip (Musterlösung Blatt 5).','192'], ['Bedingung des «extend» als Notiz an die Beziehung, z. B. „Lunchpaket gewünscht?“ (Musterlösung Blatt 5).','183']);
+    TIPS.klasse.push(['Kann und Muss: 0..1 und * sind Kann-, 1 und 1..* Muss-Beziehungen.','245–247'], ['Verwaltungsoperationen wie new(), get…() und set…() nicht eintragen.','219'], ['Aggregation ohne Kreis: Ist B Teil von A, darf A nicht Teil von B sein.','257'], ['Sichtbarkeit: + öffentlich, # geschützt, - privat.','267'], ['Zwei Namen dürfen sich nicht nur in Groß- und Kleinschreibung unterscheiden.','233']);
+    TIPS.objekt.push(['Schnappschuss zu genau einem Zeitpunkt.','222'], ['Rollennamen der Assoziation dürfen auch an den Links stehen.','260']);
+    TIPS.paket.push(['Ein Paket ist eine logische Einheit, die man allein verstehen und entwerfen kann.','276'], ['Kopplung innerhalb eines Pakets groß, zwischen Paketen gering.','277']);
+    TIPS.aktivitaet.push(['Objektknoten mit Zustand in [ ]: Butter [fest] wird durch eine Aktion zu Butter [geschmolzen].','288, Übungsblatt 7'], ['Mehrere Startknoten sind erlaubt.','Übungsblatt 7'], ['Partitionen (Schwimmbahnen) zeigen Verantwortungsbereiche.','287'], ['Eine Aktion kann durch ein eigenes Aktivitätsdiagramm verfeinert werden.','289']);
+    TIPS.sequenz.push(['Alternativen wie auf der Folie: [Bedingung] über der Nachricht, [ELSE] für den Rest.','307'], ['Objekt löschen: X am Ende der Lebenslinie.','303, 305'], ['Der Akteur darf links mit eigener Lebenslinie stehen.','305'], ['Die Balkenlänge zeigt die relative Dauer.','305']);
+    TIPS.kommunikation.push(['Kann zusätzlich Assoziationen und Zustandsübergänge zeigen.','308'], ['Jede Nachricht braucht einen Link zwischen Sender und Empfänger.','309']);
     sheets.forEach(sh => { sh.tips = TIPS[sh.k] || []; });
     // ---------- Falsch vs. richtig (Bildpaare) ----------
     const FRp = (t, a, b, d, ref, la, lb) => ({ t, a, b, d, ref, la: la || '✗ Falsch', lb: lb || '✓ Richtig', cmp: !!la });
@@ -2482,7 +2518,349 @@ class Component extends DCLogic {
         FRp('Vererbung über die Paketgrenze', frPk(false), frPk(true), 'Ober- und Unterklasse gehören ins selbe Paket, die Paketgrenze darf eine Vererbung nicht schneiden.', '277')
       ]
     };
+    const frZg = g => svg(240,148, state(8,74,84,36,'Ohne Res.') + state(140,74,94,36,'Teilweise') + ar(140,98,92,98,'open') + tx(116,124,'stornieren()',{fs:9.5}) + (g[1] ? tx(116,138,g[1],{fs:9.5,c:C.a}) : '')
+      + par([[165,74],[165,46],[210,46],[210,74]]) + tx(187,20,'stornieren()',{fs:9.5}) + (g[0] ? tx(187,33,g[0],{fs:9.5,c:C.a}) : ''));
+    const frAo = ok => svg(240,145, act(120,20,'Butter erhitzen',140) + ar(120,36,120,53,'open') + (ok ? onode(120,72,'Butter','[geschmolzen]',120) : act(120,72,'geschmolzen',120)) + ar(120,91,120,106,'open') + act(120,122,'Butter zugeben',140));
+    FR.zustand.unshift(FRp('Gleiches Ereignis ohne Bedingung', frZg(['','']), frZg(['[reserviert>1]','[reserviert=1]']), 'Führt dasselbe Ereignis über zwei Pfeile aus einem Zustand, muss eine Bedingung entscheiden, welcher schaltet. Ohne Bedingung ist das Verhalten nicht eindeutig.', '293, 296'),
+      FRp('Bedingungen überschneiden sich', frZg(['[reserviert>=1]','[reserviert=1]']), frZg(['[reserviert>1]','[reserviert=1]']), 'Bei genau einem reservierten Platz wären links beide Bedingungen wahr. Die Bedingungen müssen sich ausschließen und zusammen alle Fälle abdecken.', '296'));
+    FR.aktivitaet.push(FRp('Objektzustand als Aktion gezeichnet', frAo(false), frAo(true), 'Ein Zustand ist keine Tätigkeit. Er steht als [Zustand] in einem eckigen Objektknoten, die Aktionen davor und danach bleiben abgerundet.', '288'));
     sheets.forEach(sh => { sh.fr = FR[sh.k] || []; });
+    // ---------- Level 2: Klausurniveau ----------
+    const L2 = (t, src, desc, img, steps) => ({ t, src, desc, img, steps: steps.map(([h, v]) => ({ h, v })) });
+    const objn = (cx,cy,name,w=100) => G(rc(cx-w/2,cy-16,w,32,{c:'var(--dg-obj, var(--color-neutral-400))',f:'var(--dg-obj-fill, var(--color-surface))'}) + tx(cx,cy+4,name,{fs:12}));
+    const noteB = (x,y,w,h,lines) => G(pg([[x,y],[x+w-10,y],[x+w,y+10],[x+w,y+h],[x,y+h]], 'var(--color-surface)', {c:C.m}) + pl([[x+w-10,y],[x+w-10,y+10],[x+w,y+10]],{c:C.m}) + lines.map((v,i) => tx(x+w/2,y+18+i*14,v,{fs:10.5})).join(''));
+    const lane = (x,y,w,h,heads,pool) => { const t = pool ? 20 : 0; let s = rc(x,y,w,h,{f:'transparent'}) + (pool ? ln(x,y+t,x+w,y+t) + tx(x+w/2,y+15,pool,{fs:11,w:700}) : '') + ln(x,y+t+22,x+w,y+t+22); heads.forEach(([hx,hw,name]) => { s += tx(hx+hw/2,y+t+16,name,{fs:11,w:700}); if (hx > x) s += ln(hx,y+t,hx,y+h); }); return s; };
+    const sArr = (x,y,dir) => dir === 'r' ? ar(x,y,x+26,y,'filled') : dir === 'l' ? ar(x+26,y,x,y,'filled') : dir === 'd' ? ar(x,y,x,y+22,'filled') : ar(x,y+22,x,y,'filled');
+
+    // Zustand · Folie S. 296
+    const l2Z1 = svg(720,390, state(30,60,180,64,'OhneReservierung',['entry / ruecksetzen()']) + state(390,60,170,56,'TeilweiseReserviert') + state(430,240,140,48,'Ausgebucht') + state(230,330,150,48,'Geschlossen')
+      + start(115,252) + ar(115,244,115,124,'open') + tx(107,190,'flugEinrichten()',{a:'end',fs:10.5}) + ar(180,124,180,238,'open') + tx(188,190,'flugStreichen()',{a:'start',fs:10.5}) + end(180,250) + par([[230,354],[180,354],[180,262]])
+      + ar(210,76,390,76,'open') + tx(300,68,'reservieren()',{fs:10.5}) + ar(390,104,210,104,'open') + tx(300,120,'stornieren()',{fs:10.5}) + tx(300,133,'[reserviertePlaetze=1]',{fs:10.5})
+      + par([[430,60],[430,34],[480,34],[480,60]]) + tx(455,12,'stornieren()',{fs:10.5}) + tx(455,25,'[reserviertePlaetze>1]',{fs:10.5})
+      + par([[560,76],[600,76],[600,100],[560,100]]) + tx(606,84,'reservieren()',{a:'start',fs:10.5}) + tx(606,97,'[freiePlaetze>1]',{a:'start',fs:10.5})
+      + ar(530,116,530,240,'open') + tx(538,170,'reservieren()',{a:'start',fs:10.5}) + tx(538,183,'[freiePlaetze=1]',{a:'start',fs:10.5})
+      + ar(460,240,460,116,'open') + tx(452,178,'stornieren()',{a:'end',fs:10.5})
+      + ar(410,116,330,330,'open') + tx(356,232,'schliessen()',{a:'end',fs:10.5}) + par([[500,288],[500,354],[380,354]]) + tx(440,370,'schliessen()',{fs:10.5})
+      + co(140,262,1) + co(16,108,2) + co(534,44,3) + co(300,150,4) + co(495,212,5) + co(205,268,6));
+    // Zustand · eigenes Szenario
+    const l2Z2 = svg(740,380, state(80,46,140,48,'Verfügbar') + state(380,46,130,48,'Reserviert') + state(380,190,180,64,'Ausgeliehen',['do / kmZaehlen()']) + state(60,190,180,64,'Defekt',['entry / meldungSenden()']) + state(60,320,160,44,'Ausgemustert')
+      + start(22,70) + ar(30,70,80,70,'open') + tx(55,60,'anlegen()',{fs:10})
+      + ar(220,60,380,60,'open') + tx(300,52,'reservieren()',{fs:10.5}) + ar(380,82,220,82,'open') + tx(300,98,'after(15 Min)',{fs:10.5})
+      + ar(445,94,445,190,'open') + tx(453,146,'ausleihen()',{a:'start',fs:10.5})
+      + ar(395,190,205,94,'open') + tx(326,132,'zurueckgeben(z)',{a:'start',fs:10.5}) + tx(326,145,'[z=ok]',{a:'start',fs:10.5})
+      + ar(380,232,240,232,'open') + tx(310,224,'zurueckgeben(z)',{fs:10.5}) + tx(310,248,'[z=defekt]',{fs:10.5})
+      + ar(150,190,150,94,'open') + tx(142,136,'reparieren()',{a:'end',fs:10.5}) + tx(142,149,'[reparaturen<3]',{a:'end',fs:10.5})
+      + ar(150,254,150,320,'open') + tx(158,284,'reparieren()',{a:'start',fs:10.5}) + tx(158,297,'[reparaturen>=3]',{a:'start',fs:10.5})
+      + ar(220,342,318,342,'open') + tx(270,334,'verschrotten()',{fs:10.5}) + end(330,342)
+      + par([[560,206],[600,206],[600,236],[560,236]]) + tx(606,206,'verlaengern()',{a:'start',fs:10.5}) + tx(606,219,'[verlaengerungen<2]',{a:'start',fs:10.5}) + tx(606,232,'/ fristSetzen()',{a:'start',fs:10.5})
+      + co(22,96,1) + co(300,116,2) + co(574,264,3) + co(310,268,4) + co(285,290,5) + co(620,254,6));
+
+    // Aktivität · Übungsblatt 7, Übung 8c
+    const l2A1 = svg(640,712, lane(10,8,620,696,[[10,240,'Vertrieb'],[250,200,'Rechnungswesen'],[450,180,'Kunde']],'Pool')
+      + start(130,64) + ar(130,72,130,98,'open') + act(130,114,'Auftrag prüfen',120) + ar(130,130,130,152,'open') + dec(130,165)
+      + ar(130,178,130,200,'open') + tx(138,193,'[akzeptiert]',{a:'start',fs:10.5}) + act(130,216,'Auftrag bearbeiten',140) + ar(130,232,130,252,'open') + bar(70,252,140)
+      + ar(130,257,130,390,'open') + act(130,406,'Lieferung durchführen',150)
+      + par([[195,257],[195,300],[280,300]]) + act(350,300,'Rechnung versenden',140) + ar(350,316,350,342,'open') + objn(350,358,'Rechnung',100)
+      + par([[400,358],[540,358],[540,392]]) + act(540,408,'Rechnung bezahlen',130) + ar(505,424,420,466,'open') + act(350,482,'Zahlungseingang prüfen',160)
+      + par([[270,482],[195,482],[195,560]]) + ar(130,422,130,560,'open') + bar(70,560,140) + ar(130,565,130,590,'open') + dec(130,603)
+      + par([[117,165],[36,165],[36,603],[117,603]]) + tx(42,292,'[nicht',{a:'start',fs:10.5}) + tx(42,305,'akzeptiert]',{a:'start',fs:10.5})
+      + ar(130,616,130,632,'open') + act(130,648,'Auftrag abschließen',150) + ar(130,664,130,678,'open') + end(130,690)
+      + noteB(300,532,110,44,['Hinweis','zur Prüfung']) + ln(350,498,355,532,{d:true,c:C.m})
+      + co(30,60,1) + co(158,158,2) + co(222,252,3) + co(418,342,4) + co(222,560,5) + co(158,598,6) + co(424,530,7));
+    // Aktivität · eigenes Szenario (mit Objektzuständen)
+    const l2A2 = svg(690,770, lane(10,8,670,754,[[10,210,'Kunde'],[220,230,'Lager'],[450,230,'Buchhaltung']])
+      + start(115,56) + ar(115,64,115,84,'open') + act(115,100,'Retoure anmelden',150) + ar(115,116,115,136,'open') + act(115,152,'Paket senden',120) + ar(115,168,115,187,'open') + onode(115,206,'Paket','[versendet]',110)
+      + par([[170,206],[335,206],[335,232]]) + dec(335,245) + ar(335,258,335,272,'open') + act(335,288,'Ware prüfen',120) + ar(335,304,335,322,'open') + dec(335,335)
+      + ar(322,335,175,335,'open') + tx(250,327,'[unvollständig]',{fs:10.5}) + act(115,335,'Teile nachsenden',120) + par([[115,319],[115,245],[322,245]])
+      + ar(348,335,500,335,'open') + tx(422,327,'[beschädigt]',{fs:10.5}) + act(565,335,'Retoure ablehnen',130)
+      + ar(335,348,335,376,'open') + tx(343,368,'[ok]',{a:'start',fs:10.5}) + bar(280,376,280)
+      + ar(320,381,320,410,'open') + act(320,426,'Ware einlagern',120) + ar(320,442,320,600,'open')
+      + ar(540,381,540,410,'open') + act(540,426,'Gutschrift erstellen',150) + ar(540,442,540,462,'open') + onode(540,481,'Gutschrift','[erstellt]',120) + ar(540,500,540,520,'open') + act(540,536,'Betrag erstatten',130) + ar(540,552,540,600,'open')
+      + bar(280,600,280) + ar(335,605,335,628,'open') + dec(335,641) + par([[630,335],[655,335],[655,641],[348,641]])
+      + ar(335,654,335,676,'open') + act(335,692,'Kunde benachrichtigen',170) + ar(335,708,335,728,'open') + end(335,740)
+      + co(44,206,1) + co(364,250,2) + co(364,314,3) + co(578,378,4) + co(618,470,5) + co(578,602,6) + co(306,641,7));
+
+    // Klasse · Musterlösung Übungsblatt 6, Übung 7a
+    const l2K1 = (() => { const ku = cls(60,20,180,'Kunde',['kundennummer','telefonnummer','email-Adresse'],['benachrichtigen()'],{i:true,prop:'{abstract}'}), au = cls(410,20,180,'Auftrag',['auftragsnummer','gesamtbetrag'],[]),
+        pk = cls(20,250,130,'Privatkunde',['vorname','nachname'],null), gk = cls(170,250,150,'Geschäftskunde',['unternehmensname'],null),
+        ap = cls(400,230,200,'Auftragsposition',['auftragspositionsnummer','gesamtbetrag','menge'],['hinzufuegen_produkt()']),
+        pr = cls(420,400,160,'Produkt',['produktbeschreibung','einzelpreis'],null,{i:true,prop:'{abstract}'}), ma = cls(330,540,150,'Material',['materialnummer','beschreibung'],null), dl = cls(520,540,150,'Dienstleistung',['dienstleistung_ID','beschreibung'],null);
+      return svg(690,620, ln(240,60,410,60) + mult(246,52,'1') + mult(404,52,'*','end') + tx(325,52,'erteilt ▶',{fs:11,i:true,c:C.m})
+        + pl([[85,250],[85,215],[245,215],[245,250]]) + ar(150,215,150,ku.b,'hollow')
+        + ln(500,au.b,500,230) + mult(508,au.b+16,'1') + mult(508,222,'1..10') + tx(492,165,'gehört zu ▲',{a:'end',fs:11,i:true,c:C.m})
+        + ln(500,ap.b,500,400) + mult(508,ap.b+16,'*') + mult(508,394,'1')
+        + pl([[405,540],[405,510],[595,510],[595,540]]) + ar(500,510,500,pr.b,'hollow')
+        + ku.s + au.s + pk.s + gk.s + ap.s + pr.s + ma.s + dl.s
+        + co(46,24,1) + co(172,200,2) + co(325,82,3) + co(572,212,4) + co(406,404,5) + co(540,366,6)); })();
+    // Klasse · eigenes Szenario
+    const l2K2 = (() => { const pe = cls(250,10,160,'Person',['Name','Geburtsdatum'],null,{i:true,prop:'{abstract}'}), st = cls(40,130,170,'Student',['Matrikelnummer','/ Semesteranzahl'],['anmelden()']),
+        pf = cls(480,130,170,'Professor',['Fachgebiet'],['bewerten()']), an = cls(250,240,150,'Anmeldung',['Datum','Note'],null), pu = cls(480,330,170,'Prüfung',['Datum','Raum'],null),
+        mo = cls(480,470,170,'Modul',['Kürzel','ECTS'],null), sg = cls(140,470,170,'Studiengang',['Name','Abschluss'],null);
+      return svg(790,600, pl([[125,130],[125,108],[565,108],[565,130]]) + ar(330,108,330,pe.b,'hollow')
+        + ln(565,pf.b,565,330) + mult(573,pf.b+16,'1') + mult(573,322,'*') + tx(557,268,'prüft ▼',{a:'end',fs:11,i:true,c:C.m})
+        + pl([[125,st.b],[125,361],[480,361]]) + mult(133,st.b+16,'*') + mult(474,353,'*','end') + ln(325,an.b,325,361,{d:true})
+        + ar(565,pu.b,565,470,'dfilled') + mult(573,pu.b+16,'1..*') + mult(573,458,'1')
+        + ar(480,500,310,500,'dhollow') + mult(474,492,'*','end') + mult(334,492,'1..*')
+        + pl([[650,490],[690,490],[690,560],[600,560],[600,mo.b]]) + mult(656,506,'*') + tx(698,494,'Folgemodul',{a:'start',fs:10,c:C.m}) + mult(608,548,'*') + tx(594,552,'Voraussetzung',{a:'end',fs:10,c:C.m})
+        + pe.s + st.s + pf.s + an.s + pu.s + mo.s + sg.s
+        + co(236,18,1) + co(26,190,2) + co(412,252,3) + co(612,430,4) + co(395,486,5) + co(704,470,6) + co(470,262,7)); })();
+
+    // Anwendungsfall · Folie S. 192
+    const l2U1 = svg(740,400, rc(170,10,560,380,{f:'transparent'}) + tx(180,28,'SeminarOrganisation',{a:'start',fs:11,w:500})
+      + actor(70,30,'Kunde',{i:true}) + actor(35,190,'Firmenkunde') + actor(115,190,'Privatkunde') + ar(40,190,64,108,'hollow') + ar(110,190,78,108,'hollow')
+      + uc(420,70,76,22,'Verkaufen',{i:true}) + ln(84,51,345,66) + mult(96,46,'1') + mult(336,58,'*','end')
+      + uc(500,190,80,24,'interne Veran-|staltung buchen') + uc(660,190,66,24,'öffentliche Ver-|anst. buchen') + ar(490,166,435,92,'hollow') + ar(640,166,465,88,'hollow')
+      + uc(290,300,96,40,'Informieren',{ep:'Zusätzliche Wünsche'}) + ar(370,88,316,262,'open',{d:true}) + tx(352,180,'«include»',{a:'end',fs:10.5})
+      + uc(600,310,84,26,'Adressaufkleber|erstellen') + ar(516,312,386,306,'open',{d:true}) + tx(452,298,'«extend»',{fs:10.5}) + tx(452,350,'Der Kunde wünscht Info-Material',{fs:10.5,c:C.m})
+      + co(40,30,1) + co(20,160,2) + co(220,46,3) + co(420,30,4) + co(320,190,5) + co(170,300,6) + co(452,370,7));
+    // Anwendungsfall · eigenes Szenario
+    const l2U2 = svg(760,430, rc(170,10,450,410,{f:'transparent'}) + tx(180,28,'Carsharing-App',{a:'start',fs:11,w:500})
+      + uc(310,82,96,40,'Fahrzeug buchen',{i:true,ep:'Versicherung'}) + uc(250,200,66,22,'Spontan buchen') + uc(400,200,66,22,'Vorab buchen') + ar(260,178,290,120,'hollow') + ar(390,178,335,120,'hollow')
+      + uc(520,64,70,24,'Führerschein|prüfen') + ar(406,78,450,70,'open',{d:true}) + tx(430,58,'«include»',{fs:10.5})
+      + uc(520,180,70,24,'Vollkasko|hinzufügen') + ar(480,158,380,112,'open',{d:true}) + tx(470,128,'«extend»',{a:'start',fs:10.5}) + tx(520,226,'[Kunde wünscht Vollkasko]',{fs:10,c:C.m})
+      + uc(300,290,72,22,'Fahrt abrechnen') + uc(500,300,76,24,'Zahlung|durchführen') + ar(372,292,424,298,'open',{d:true}) + tx(398,284,'«include»',{fs:10.5})
+      + uc(300,380,78,24,'Fahrzeug|ausmustern')
+      + actor(70,50,'Kunde') + ln(84,71,214,80) + ln(84,71,232,284) + mult(92,66,'1') + mult(206,74,'*','end') + mult(220,272,'*','end')
+      + actor(70,330,'Servicemitarbeiter') + ln(84,351,222,378) + mult(92,346,'2') + mult(214,370,'*','end')
+      + actor(700,260,'Zahlungsdienst') + ln(686,281,576,300)
+      + co(310,140,1) + co(430,40,2) + co(600,150,3) + co(398,320,4) + co(116,370,5) + co(720,240,6));
+
+    // Sequenz · Folie S. 307
+    const l2S1 = svg(720,385, actor(40,0,'') + ln(40,52,40,372,{d:true,c:C.m}) + actv(40,62,355)
+      + life(230,66,':Kunde',250,{w:100}) + ar(45,80,180,80,'open',{d:true}) + tx(110,60,'[Neukunde]',{fs:10.5,w:600}) + tx(110,73,'erfassen()',{fs:10.5}) + actv(230,94,205)
+      + msg(45,225,130,'buchen()','filled') + life(380,126,':Veranstaltung',250,{w:110}) + ar(235,140,325,140,'open',{d:true}) + actv(380,154,190) + ar(375,190,235,190,'open',{d:true}) + ar(225,205,45,205,'open',{d:true})
+      + life(540,10,':Kunde',372,{w:100}) + tx(110,224,'[ELSE]',{fs:10.5,w:600}) + msg(45,535,240,'aktualisieren()','filled') + actv(540,240,350)
+      + msg(45,535,275,'buchen()','filled') + life(640,276,':Veranstaltung',372,{w:110}) + ar(545,290,585,290,'open',{d:true}) + actv(640,304,330) + ar(635,330,545,330,'open',{d:true}) + ar(535,345,45,345,'open',{d:true})
+      + co(110,40,1) + co(168,106,2) + co(140,190,3) + co(70,224,4) + co(560,312,5));
+    // Sequenz · eigenes Szenario
+    const l2S2 = svg(720,470, actor(40,0,'Kunde') + ln(40,72,40,460,{d:true,c:C.m}) + life(200,20,':Automat',460,{w:100}) + life(400,20,':Bank',460,{w:90}) + life(590,20,':Konto',460,{w:90})
+      + msg(45,195,84,'karteEinstecken()','filled') + actv(200,84,440) + msg(45,195,114,'pinEingeben(pin)','filled')
+      + msg(205,395,146,'pruefePin(pin)','filled') + actv(400,146,182) + ar(395,182,205,182,'open',{d:true}) + tx(300,176,'ok',{fs:11})
+      + tx(300,210,'[ok]',{fs:10.5,w:600}) + msg(205,395,228,'abheben(betrag)','filled') + actv(400,228,345)
+      + msg(405,585,256,'pruefeDeckung(betrag)','filled') + actv(590,256,330) + actv(596,282,310) + pl([[595,272],[630,272],[630,290],[602,290]]) + head(630,290,602,290,'filled') + tx(636,276,'abbuchen()',{a:'start',fs:10.5})
+      + ar(585,330,405,330,'open',{d:true}) + ar(395,345,205,345,'open',{d:true})
+      + ar(205,372,265,372,'open',{d:true}) + tx(236,364,'Beleg()',{fs:10.5}) + life(310,358,':Beleg',460,{w:90}) + actv(310,386,400)
+      + tx(120,422,'[ELSE]',{fs:10.5,w:600}) + ar(195,436,45,436,'filled') + tx(120,450,'karteAuswerfen()',{fs:10.5})
+      + co(26,84,1) + co(236,130,2) + co(352,172,3) + co(366,206,4) + co(668,300,5) + co(236,392,6) + co(80,422,7));
+
+    // Kommunikation · Folie S. 309
+    const l2C1 = svg(620,320, actor(40,10,'') + ln(56,40,330,40) + box(330,20,150,44,[':Klasse1','{transient}']) + tx(160,28,'1: Operation1()',{fs:11}) + sArr(212,24,'r')
+      + ln(355,64,355,140) + box(290,140,130,44,[':Klasse2','{new}']) + tx(335,104,'2: Operation2()',{a:'end',fs:11}) + sArr(343,90,'d')
+      + ln(455,64,530,140) + box(470,140,120,32,':Klasse4') + tx(512,104,'3: Operation4()',{a:'start',fs:11}) + sArr(502,82,'d')
+      + ln(355,184,355,250) + box(290,250,130,44,[':Klasse3','{new}']) + tx(335,222,'2.1: Operation3()',{a:'end',fs:11}) + sArr(343,208,'d')
+      + co(100,52,1) + co(222,114,2) + co(256,30,3) + co(436,174,4) + co(500,14,5));
+    // Kommunikation · eigenes Szenario (= Sequenz S2 als Kommunikationsdiagramm)
+    const l2C2 = svg(740,330, actor(36,20,'Kunde') + ln(52,56,220,56) + box(220,40,120,32,':Automat') + ln(340,56,500,56) + box(500,40,100,32,':Bank')
+      + ln(550,72,550,220) + box(500,220,100,32,':Konto') + ln(280,72,280,220) + box(220,220,120,44,[':Beleg','{new}'])
+      + tx(70,34,'1: karteEinstecken()',{a:'start',fs:10.5}) + sArr(120,44,'r') + tx(70,86,'2: pinEingeben(pin)',{a:'start',fs:10.5}) + sArr(120,66,'r')
+      + tx(420,34,'2.1: ok = pruefePin(pin)',{fs:10.5}) + sArr(407,44,'r') + tx(420,86,'2.2 [ok]: abheben(betrag)',{fs:10.5}) + sArr(407,66,'r')
+      + tx(562,140,'2.2.1: pruefeDeckung(betrag)',{a:'start',fs:10.5}) + sArr(562,150,'d')
+      + tx(250,130,'2.3 [ok]: Beleg()',{a:'end',fs:10.5}) + sArr(262,116,'d') + tx(250,170,'2.4*: zeileDrucken()',{a:'end',fs:10.5}) + sArr(262,156,'d')
+      + co(14,26,1) + co(420,108,2) + co(150,112,3) + co(118,170,4) + co(356,242,5));
+
+    // Objekt · Folie S. 250
+    const l2O1 = (() => { const a = cls(30,20,170,'Angestellter',['Name','Gehalt','Position'],null); const B = (x,y) => box(x,y,120,28,':Angestellter');
+      return svg(800,240, pl([[200,40],[240,40],[240,124],[150,124],[150,a.b]]) + tx(206,34,'Chef',{a:'start',fs:10.5,c:C.m}) + mult(206,54,'0..1') + mult(158,a.b+14,'*') + tx(160,140,'Mitarbeiter',{a:'start',fs:10.5,c:C.m}) + a.s
+        + ln(400,54,470,54) + ln(590,54,660,54) + ln(360,68,500,150) + ln(550,68,690,150)
+        + tx(404,46,'Chef',{a:'start',fs:10,c:C.m}) + tx(466,72,'Mitarbeiter',{a:'end',fs:10,c:C.m}) + tx(594,46,'Chef',{a:'start',fs:10,c:C.m}) + tx(656,72,'Mitarbeiter',{a:'end',fs:10,c:C.m})
+        + tx(372,96,'Chef',{a:'start',fs:10,c:C.m}) + tx(496,140,'Mitarbeiter',{a:'end',fs:10,c:C.m}) + tx(562,96,'Chef',{a:'start',fs:10,c:C.m}) + tx(686,140,'Mitarbeiter',{a:'end',fs:10,c:C.m})
+        + B(280,40) + B(470,40) + B(660,40) + B(470,150) + B(660,150)
+        + co(16,20,1) + co(254,60,2) + co(340,26,3) + co(530,108,4)); })();
+    // Objekt · eigenes Szenario mit Fehlersuche
+    const l2O2 = (() => { const te = cls(20,30,140,'Teilnehmer',['Name'],null), ku = cls(250,30,170,'Kurs',['Titel','MaxTeilnehmer'],null), tm = cls(520,30,150,'Termin',['Datum','Raum'],null);
+      const an = obj(20,170,160,'anna: Teilnehmer',['Name = »Anna«']), be = obj(20,290,160,'ben: Teilnehmer',['Name = »Ben«']), yo = obj(250,170,180,'yoga: Kurs',['Titel = »Yoga«','MaxTeilnehmer = 12']),
+        pi = obj(250,310,180,'pilates: Kurs',['Titel = »Pilates«','MaxTeilnehmer = 8']), t1 = obj(530,160,160,'t1: Termin',['Datum = 3.12.','Raum = A1']), t2 = obj(530,300,160,'t2: Termin',['Datum = 5.12.','Raum = B2']);
+      return svg(720,400, ln(160,54,250,54) + mult(166,46,'*') + mult(244,46,'0..3','end') + tx(205,72,'besucht ▶',{fs:11,i:true,c:C.m})
+        + ln(420,54,520,54) + mult(426,46,'1') + mult(514,46,'1..*','end') + tx(470,72,'hat ▶',{fs:11,i:true,c:C.m})
+        + ln(10,128,710,128,{d:true,c:C.m}) + tx(14,148,'Objektdiagramm',{a:'start',fs:10.5,c:C.m}) + tx(14,20,'Klassendiagramm',{a:'start',fs:10.5,c:C.m})
+        + ln(180,190,250,190) + ln(180,204,250,330) + ln(180,310,250,206) + ln(430,190,530,190) + mult(436,182,'1') + mult(524,182,'1..*','end') + ln(430,214,530,320) + ln(430,340,530,340)
+        + te.s + ku.s + tm.s + an.s + be.s + yo.s + pi.s + t1.s + t2.s); })();
+
+    // Paket · Folie S. 275
+    const l2P1 = svg(560,300, pkg(20,10,520,280,'Handelssystem') + pkg(80,70,140,50,'Einkauf') + pkg(340,70,140,50,'Verkauf') + pkg(210,200,140,50,'Lager')
+      + par([[210,232],[150,232],[150,120]],'open',{d:true}) + par([[350,232],[410,232],[410,120]],'open',{d:true}) + tx(418,180,'Abhängigkeit',{a:'start',fs:10.5,c:C.m})
+      + co(176,22,1) + co(160,170,2) + co(430,140,3));
+    // Paket · eigenes Szenario
+    const l2P2 = (() => { const pe = cls(90,44,140,'Person',null,null,{i:true,prop:'{abstract}'}), kd = cls(30,140,110,'Kunde',null,null), mi = cls(180,140,120,'Mitarbeiter',null,null),
+        bs = cls(380,50,130,'Bestellung',null,null), po = cls(570,50,120,'Position',null,null), ar1 = cls(560,290,130,'Artikel',null,null,{i:true,prop:'{abstract}'}),
+        bu = cls(480,374,90,'Buch',null,null), el = cls(590,374,110,'Elektronik',null,null), ka = cls(300,290,130,'Kategorie',null,null);
+      return svg(720,430, pkg(10,10,310,200,'Kunden') + pkg(340,10,370,200,'Bestellung') + pkg(10,240,700,180,'Katalog')
+        + pl([[85,140],[85,115],[240,115],[240,140]]) + ar(160,115,160,pe.b,'hollow')
+        + ar(570,65,510,65,'dfilled') + mult(516,58,'1') + mult(564,58,'1..*','end')
+        + pl([[85,170],[85,196],[445,196],[445,80]]) + mult(92,186,'1') + mult(452,94,'*')
+        + ln(630,80,630,290) + mult(638,96,'*') + mult(638,284,'1')
+        + ln(430,312,560,312) + mult(436,304,'1..*') + mult(554,304,'*','end')
+        + pl([[525,374],[525,354],[645,354],[645,374]]) + ar(625,354,625,ar1.b,'hollow')
+        + ar(340,30,320,30,'open',{d:true}) + ar(470,210,470,240,'open',{d:true})
+        + pe.s + kd.s + mi.s + bs.s + po.s + ar1.s + bu.s + el.s + ka.s
+        + co(250,60,1) + co(540,84,2) + co(250,183,3) + co(660,140,4) + co(330,48,5)); })();
+
+    const L2S = {
+      zustand: [
+        L2('Flugbuchung', 'Folie S. 296', 'Lebenslauf eines Flug-Objekts von der Einrichtung bis zur Schließung.', l2Z1, [
+          ['① Start lesen','Der Startpfeil trägt flugEinrichten(). Das Objekt beginnt in OhneReservierung.'],
+          ['② Zustand mit entry','entry / ruecksetzen() läuft bei jedem Eintritt, also auch, wenn der letzte Platz storniert wird.'],
+          ['Erlaubte Ereignisse je Zustand','Nur Ereignisse an Pfeilen, die aus dem Zustand herausführen, sind dort erlaubt (S. 292). In OhneReservierung gibt es nur reservieren() und flugStreichen(), kein stornieren().'],
+          ['③ ④ Gleiches Ereignis, mehrere Pfeile','stornieren() verlässt TeilweiseReserviert zweimal. Bedingungen prüfen: [reserviertePlaetze>1] bleibt im Zustand, [reserviertePlaetze=1] führt zu OhneReservierung. Zusammen vollständig und ohne Überschneidung, weil in diesem Zustand mindestens ein Platz reserviert ist.'],
+          ['Dasselbe für reservieren()','[freiePlaetze>1] bleibt im Zustand, [freiePlaetze=1] bucht den letzten Platz und führt zu Ausgebucht.'],
+          ['⑤ Pfeil ohne Bedingung','stornieren() aus Ausgebucht braucht keine Bedingung: Danach ist immer genau ein Platz frei.'],
+          ['⑥ Wege zum Ende','Aus OhneReservierung über flugStreichen(). Aus Geschlossen führt ein Pfeil ohne Ereignis zum Ende. Nach UML-Standard schaltet er automatisch; die Folie erklärt das nicht.'],
+          ['Klausur-Check','Zu jedem Ereignis, das mehrfach aus einem Zustand führt, die Bedingungen nachrechnen. Fehlt ein Fall oder überschneiden sich zwei, ist das der Fehler. Auf der Folie steht „resevieren()“, ein Tippfehler.']
+        ]),
+        L2('Leihfahrrad', 'eigenes Szenario', 'Ein Leihfahrrad wird angelegt, reserviert, ausgeliehen, zurückgegeben, repariert und irgendwann ausgemustert.', l2Z2, [
+          ['① Start','anlegen() erzeugt das Rad im Zustand Verfügbar.'],
+          ['Erlaubte Ereignisse','In Verfügbar ist nur reservieren() erlaubt. ausleihen() hat dort keinen Pfeil und ist ohne Reservierung nicht möglich.'],
+          ['② Zeitereignis','after(15 Min): Wird das Rad nicht ausgeliehen, verfällt die Reservierung von selbst.'],
+          ['③ Dauernde Aktion','do / kmZaehlen() läuft, solange das Rad ausgeliehen ist.'],
+          ['④ zurueckgeben(z) prüfen','Zwei Pfeile mit [z=ok] und [z=defekt]. Vollständig nur, wenn z genau diese zwei Werte haben kann. Gibt es einen dritten Wert, fehlt ein Fall.'],
+          ['⑤ reparieren() prüfen','[reparaturen<3] und [reparaturen>=3] decken alle Zahlen ab und überschneiden sich nicht.'],
+          ['⑥ Bedingung ohne Gegenstück','verlaengern() [verlaengerungen<2] hat keinen zweiten Pfeil. Ist die Bedingung falsch, schaltet nichts, das Ereignis bleibt ohne Wirkung (UML-Standard). Erlaubt, muss aber gewollt sein.'],
+          ['entry bei Defekt','entry / meldungSenden() läuft bei jedem Eintritt in Defekt.'],
+          ['Klausur-Check','Pro Zustand alle Ereignisse auflisten, Ziel je Bedingung notieren, Lücken und Überschneidungen benennen.']
+        ])
+      ],
+      aktivitaet: [
+        L2('Auftrag mit Partitionen', 'Übungsblatt 7, Übung 8c', 'Aufgabe: Interpretieren Sie alle möglichen Abläufe. Welche Notationselemente wurden mit welcher Semantik verwendet? Die Schritte sind meine Interpretation, die Besprechung ist am 2.12. in der Vorlesung.', l2A1, [
+          ['① Partitionen lesen','Pool mit drei Verantwortungsbereichen: Vertrieb, Rechnungswesen, Kunde. Jede Aktion gehört der Einheit ihrer Spalte (S. 287).'],
+          ['② Entscheidung','Nach Auftrag prüfen geht es mit [akzeptiert] oder [nicht akzeptiert] weiter. Zusammen decken beide alle Fälle ab und schließen sich aus.'],
+          ['Ablauf 1: nicht akzeptiert','Der linke Pfeil führt direkt zur Raute vor Auftrag abschließen, danach Ende.'],
+          ['③ Aufspalten','Bei [akzeptiert] folgt Auftrag bearbeiten, dann der Balken: Ab hier laufen zwei Stränge parallel.'],
+          ['④ Objektfluss','Rechnung versenden erzeugt das Objekt Rechnung. Es geht an den Kunden, der zahlt. Danach prüft das Rechnungswesen den Zahlungseingang. Ein Zustand ist hier nicht angegeben, er wäre optional als [Zustand] möglich.'],
+          ['⑤ Synchronisation','Erst wenn Lieferung durchführen und Zahlungseingang prüfen fertig sind, geht es weiter (logisches UND).'],
+          ['⑥ Zusammenführung','Die Raute vereint beide Abläufe (logisches ODER). Es kommt immer nur einer an, deshalb Raute statt Balken.'],
+          ['⑦ Notiz','Die Notiz an Zahlungseingang prüfen ist ein Kommentar und ändert den Ablauf nicht.'],
+          ['Ergebnis','Genau zwei Abläufe. Im akzeptierten Ablauf ist die Reihenfolge zwischen Lieferung und Rechnungsstrang offen, beide laufen parallel.']
+        ]),
+        L2('Retoure mit Objektzuständen', 'eigenes Szenario', 'Ein Kunde schickt Ware zurück. Das Lager prüft, die Buchhaltung erstattet.', l2A2, [
+          ['① Objekt mit Zustand','Paket [versendet] ist ein Objektknoten. Der Zustand steht in eckigen Klammern und sagt, in welchem Zustand das Objekt die Aktion verlässt (S. 288).'],
+          ['② Zusammenführung vor der Prüfung','Die Raute vor Ware prüfen hat zwei Eingänge: das Paket und nachgesendete Teile. So entsteht eine Schleife, ohne dass zwei Pfeile direkt in die Aktion laufen.'],
+          ['③ Entscheidung mit drei Ausgängen','[ok], [unvollständig], [beschädigt]: Sie schließen sich aus. Vollständig sind sie nur, wenn es kein viertes Prüfergebnis gibt.'],
+          ['Schleife','[unvollständig] führt über Teile nachsenden zurück zur Raute. Die Prüfung kann sich beliebig oft wiederholen.'],
+          ['④ Aufspalten','Bei [ok] laufen Ware einlagern (Lager) und der Gutschrift-Strang (Buchhaltung) parallel.'],
+          ['⑤ Zustandswechsel','Gutschrift [erstellt] ist Ergebnis von Gutschrift erstellen und Eingabe für Betrag erstatten. Würde danach Gutschrift [ausgezahlt] folgen, sähe man den Zustandswechsel des Objekts.'],
+          ['⑥ Synchronisation','Weiter erst, wenn Einlagern und Erstatten beide fertig sind.'],
+          ['⑦ Zusammenführung vor dem Ende','Der [ok]-Ablauf und der abgelehnte Ablauf treffen sich an der Raute.'],
+          ['Klausur-Check','Abläufe zählen: ok, beschädigt, unvollständig mit Schleife. Jede Raute einordnen: Entscheidung (ein Eingang, mehrere Ausgänge) oder Zusammenführung (mehrere Eingänge, ein Ausgang).']
+        ])
+      ],
+      klasse: [
+        L2('Aufträge und Produkte', 'Musterlösung Übungsblatt 6, Übung 7a', 'Kunden (privat oder geschäftlich) erteilen Aufträge mit 1 bis 10 Positionen. Jede Position betrifft genau ein Material oder eine Dienstleistung.', l2K1, [
+          ['① Abstrakte Klassen','Kunde und Produkt sind kursiv mit {abstract}: Von ihnen gibt es keine eigenen Objekte, nur über Unterklassen (S. 268).'],
+          ['② Vererbung','Privatkunde und Geschäftskunde erben Attribute, Operationen und die Assoziation erteilt. „Entweder privat oder geschäftlich“ steckt in der Vererbung.'],
+          ['③ In beide Richtungen lesen','Ein Kunde erteilt beliebig viele Aufträge (*). Ein Auftrag wird von genau einem Kunden erteilt (1). ▶ gibt die Leserichtung des Namens an.'],
+          ['④ Restriktion als Kardinalität','„Mindestens eine, höchstens 10 Positionen“ wird zu 1..10. „gehört zu ▲“ liest man von unten nach oben: Position gehört zu Auftrag.'],
+          ['⑤ Entweder Material oder Dienstleistung','Jede Position verweist auf genau ein Produkt (1). Weil Produkt abstrakt ist, ist es immer ein Material oder eine Dienstleistung.'],
+          ['⑥ Rückrichtung','Ein Produkt kann in beliebig vielen Positionen vorkommen (*).'],
+          ['Analyse-Phase','Keine Navigationspfeile, keine Datentypen, keine Sichtbarkeiten: Die Aufgabe verlangt ausdrücklich die Analyse.'],
+          ['Abweichung zur Folie','Die Musterlösung schreibt Attribute klein und nutzt einen Unterstrich (hinzufuegen_produkt). Die Folien S. 233–235 empfehlen deutsche Attribute groß und keine Unterstriche. Einheitlich bleiben, im Zweifel im Praktikum fragen.']
+        ]),
+        L2('Prüfungsverwaltung', 'eigenes Szenario', 'Studierende melden sich zu Prüfungen an (mit Datum und Note). Professoren prüfen. Prüfungen gehören fest zu einem Modul, Module können in mehreren Studiengängen vorkommen und setzen andere Module voraus.', l2K2, [
+          ['① Abstrakte Oberklasse','Person ist abstrakt. Student und Professor erben Name und Geburtsdatum.'],
+          ['② Abgeleitetes Attribut','/ Semesteranzahl wird berechnet und nicht gespeichert (S. 207).'],
+          ['③ Assoziative Klasse','Student und Prüfung stehen in *-zu-*-Beziehung. Datum und Note gehören zu keiner der beiden Klassen allein, sondern zur Anmeldung, deshalb die gestrichelt angehängte Klasse (S. 254).'],
+          ['④ Komposition','Eine Prüfung gehört zu genau einem Modul und verschwindet mit ihm. Am Ganzen steht 1, nie mehr (S. 258).'],
+          ['⑤ Aggregation','Ein Modul kann in mehreren Studiengängen vorkommen. Bei der Aggregation darf das Teil geteilt werden, deshalb 1..* am Ganzen (S. 257).'],
+          ['⑥ Reflexive Assoziation','Modul zu Modul mit Rollen: Ein Modul kann Voraussetzung für viele Folgemodule sein und umgekehrt (S. 250).'],
+          ['⑦ Leserichtung','„Professor prüft ▼ Prüfung“: von oben nach unten lesen.'],
+          ['Klausur-Check','Jeden Satz im Text einer Kardinalität zuordnen. Komposition nur, wenn das Teil ohne das Ganze nicht existiert und nicht geteilt wird.']
+        ])
+      ],
+      anwendungsfall: [
+        L2('Seminarorganisation', 'Folie S. 192', 'Alle Notationselemente des Anwendungsfalldiagramms in einem Bild.', l2U1, [
+          ['① Abstrakter Akteur','Kunde ist kursiv: Es gibt ihn nur als Firmenkunde oder Privatkunde.'],
+          ['② Generalisierung der Akteure','Geschlossene Spitze, vom speziellen zum allgemeinen Akteur. Beide Unterarten dürfen alles, was Kunde darf (S. 179–180).'],
+          ['③ Kardinalität','1 am Kunden, * am Anwendungsfall: An einem Verkauf ist genau ein Kunde beteiligt, ein Kunde an beliebig vielen Verkäufen.'],
+          ['④ Abstrakter Anwendungsfall','Verkaufen ist kursiv und wird über die Spezialisierungen interne und öffentliche Veranstaltung buchen ausgeführt.'],
+          ['⑤ «include»','Verkaufen bindet Informieren immer ein. Der Pfeil zeigt zum eingebundenen Fall (S. 182).'],
+          ['⑥ Extension Point','Informieren nennt unter dem Trennstrich die Stelle Zusätzliche Wünsche, an der erweitert werden darf (S. 183).'],
+          ['⑦ «extend» mit Bedingung','Adressaufkleber erstellen läuft nur, wenn der Kunde Info-Material wünscht. Der Pfeil zeigt zum erweiterten Fall (S. 184).'],
+          ['Klausur-Check','Pro Pfeil fragen: immer (include) oder nur unter Bedingung (extend)? Passen Richtung und Stereotyp?']
+        ]),
+        L2('Carsharing', 'eigenes Szenario', 'Kunden buchen Fahrzeuge spontan oder vorab. Dabei wird immer der Führerschein geprüft, auf Wunsch kommt eine Vollkasko dazu. Abgerechnet wird über einen externen Zahlungsdienst. Ein Fahrzeug dürfen nur zwei Servicemitarbeiter gemeinsam ausmustern.', l2U2, [
+          ['① Abstrakter Fall mit Spezialisierung','Fahrzeug buchen ist kursiv. Spontan buchen und Vorab buchen erben davon, auch das «include».'],
+          ['② «include»','Führerschein prüfen läuft bei jeder Buchung, Pfeil zum eingebundenen Fall.'],
+          ['③ «extend»','Vollkasko hinzufügen läuft nur bei [Kunde wünscht Vollkasko]. Der Extension Point Versicherung steht im erweiterten Fall.'],
+          ['④ Externes System','Der Zahlungsdienst ist ein Akteur außerhalb der Systemgrenze (S. 171).'],
+          ['⑤ Kardinalität 2','2 am Servicemitarbeiter: An jedem Ausmustern sind genau zwei beteiligt (wie das Vier-Augen-Prinzip in der Musterlösung zu Blatt 5).'],
+          ['Klausur-Check','Jeder Akteur außerhalb, jeder Fall in der Grenze, Systemname oben. Jede Muss-Formulierung im Text wird «include», jede Kann-Formulierung «extend».']
+        ])
+      ],
+      sequenz: [
+        L2('Neukunde oder Bestandskunde', 'Folie S. 307', 'Ein Akteur bucht eine Veranstaltung, für Neukunden wird vorher ein Kunde angelegt.', l2S1, [
+          ['① Alternative mit Bedingung','[Neukunde] steht über der ersten Nachricht. Nur in diesem Fall läuft der obere Teil. So zeigt die Folie Alternativen, ohne Rahmen.'],
+          ['② Objekt erzeugen','erfassen() ist gestrichelt und endet am Kopf eines neuen :Kunde. Seine Lebenslinie beginnt erst dort (S. 304–305).'],
+          ['Synchroner Aufruf','buchen() hat eine gefüllte Spitze: Der Akteur wartet, bis :Kunde fertig ist. :Kunde erzeugt dabei ein :Veranstaltung-Objekt.'],
+          ['③ Antworten','Gestrichelte Pfeile mit offener Spitze zurück. Sie sind optional und zeigen das Ende der Bearbeitung.'],
+          ['④ [ELSE]','Sonst wird der bestehende :Kunde aktualisiert und dann gebucht. [Neukunde] und [ELSE] decken zusammen alle Fälle ab.'],
+          ['⑤ Steuerungsfokus','Die Balken zeigen, solange ein Objekt aktiv ist. Ihre Länge zeigt die relative Dauer (S. 305).'],
+          ['Klausur-Check','Von oben nach unten lesen, jede Bedingung auf Vollständigkeit prüfen, Erzeugung und Antworten an der Strichart erkennen.']
+        ]),
+        L2('Geldautomat', 'eigenes Szenario', 'Ein Kunde hebt Geld ab. Der Automat prüft die PIN bei der Bank, die Bank bucht vom Konto ab, danach wird ein Beleg erzeugt.', l2S2, [
+          ['① Objekte und Zeit','Akteur und Objekte oben, die Zeit läuft nach unten. Alle Objekte außer :Beleg existieren schon.'],
+          ['② Synchroner Aufruf','pruefePin(pin) mit gefüllter Spitze: Der Automat wartet auf die Bank.'],
+          ['③ Antwort mit Wert','Gestrichelt zurück mit ok. Den Rückgabewert darf man an die Antwort schreiben.'],
+          ['④ Bedingung','[ok] über abheben(betrag). Der Gegenfall [ELSE] steht unten. Zusammen vollständig.'],
+          ['⑤ Nachricht an sich selbst',':Konto ruft abbuchen() bei sich selbst auf: versetzter zweiter Balken (S. 305).'],
+          ['⑥ Erzeugen','Beleg() ist gestrichelt auf den Kopf des neuen :Beleg. Der Name entspricht der Klasse wie Klasse3() auf S. 305.'],
+          ['⑦ [ELSE]','Ist die PIN falsch, wird nur die Karte ausgeworfen.'],
+          ['Klausur-Check','Ein Sequenzdiagramm zeigt ein Szenario oder die Alternativen eines Szenarios, nicht alle Ablaufpfade (S. 302).']
+        ])
+      ],
+      kommunikation: [
+        L2('Syntax-Beispiel', 'Folie S. 309', 'Alle Beschriftungen des Kommunikationsdiagramms an einem Beispiel.', l2C1, [
+          ['① Links','Die Linien sind Links wie im Objektdiagramm. Nachrichten laufen nur entlang dieser Links (S. 309).'],
+          ['② Nummern lesen','Erst 1, dann 2, darin 2.1, dann 3. 2.1 heißt: wird während Operation2() von :Klasse2 ausgelöst.'],
+          ['③ Kleiner Pfeil','Der Pfeil neben der Nachricht zeigt ihre Richtung. Der Link selbst hat keine Richtung.'],
+          ['④ {new}',':Klasse2 und :Klasse3 entstehen während der Interaktion.'],
+          ['⑤ {transient}','Nach UML-Standard existiert :Klasse1 nur während dieser Interaktion. Die Folie zeigt nur die Notation.'],
+          ['Klausur-Check','Nummern in eine Reihenfolge bringen und daraus ein Sequenzdiagramm zeichnen können. Beide zeigen dasselbe Szenario.']
+        ]),
+        L2('Geldautomat', 'eigenes Szenario', 'Dasselbe Szenario wie das Sequenzdiagramm Geldautomat, nur als Kommunikationsdiagramm. Vergleichen lohnt sich.', l2C2, [
+          ['① Reihenfolge nur über Nummern','Es gibt keine Zeitachse. 1 und 2 kommen vom Kunden, alles mit 2.x passiert während pinEingeben().'],
+          ['② Antwort speichern','2.1: ok = pruefePin(pin) speichert den Rückgabewert in ok (S. 310).'],
+          ['③ Bedingte Nachricht','2.2 [ok] und 2.3 [ok] laufen nur, wenn ok wahr ist.'],
+          ['④ Iteration','2.4*: zeileDrucken() wird mehrfach gesendet.'],
+          ['⑤ {new}',':Beleg entsteht während der Interaktion.'],
+          ['Verschachtelung','2.2.1 wird von :Bank während abheben() gesendet: Die Nummer zeigt, wer gerade aktiv ist.'],
+          ['Klausur-Check','Jede Nachricht braucht einen Link zwischen Sender und Empfänger. Fehlt der Link, ist das Diagramm falsch.']
+        ])
+      ],
+      objekt: [
+        L2('Chef und Mitarbeiter', 'Folie S. 250', 'Klassendiagramm mit reflexiver Assoziation und ein passender Schnappschuss.', l2O1, [
+          ['① Klassendiagramm zuerst','Angestellter hat eine reflexive Assoziation mit den Rollen Chef (0..1) und Mitarbeiter (*).'],
+          ['② Kardinalitäten übersetzen','Jeder Angestellte hat höchstens einen Chef, ein Chef beliebig viele Mitarbeiter.'],
+          ['③ Objekte lesen','Alle Objekte sind anonym (:Angestellter) und unterstrichen.'],
+          ['④ Rollen an den Links','Jeder Link trägt dieselben Rollen wie die Assoziation. Der zweite Angestellte oben ist Mitarbeiter (links) und gleichzeitig Chef (rechts und unten).'],
+          ['Gegen die Kardinalität prüfen','Jedes Objekt hat höchstens einen Link in der Rolle Chef auf sich: 0..1 eingehalten. Ein Chef mit zwei Mitarbeitern ist mit * erlaubt.'],
+          ['Klausur-Check','Im Objektdiagramm keine Kardinalitäten. Jede Verbindung muss zu einer Assoziation im Klassendiagramm passen.']
+        ]),
+        L2('Kurse: Fehler finden', 'eigenes Szenario', 'Aufgabe: Passt das Objektdiagramm zum Klassendiagramm? Es enthält zwei Fehler.', l2O2, [
+          ['① Klassendiagramm übersetzen','Ein Kurs hat 1..* Termine, ein Termin gehört zu genau 1 Kurs. Ein Teilnehmer besucht 0..3 Kurse, ein Kurs hat beliebig viele Teilnehmer.'],
+          ['② Objekte zuordnen','Name vor dem Doppelpunkt, Klasse dahinter, unterstrichen. Attribute mit Werten passend zur Klasse.'],
+          ['③ Links je Objekt zählen','anna: 2 Kurse, ben: 1 Kurs (beide ≤ 3). yoga: 2 Termine, pilates: 1 Termin (beide ≥ 1).'],
+          ['④ Rückrichtung zählen','t1 gehört zu yoga. t2 hängt an yoga und pilates, erlaubt ist aber genau 1 Kurs. Fehler 1.'],
+          ['⑤ Notation prüfen','Am Link yoga–t1 stehen Kardinalitäten. Im Objektdiagramm gibt es keine. Fehler 2.'],
+          ['Klausur-Check','Immer beide Richtungen jeder Assoziation an den Objekten nachzählen.']
+        ])
+      ],
+      paket: [
+        L2('Handelssystem', 'Folie S. 275', 'Pakete in einem Paket mit Abhängigkeiten.', l2P1, [
+          ['① Pakete in Paketen','Handelssystem enthält die Pakete Einkauf, Verkauf und Lager (S. 274).'],
+          ['② Abhängigkeit','Gestrichelter Pfeil mit offener Spitze: Lager nutzt Elemente aus Einkauf und Verkauf. Ändert sich Einkauf, kann Lager betroffen sein.'],
+          ['③ Richtung','Der Pfeil zeigt vom abhängigen zum genutzten Paket (UML-Standard, die Folie zeigt nur die Darstellung).'],
+          ['Kriterien','Gute Pakete bilden eine logische Einheit, schneiden keine Vererbung und keine Aggregation und haben wenig Assoziationen nach außen (S. 276–277).']
+        ]),
+        L2('Online-Shop zerlegen', 'eigenes Szenario', 'Aufgabe: Ist der Schnitt in die drei Pakete gut? Begründe mit den Paketkriterien.', l2P2, [
+          ['① Vererbung im Paket','Person, Kunde und Mitarbeiter liegen zusammen in Kunden, Artikel, Buch und Elektronik zusammen in Katalog. Keine Vererbung wird geschnitten.'],
+          ['② Komposition im Paket','Bestellung und Position liegen beide in Bestellung. Lägen Position und Artikel zusammen in Katalog, wäre die Komposition durchtrennt.'],
+          ['③ Wenige Assoziationen nach außen','Nur zwei Assoziationen kreuzen eine Grenze: Kunde–Bestellung und Position–Artikel.'],
+          ['④ Kopplung','Innerhalb der Pakete hängen die Klassen eng zusammen, zwischen den Paketen nur über diese zwei Linien (S. 277).'],
+          ['⑤ Abhängigkeiten','Bestellung nutzt Kunden und Katalog, deshalb zwei gestrichelte Pfeile. Kunden und Katalog brauchen Bestellung nicht und können allein entwickelt werden.'],
+          ['Klausur-Check','Jede Klasse genau einem Paket zuordnen, dann jede Grenze gegen die Kriterien von S. 276–277 prüfen.']
+        ])
+      ]
+    };
+    sheets.forEach(sh => { sh.l2 = L2S[sh.k] || []; });
 
 
     const uml = { sheets, compares };
@@ -2759,10 +3137,13 @@ class Component extends DCLogic {
       { label:'Verhaltensdiagramme', sub:'dynamische Sicht: was passiert', ck:'p3', items:[MI('Anwendungsfalldiagramm','anwendungsfall','Was leistet das System für wen?'), MI('Aktivitätsdiagramm','aktivitaet','Wie läuft ein Prozess ab?'), MI('Zustandsdiagramm','zustand','Lebenszyklus eines Objekts')] },
       { label:'Interaktionsdiagramme', sub:'dynamisch: Objekte im Zusammenspiel', ck:'p5', items:[MI('Sequenzdiagramm','sequenz','Nachrichten in zeitlicher Reihenfolge'), MI('Kommunikationsdiagramm','kommunikation','Wer spricht mit wem?'), MI('Timing-Diagramm'), MI('Interaktionsübersichtsdiagramm')] }
     ].map(g => { const c = col(g.ck); return { ...g, c, soft:soft(c, 7), ink:ink(c) }; });
-    const umlSheets = D.uml.sheets.map(sh => { const c = col(SHC[sh.k] || 'color-accent'); const op = !!(s.umlSf || {})[sh.k], n = (sh.sf || []).length; return { anchor:'sheet-' + sh.k, title:sh.title, q:sh.q, ref:sh.ref, c, ink:ink(c), img:this.el(sh.img), legend:sh.legend,
+    const umlSheets = D.uml.sheets.map(sh => { const c = col(SHC[sh.k] || 'color-accent'); const op = !!(s.umlSf || {})[sh.k], n = (sh.sf || []).length; return { anchor:'sheet-' + sh.k, title:sh.title, q:sh.q, ref:sh.ref, c, ink:ink(c), soft:soft(c, 16), img:this.el(sh.img), legend:sh.legend,
       fr: (s.umlFr || {})[sh.k] ? (sh.fr || []).map(x => ({ t:x.t, d:x.d, ref: /^\d/.test(x.ref) ? 'S. ' + x.ref : x.ref, la:x.la, lb:x.lb, a:this.el(x.a), b:this.el(x.b), ca: x.cmp ? c : 'var(--bad)', cb: x.cmp ? c : 'var(--ok)' })) : [], frOpen: !!(s.umlFr || {})[sh.k], hasFr: (sh.fr || []).length > 0,
       frLabel: ((s.umlFr || {})[sh.k] ? 'Falsch vs. richtig ausblenden' : 'Falsch vs. richtig') + ' (' + (sh.fr || []).length + ')', frBg: (s.umlFr || {})[sh.k] ? soft(c, 18) : 'transparent', frToggle:() => this.setState(st => ({ umlFr: { ...(st.umlFr || {}), [sh.k]: !(st.umlFr || {})[sh.k] } })),
-      tips:(sh.tips || []).map(([v, r]) => ({ v, r: r ? 'S. ' + r : 'UML-Standard' })), hasTips:(sh.tips || []).length > 0,
+      span: (s.umlL2 || {})[sh.k] ? '1 / -1' : 'auto', l2Open: !!(s.umlL2 || {})[sh.k], hasL2: (sh.l2 || []).length > 0, l2Label: ((s.umlL2 || {})[sh.k] ? 'Level 2 ausblenden' : 'Level 2 · Klausurniveau') + ' (' + (sh.l2 || []).length + ')', l2Bg: (s.umlL2 || {})[sh.k] ? soft(c, 18) : 'transparent',
+      l2Toggle:() => this.setState(st => ({ umlL2: { ...(st.umlL2 || {}), [sh.k]: !(st.umlL2 || {})[sh.k] } })),
+      l2: (s.umlL2 || {})[sh.k] ? (sh.l2 || []).map((x, i) => { const key = sh.k + i, n = (s.l2Step || {})[key] || 0, all = x.steps.length; return { t:x.t, src:x.src, desc:x.desc, img:this.el(x.img), steps: x.steps.slice(0, n).map((st2, j) => ({ ...st2, n:String(j + 1) })), shown:n, all, more: n < all, nextLabel: n === 0 ? 'Ersten Schritt zeigen' : 'Nächster Schritt (' + (n + 1) + '/' + all + ')', next:() => this.setState(st => ({ l2Step: { ...(st.l2Step || {}), [key]: Math.min(all, ((st.l2Step || {})[key] || 0) + 1) } })), showAll:() => this.setState(st => ({ l2Step: { ...(st.l2Step || {}), [key]: all } })), reset:() => this.setState(st => ({ l2Step: { ...(st.l2Step || {}), [key]: 0 } })), hasSteps: n > 0 }; }) : [],
+      tips:(sh.tips || []).map(([v, r]) => ({ v, r: /^\d/.test(r) ? 'S. ' + r : (r || 'UML-Standard') })), hasTips:(sh.tips || []).length > 0,
       sfOpen:op, sfBg: op ? soft(c, 18) : 'transparent', sfLabel: (op ? 'Sonderfälle ausblenden' : 'Sonderfälle anzeigen') + ' (' + n + ')', sfToggle:() => this.setState(st => ({ umlSf: { ...(st.umlSf || {}), [sh.k]: !(st.umlSf || {})[sh.k] } })),
       sf: op ? sh.sf.map(x => ({ t:x.t, d:x.d, ref:x.ref, img:this.el(x.img) })) : [] }; });
     const umlCmp = D.uml.compares.map(cp => ({ title:cp.title, l:this.el(cp.l), r:this.el(cp.r), lt:cp.lt, rt:cp.rt, note:cp.note }));

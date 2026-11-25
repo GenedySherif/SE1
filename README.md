@@ -17,3 +17,4 @@ Sicherungen des Lernplans „Klausurvorbereitung UML-Diagramme“ (Software Engi
 | v7 | 25.11.2026 | Reiter Pflichtenheft: 14 Schritte am Muster (Fallstudie Lagerverwaltung) erklärt, überflüssige Schritte entfernt; UML-Überblick: »Worauf achten« je Typ, Sonderfälle groß |
 | v8 | 25.11.2026 | UML-Überblick: 15 Bildpaare »Falsch vs. richtig« (u. a. Raute vs. Balken, BPMN-Gateway) |
 | v9 | 25.11.2026 | Klick auf den aktiven Reiter springt an den Seitenanfang |
+| v10 | 25.11.2026 | UML-Überblick: Level 1/Level 2 je Typ (16 Klausur-Diagramme mit Schritt-für-Schritt-Leseanleitung), Bedingungen im Zustandsdiagramm, Objektzustände im Aktivitätsdiagramm, Regeln aus Folien und Musterlösungen ergänzt |
