@@ -1315,9 +1315,9 @@ class Component extends DCLogic {
     add('join','aktivitaet',M, svg(320,110, act(65,30,'Rechnung',120)+act(65,80,'Paket packen',120)+ar(125,30,187,30,'open')+ar(125,80,187,80,'open')+barV(187,15,80,{c:C.a})+ar(192,55,225,55,'open')+act(270,55,'Versenden',90)),
       ['Synchronisation (Join)','Zusammenführen (ODER)','Aufspalten (Fork)','Endknoten'],
       'Join: Es geht erst weiter, wenn alle eingehenden Abläufe angekommen sind (logisches UND). Alternative Pfade führt man dagegen mit einer Raute zusammen.','285–286');
-    add('objektfluss','aktivitaet',M, svg(320,110, act(45,55,'Erstellen',84)+ar(87,55,112,55,'open',{d:true})+onode(160,55,'Rechnung','[erstellt]',96,{c:C.a})+ar(208,55,234,55,'open',{d:true})+act(276,55,'Versenden',84)),
+    add('objektfluss','aktivitaet',M, svg(320,110, act(45,55,'Erstellen',84)+ar(87,55,112,55,'open')+onode(160,55,'Rechnung','[erstellt]',96,{c:C.a})+ar(208,55,234,55,'open')+act(276,55,'Versenden',84)),
       ['Objektknoten mit Zustand','Zustand eines Zustandsdiagramms','Notiz','Partition'],
-      'Rechteck mit Zustand in eckigen Klammern, gestrichelte Kanten: Objektfluss. Er dokumentiert, welches Objekt zwischen Aktionen ausgetauscht wird und in welchem Zustand es ist.','288');
+      'Rechteck mit Zustand in eckigen Klammern: Objektfluss. Er dokumentiert, welches Objekt zwischen Aktionen ausgetauscht wird und in welchem Zustand es ist.','288');
     add('partition','aktivitaet',M, svg(320,115, rc(15,8,145,100,{c:C.a,f:'transparent'})+rc(160,8,145,100,{c:C.a,f:'transparent'})+ln(15,30,305,30,{c:C.a})+tx(87,23,'Vertrieb',{fs:11,w:500,c:C.a})+tx(232,23,'Lager',{fs:11,w:500,c:C.a})+act(87,68,'Auftrag erfassen',116)+ar(145,68,177,68,'open')+act(232,68,'Ware packen',110)),
       ['Partition (Verantwortungsbereich)','Paket','Systemgrenze','Kombiniertes Fragment'],
       'Partitionen ordnen Aktionen einer ausführenden Einheit zu, anfangs meist Akteuren und dem System, später einzelnen Komponenten.','287');
@@ -1413,8 +1413,8 @@ class Component extends DCLogic {
 
     const sol3 = svg(500,510,
       start(200,24)+ar(200,32,200,50,'open')+act(200,66,'Bestellung aufgeben',170)
-      +ar(200,82,200,109,'open',{d:true})+onode(200,126,'Bestellung','[aufgegeben]',140)
-      +ar(200,143,200,170,'open',{d:true})+act(200,186,'Verfügbarkeit prüfen',170)
+      +ar(200,82,200,109,'open')+onode(200,126,'Bestellung','[aufgegeben]',140)
+      +ar(200,143,200,170,'open')+act(200,186,'Verfügbarkeit prüfen',170)
       +ar(200,202,200,227,'open')+dec(200,240)
       +ar(213,240,320,240,'open')+tx(266,232,'[nicht verfügbar]',{fs:11})+act(400,240,'Kunde benachrichtigen',160)
       +ar(400,256,400,289,'open')+end(400,300)
@@ -1700,8 +1700,8 @@ class Component extends DCLogic {
       rc(10,10,180,480,{f:'transparent'}) + rc(190,10,320,480,{f:'transparent'}) + rc(510,10,160,480,{f:'transparent'}) + ln(10,34,670,34)
       + tx(100,27,'Kunde',{fs:11.5,w:500}) + tx(350,27,'Kundenservice',{fs:11.5,w:500}) + tx(590,27,'Lager',{fs:11.5,w:500})
       + start(100,60) + ar(100,68,100,88,'open') + act(100,104,'Reklamation einreichen',160)
-      + par([[100,120],[100,165],[130,165]],'open',{d:true}) + onode(190,165,'Reklamation','[eingereicht]',120)
-      + par([[250,165],[280,165],[280,196]],'open',{d:true}) + act(280,212,'Reklamation prüfen',150)
+      + par([[100,120],[100,165],[130,165]]) + onode(190,165,'Reklamation','[eingereicht]',120)
+      + par([[250,165],[280,165],[280,196]]) + act(280,212,'Reklamation prüfen',150)
       + ar(280,228,280,256,'open') + dec(280,269)
       + ar(293,269,520,269,'open') + tx(400,261,'[berechtigt]',{fs:11})
       + act(590,269,'Ware zurücknehmen',140)
@@ -2106,13 +2106,13 @@ class Component extends DCLogic {
         + ln(180,620,260,600) + ln(180,630,260,712) + ln(450,600,540,582) + ln(450,610,530,694) + ln(450,712,530,712)
         + nord.s + b1.s + b2.s + li.s + bo.s); })();
     const sol35 = svg(720,770, start(200,24) + ar(200,32,200,58,'open') + act(200,74,'Pfanne erhitzen',150) + onode(55,74,'Pfanne','[kalt]',90) + ar(100,74,125,74,'open',DS)
-      + ar(200,90,200,118,'open',DS) + onode(200,137,'Pfanne','[heiß]',100) + ar(200,156,200,430,'open',DS)
+      + ar(200,90,200,118,'open') + onode(200,137,'Pfanne','[heiß]',100) + ar(200,156,200,430,'open')
       + start(500,24) + ar(500,32,500,58,'open') + act(500,74,'Teig anrühren',150) + onode(650,74,'Zutaten','[abgewogen]',100) + ar(600,74,575,74,'open',DS)
-      + ar(500,90,500,118,'open',DS) + onode(500,137,'Teig','[glatt]',100) + ar(500,156,500,184,'open',DS) + bar(360,184,280)
+      + ar(500,90,500,118,'open') + onode(500,137,'Teig','[glatt]',100) + ar(500,156,500,184,'open') + bar(360,184,280)
       + ar(430,189,430,220,'open') + act(430,236,'Teig ruhen lassen',140) + ar(580,189,580,220,'open') + act(580,236,'Belag schneiden',120)
       + ar(430,252,430,300,'open') + ar(580,252,580,300,'open') + bar(360,300,280) + ar(500,305,500,430,'open') + bar(150,430,400)
       + ar(350,435,350,460,'open') + act(350,476,'Teig in Pfanne geben',180) + ar(350,492,350,512,'open') + act(350,528,'Backen',120) + ar(350,544,350,564,'open') + act(350,580,'Wenden',120)
-      + ar(350,596,350,616,'open',DS) + onode(350,635,'Pfannkuchen','[fertig]',130) + ar(350,654,350,680,'open',DS) + act(350,696,'Servieren',120) + ar(350,712,350,732,'open') + end(350,744));
+      + ar(350,596,350,616,'open') + onode(350,635,'Pfannkuchen','[fertig]',130) + ar(350,654,350,680,'open') + act(350,696,'Servieren',120) + ar(350,712,350,732,'open') + end(350,744));
     const sol36 = svg(740,660, start(300,20) + ar(300,28,300,46,'open') + act(300,62,'Punkte p einlesen',160) + ar(300,78,300,97,'open') + dec(300,110)
       + par([[287,110],[120,110],[120,150]]) + tx(200,102,'[p >= 90]',{fs:10.5}) + act(120,166,'Note = 1',120) + par([[120,182],[120,540],[287,540]])
       + par([[313,110],[400,110],[400,160]]) + tx(360,102,'[p < 90]',{fs:10.5}) + dec(400,173)
@@ -2129,9 +2129,9 @@ class Component extends DCLogic {
       + ar(120,164,120,190,'open') + tx(128,182,'[kein Termin]',{a:'start',fs:10.5}) + act(120,206,'Wartezeit mitteilen',160) + par([[120,222],[120,250],[327,250]])
       + par([[133,151],[340,151],[340,237]]) + tx(236,143,'[Termin vorhanden]',{fs:10.5}) + dec(340,250)
       + ar(340,263,340,285,'open') + act(340,301,'Patient untersuchen',170) + ar(340,317,340,337,'open') + bar(260,337,300)
-      + ar(340,342,340,372,'open') + act(340,388,'Rezept ausstellen',150) + ar(340,404,340,428,'open',DS) + onode(340,447,'Rezept','[unterschrieben]',130)
-      + par([[275,447],[120,447],[120,488]],'open',DS) + act(120,504,'Rezept aushändigen',160) + ar(120,520,120,550,'open') + end(120,562)
-      + ar(540,342,540,372,'open') + act(540,388,'Blut analysieren',140) + ar(540,404,540,428,'open',DS) + onode(540,447,'Befund','[erstellt]',110) + ar(540,466,540,494,'open',DS) + fend(540,506)
+      + ar(340,342,340,372,'open') + act(340,388,'Rezept ausstellen',150) + ar(340,404,340,428,'open') + onode(340,447,'Rezept','[unterschrieben]',130)
+      + par([[275,447],[120,447],[120,488]]) + act(120,504,'Rezept aushändigen',160) + ar(120,520,120,550,'open') + end(120,562)
+      + ar(540,342,540,372,'open') + act(540,388,'Blut analysieren',140) + ar(540,404,540,428,'open') + onode(540,447,'Befund','[erstellt]',110) + ar(540,466,540,494,'open') + fend(540,506)
       + xNote(520,546,110,44,['Ergebnis nach','2 Tagen']) + ln(605,404,590,546,{d:true,c:C.m})
       + (withCo ? xCo(30,54,1) + xCo(148,146,2) + xCo(366,250,3) + xCo(578,337,4) + xCo(418,447,5) + xCo(566,506,6) + xCo(148,562,7) + xCo(640,560,8) : ''));
     const given37 = g37(false), sol37 = g37(true);
@@ -2154,7 +2154,7 @@ class Component extends DCLogic {
       { id:'ex35', num:'35', title:'Pfannkuchen', type:'Aktivitätsdiagramm', isNew:true,
         paras:['Die Zubereitung von Pfannkuchen soll über ein UML-Aktivitätsdiagramm modelliert werden. Sie beginnt mit den nebenläufig durchgeführten Aktionen Pfanne erhitzen (Anfangszustand Pfanne = kalt) und Teig anrühren (Anfangszustand Zutaten = abgewogen). Mehrere Startknoten sind erlaubt.', 'Nach dem Erhitzen ist die Pfanne im Zustand heiß, nach dem Anrühren der Teig im Zustand glatt. Danach werden nebenläufig die Aktionen Teig ruhen lassen und Belag schneiden durchgeführt.', 'Sind die Pfanne heiß, der Teig geruht und der Belag geschnitten, wird der Teig in die Pfanne gegeben, gebacken und gewendet. Als Ergebnis erhält man einen Pfannkuchen im Zustand fertig. Nach dem Servieren endet die Zubereitung.', 'Zeichne den Kontroll- und den Objektfluss mit Objekten (mit Zustand), Aktionen, Kontrollknoten, Start- und Endknoten. (Aufbau wie Übungsblatt 7, Übung 8a)'],
         hints:['Zwei unabhängige Anfänge: zwei Startknoten.', 'Jeder Zustandswechsel eines Objekts wird ein eigener Objektknoten mit [Zustand].', 'Worauf muss vor „Teig in Pfanne geben“ gewartet werden? Synchronisation.'],
-        sol:sol35, solNote:'Objektflüsse gestrichelt wie in der Praktikumslösung zur Sauce Hollandaise. Wie der Anfangszustand (Pfanne [kalt]) genau angebunden wird, mit dieser Lösung vergleichen; hier fließt das Objekt in die Aktion.',
+        sol:sol35, solNote:'Objektfluss durchgezogen. Gestrichelt sind nur die Verweise auf die Anfangszustände Pfanne [kalt] und Zutaten [abgewogen], wie in der Praktikumslösung zur Sauce Hollandaise. Die genaue Anbindung mit dieser Lösung vergleichen.',
         checks:['Zwei Startknoten für die nebenläufigen Anfänge', 'Pfanne [kalt] → Pfanne erhitzen → Pfanne [heiß]', 'Zutaten [abgewogen] → Teig anrühren → Teig [glatt]', 'Aufspalten nach dem Teig, Synchronisation nach Ruhen und Schneiden', 'Zweite Synchronisation mit der heißen Pfanne vor Teig in Pfanne geben', 'Pfannkuchen [fertig], Servieren, ein Endknoten'] },
       { id:'ex36', num:'36', title:'Notenberechnung', type:'Aktivitätsdiagramm', isNew:true,
         paras:['Wie können verschachtelte If-else-Verzweigungen im UML-Aktivitätsdiagramm dargestellt werden? Gib dazu ein Beispiel an.', 'Beispiel: Eine Aktivität liest die Punktzahl p einer Klausur ein und gibt die Note aus: ab 90 Punkten eine 1, ab 75 eine 2, ab 60 eine 3, ab 50 eine 4, darunter eine 5. (Aufbau wie Übungsblatt 7, Übung 8b)'],
@@ -2166,7 +2166,7 @@ class Component extends DCLogic {
         given:given37, givenLabel:'Aktivitätsdiagramm zum Interpretieren',
         hints:['Erst die Partitionen und Knotenarten benennen, dann den Pfaden folgen.', 'Was unterscheidet den Endknoten links unten vom Kreis mit X rechts?', 'Was passiert mit dem Laborstrang, wenn der Rezeptstrang zuerst fertig ist?'],
         sol:sol37, solNote:'Zwei Wege bis zur Untersuchung (mit oder ohne Termin), danach laufen Rezept- und Laborstrang parallel. Achtung: Erreicht der Rezeptstrang den Endknoten, endet die gesamte Aktivität sofort, auch wenn das Labor noch arbeitet (S. 283). Das Ablaufende beendet nur den Laborstrang.',
-        checks:['① Drei Partitionen: Empfang, Ärztin, Labor als Verantwortungsbereiche (S. 287)', '② Entscheidung [kein Termin] / [Termin vorhanden], vollständig und überschneidungsfrei', '③ Zusammenführung: Beide Wege laufen zur Untersuchung (logisches ODER)', '④ Aufspalten: Rezept und Blutanalyse laufen parallel', '⑤ Objektknoten mit Zustand, Objektfluss gestrichelt', '⑥ Ablaufende: beendet nur den Laborstrang', '⑦ Endknoten: beendet die ganze Aktivität, ggf. auch das Labor', '⑧ Notiz: Kommentar ohne Ablaufbedeutung'] }
+        checks:['① Drei Partitionen: Empfang, Ärztin, Labor als Verantwortungsbereiche (S. 287)', '② Entscheidung [kein Termin] / [Termin vorhanden], vollständig und überschneidungsfrei', '③ Zusammenführung: Beide Wege laufen zur Untersuchung (logisches ODER)', '④ Aufspalten: Rezept und Blutanalyse laufen parallel', '⑤ Objektknoten mit Zustand: zeigen das ausgetauschte Objekt', '⑥ Ablaufende: beendet nur den Laborstrang', '⑦ Endknoten: beendet die ganze Aktivität, ggf. auch das Labor', '⑧ Notiz: Kommentar ohne Ablaufbedeutung'] }
     );
 
     // ---------- Pflichtenheft-Checkliste (nur Leitfragen, keine Inhalte) ----------
@@ -2289,7 +2289,7 @@ class Component extends DCLogic {
     // 5 Aktivitätsdiagramm
     const imgA = svg(560,300, start(60,30) + ar(60,38,60,58,'open') + act(60,74,'Bestellen',100)
       + ar(110,74,150,74,'open') + dec(163,74)
-      + par([[163,87],[163,150],[190,150]]) + tx(170,118,'[nicht lieferbar]',{a:'start',fs:10.5}) + act(250,150,'Absagen',110) + ar(305,150,330,150,'open',{d:true}) + onode(390,150,'Bestellung','[storniert]',120) + ar(450,150,470,150,'open',{d:true}) + fend(482,150)
+      + par([[163,87],[163,150],[190,150]]) + tx(170,118,'[nicht lieferbar]',{a:'start',fs:10.5}) + act(250,150,'Absagen',110) + ar(305,150,330,150,'open') + onode(390,150,'Bestellung','[storniert]',120) + ar(450,150,470,150,'open') + fend(482,150)
       + ar(176,74,240,74,'open') + tx(206,66,'[lieferbar]',{fs:10}) + barV(240,40,68)
       + ar(245,52,290,52,'open') + ar(245,96,290,96,'open') + act(345,52,'Rechnen',100) + act(345,96,'Packen',100)
       + ar(395,52,440,52,'open') + ar(395,96,440,96,'open') + barV(440,40,68) + ar(445,74,480,74,'open') + end(494,74)
@@ -2321,7 +2321,7 @@ class Component extends DCLogic {
       S('objekt','Objektdiagramm','Wie sieht es zu einem Zeitpunkt konkret aus?','222–229', imgO, [['Objekt','name: Klasse, unterstrichen'],['Attributwerte','Attribut = Wert'],['Link','Verbindung konkreter Objekte, keine Kardinalitäten'],['Anonymes Objekt',':Klasse ohne Namen']]),
       S('paket','Paketdiagramm','Wie gliedere ich das Modell grob?','274–277', imgP, [['Paket','Kasten mit Reiter, kann Pakete enthalten'],['Inhalt','Klassen gehören genau einem Paket'],['Abhängigkeit','gestrichelt mit offener Spitze, zum genutzten Paket']]),
       S('anwendungsfall','Anwendungsfalldiagramm','Was leistet das System für wen?','171–184', imgU, [['Akteur','Strichmännchen, immer außerhalb'],['Systemgrenze','Kasten mit Systemnamen'],['Anwendungsfall','Ellipse, mit Akteur verbunden'],['«include»','immer, Pfeil zum eingebundenen Fall'],['«extend»','nur bei Bedingung, Pfeil zum erweiterten Fall'],['Extension point','Stelle der Erweiterung im erweiterten Fall']]),
-      S('aktivitaet','Aktivitätsdiagramm','Wie läuft ein Prozess ab, auch parallel?','281–288', imgA, [['Startknoten','gefüllter Kreis'],['Aktion','abgerundetes Rechteck'],['Entscheidung','Raute, Bedingungen in [ ] ohne Überlappung'],['Fork / Join','Balken: parallel aufteilen bzw. auf alle warten'],['Endknoten','beendet die ganze Aktivität'],['Ablaufende','Kreis mit X, beendet nur diesen Fluss'],['Objektknoten','eckig, Zustand in [ ], Objektfluss gestrichelt']]),
+      S('aktivitaet','Aktivitätsdiagramm','Wie läuft ein Prozess ab, auch parallel?','281–288', imgA, [['Startknoten','gefüllter Kreis'],['Aktion','abgerundetes Rechteck'],['Entscheidung','Raute, Bedingungen in [ ] ohne Überlappung'],['Fork / Join','Balken: parallel aufteilen bzw. auf alle warten'],['Endknoten','beendet die ganze Aktivität'],['Ablaufende','Kreis mit X, beendet nur diesen Fluss'],['Objektknoten','eckig, Zustand in [ ], z. B. [storniert]']]),
       S('zustand','Zustandsdiagramm','Welche Zustände durchläuft ein Objekt?','292–296', imgZ, [['Startzustand','gefüllter Kreis'],['Zustand','abgerundet, mit entry / do / exit'],['Transition','ereignis [bedingung] /aktion'],['Zeitereignis','after(Dauer) oder at(Zeitpunkt)'],['Endzustand','Kreis mit Punkt'],['Bedingungen prüfen','gleiches Ereignis an zwei Pfeilen: [b<summe] und [b>=summe] decken alles ab, ohne Überschneidung']]),
       S('sequenz','Sequenzdiagramm','Welche Nachrichten in welcher zeitlichen Reihenfolge?','302–307', imgS, [['Akteur','löst das Szenario aus'],['Objekt + Lebenslinie',':Klasse, gestrichelte Linie nach unten'],['Aktivierungsbalken','Objekt hat gerade die Steuerung'],['Synchrone Nachricht','gefüllte Spitze, Sender wartet'],['Antwort','gestrichelt, offene Spitze'],['Objekterzeugung','gestrichelt auf den Kopf des neuen Objekts'],['Asynchrone Nachricht','offene Spitze, Sender wartet nicht']]),
       S('kommunikation','Kommunikationsdiagramm','Wer spricht mit wem über welche Verbindung?','308–310', imgC, [['Link','Verbindung, über die Nachrichten laufen'],['Sequenzausdruck','Nummer: 1, 1.1, 1.2 statt Zeitachse'],['Iteration','* nach der Nummer: wiederholt'],['Bedingung','[…] nach der Nummer'],['Zuweisung','antwort = nachricht()'] ])
@@ -2474,9 +2474,9 @@ class Component extends DCLogic {
         SF('Partitionen', svg(320,140, rc(10,8,150,124,{f:'transparent'}) + rc(160,8,150,124,{f:'transparent'}) + ln(10,28,310,28) + tx(85,22,'Vertrieb',{fs:10.5,w:500}) + tx(235,22,'Rechnungswesen',{fs:10.5,w:500})
           + start(85,46) + ar(85,54,85,66,'open') + act(85,82,'Auftrag erhalten',120) + par([[145,82],[235,82],[235,98]]) + act(235,114,'Rechnung senden',120)),
           'Ordnen Aktionen Verantwortungsbereichen zu: anfangs Akteure und ganzes System, später Komponenten.', '287'),
-        SF('Objektfluss, zwei Schreibweisen', svg(320,135, act(50,50,'Schritt 1',80) + act(270,50,'Schritt 2',80) + rc(90,45,10,10,{c:'var(--dg-obj, var(--color-neutral-400))'}) + rc(220,45,10,10,{c:'var(--dg-obj, var(--color-neutral-400))'}) + ar(100,50,220,50,'open',{d:true}) + tx(92,26,'Objekt',{a:'start',fs:10}) + tx(92,39,'[Zustand]',{a:'start',fs:10}) + tx(228,26,'Objekt',{a:'end',fs:10}) + tx(228,39,'[Zustand]',{a:'end',fs:10})
-          + act(50,110,'Schritt 1',80) + onode(160,110,'Objekt','[Zustand]',80) + act(270,110,'Schritt 2',80) + ar(90,110,120,110,'open',{d:true}) + ar(200,110,230,110,'open',{d:true})),
-          'Oben mit Pins: kleine Kästchen an den Aktionen, Objekt und [Zustand] stehen an jedem Pin. Unten als eigener Objektknoten zwischen den Aktionen. Objektflüsse gestrichelt wie in der Praktikumslösung, die Folie zeichnet sie durchgezogen.', '288'),
+        SF('Objektfluss, zwei Schreibweisen', svg(320,135, act(50,50,'Schritt 1',80) + act(270,50,'Schritt 2',80) + rc(90,45,10,10,{c:'var(--dg-obj, var(--color-neutral-400))'}) + rc(220,45,10,10,{c:'var(--dg-obj, var(--color-neutral-400))'}) + ar(100,50,220,50,'open') + tx(92,26,'Objekt',{a:'start',fs:10}) + tx(92,39,'[Zustand]',{a:'start',fs:10}) + tx(228,26,'Objekt',{a:'end',fs:10}) + tx(228,39,'[Zustand]',{a:'end',fs:10})
+          + act(50,110,'Schritt 1',80) + onode(160,110,'Objekt','[Zustand]',80) + act(270,110,'Schritt 2',80) + ar(90,110,120,110,'open') + ar(200,110,230,110,'open')),
+          'Oben mit Pins: kleine Kästchen an den Aktionen, Objekt und [Zustand] stehen an jedem Pin. Unten als eigener Objektknoten zwischen den Aktionen. Objektflüsse durchgezogen wie auf der Folie.', '288'),
         SF('Schleife über Zusammenführen', svg(320,140, dec(60,22) + ar(60,35,60,52,'open') + act(60,68,'Eingeben',90) + ar(60,84,60,100,'open') + dec(60,113)
           + par([[73,113],[150,113],[150,22],[73,22]]) + tx(156,70,'[ungültig]',{a:'start',fs:10.5}) + ar(47,113,20,113,'open') + tx(26,132,'[gültig]',{a:'start',fs:10.5})),
           'Ein Rücksprung endet in einer Raute (Zusammenführen) vor dem zu wiederholenden Schritt, nicht direkt an der Aktion.', '285'),
@@ -2550,7 +2550,7 @@ class Component extends DCLogic {
     TIPS.klasse.push(['Kann und Muss: 0..1 und * sind Kann-, 1 und 1..* Muss-Beziehungen.','245–247'], ['Verwaltungsoperationen wie new(), get…() und set…() nicht eintragen.','219'], ['Aggregation ohne Kreis: Ist B Teil von A, darf A nicht Teil von B sein.','257'], ['Sichtbarkeit: + öffentlich, # geschützt, - privat.','267'], ['Zwei Namen dürfen sich nicht nur in Groß- und Kleinschreibung unterscheiden.','233']);
     TIPS.objekt.push(['Schnappschuss zu genau einem Zeitpunkt.','222'], ['Rollennamen der Assoziation dürfen auch an den Links stehen.','260']);
     TIPS.paket.push(['Ein Paket ist eine logische Einheit, die man allein verstehen und entwerfen kann.','276'], ['Kopplung innerhalb eines Pakets groß, zwischen Paketen gering.','277']);
-    TIPS.aktivitaet.push(['Objektfluss gestrichelt: Kanten zu und von Objektknoten wie in der Praktikumslösung Sauce Hollandaise. Die Folien S. 284/288 zeichnen sie durchgezogen.','Praktikum Blatt 7'], ['Objektknoten mit Zustand in [ ]: Butter [fest] wird durch eine Aktion zu Butter [geschmolzen].','288, Übungsblatt 7'], ['Mehrere Startknoten sind erlaubt.','Übungsblatt 7'], ['Partitionen (Schwimmbahnen) zeigen Verantwortungsbereiche.','287'], ['Eine Aktion kann durch ein eigenes Aktivitätsdiagramm verfeinert werden.','289']);
+    TIPS.aktivitaet.push(['Objektfluss durchgezogen wie der Kontrollfluss. Gestrichelt nur, wenn auf einen Zustand verwiesen wird, z. B. den Anfangszustand eines Objekts (Praktikumslösung Sauce Hollandaise).','284, 288, Praktikum Blatt 7'], ['Objektknoten mit Zustand in [ ]: Butter [fest] wird durch eine Aktion zu Butter [geschmolzen].','288, Übungsblatt 7'], ['Mehrere Startknoten sind erlaubt.','Übungsblatt 7'], ['Partitionen (Schwimmbahnen) zeigen Verantwortungsbereiche.','287'], ['Eine Aktion kann durch ein eigenes Aktivitätsdiagramm verfeinert werden.','289']);
     TIPS.sequenz.push(['Alternativen wie auf der Folie: [Bedingung] über der Nachricht, [ELSE] für den Rest.','307'], ['Objekt löschen: X am Ende der Lebenslinie.','303, 305'], ['Der Akteur darf links mit eigener Lebenslinie stehen.','305'], ['Die Balkenlänge zeigt die relative Dauer.','305']);
     TIPS.kommunikation.push(['Kann zusätzlich Assoziationen und Zustandsübergänge zeigen.','308'], ['Jede Nachricht braucht einen Link zwischen Sender und Empfänger.','309']);
     sheets.forEach(sh => { sh.tips = TIPS[sh.k] || []; });
@@ -2624,7 +2624,7 @@ class Component extends DCLogic {
     };
     const frZg = g => svg(240,148, state(8,74,84,36,'Ohne Res.') + state(140,74,94,36,'Teilweise') + ar(140,98,92,98,'open') + tx(116,124,'stornieren()',{fs:9.5}) + (g[1] ? tx(116,138,g[1],{fs:9.5,c:C.a}) : '')
       + par([[165,74],[165,46],[210,46],[210,74]]) + tx(187,20,'stornieren()',{fs:9.5}) + (g[0] ? tx(187,33,g[0],{fs:9.5,c:C.a}) : ''));
-    const frAo = ok => svg(240,145, act(120,20,'Butter erhitzen',140) + ar(120,36,120,53,'open',ok?{d:true}:{}) + (ok ? onode(120,72,'Butter','[geschmolzen]',120) : act(120,72,'geschmolzen',120)) + ar(120,91,120,106,'open',ok?{d:true}:{}) + act(120,122,'Butter zugeben',140));
+    const frAo = ok => svg(240,145, act(120,20,'Butter erhitzen',140) + ar(120,36,120,53,'open') + (ok ? onode(120,72,'Butter','[geschmolzen]',120) : act(120,72,'geschmolzen',120)) + ar(120,91,120,106,'open') + act(120,122,'Butter zugeben',140));
     FR.zustand.unshift(FRp('Gleiches Ereignis ohne Bedingung', frZg(['','']), frZg(['[reserviert>1]','[reserviert=1]']), 'Führt dasselbe Ereignis über zwei Pfeile aus einem Zustand, muss eine Bedingung entscheiden, welcher schaltet. Ohne Bedingung ist das Verhalten nicht eindeutig.', '293, 296'),
       FRp('Bedingungen überschneiden sich', frZg(['[reserviert>=1]','[reserviert=1]']), frZg(['[reserviert>1]','[reserviert=1]']), 'Bei genau einem reservierten Platz wären links beide Bedingungen wahr. Die Bedingungen müssen sich ausschließen und zusammen alle Fälle abdecken.', '296'));
     FR.aktivitaet.push(FRp('Objektzustand als Aktion gezeichnet', frAo(false), frAo(true), 'Ein Zustand ist keine Tätigkeit. Er steht als [Zustand] in einem eckigen Objektknoten, die Aktionen davor und danach bleiben abgerundet.', '288'));
@@ -2673,13 +2673,13 @@ class Component extends DCLogic {
       + co(30,60,1) + co(158,158,2) + co(222,252,3) + co(418,342,4) + co(222,560,5) + co(158,598,6) + co(424,530,7));
     // Aktivität · eigenes Szenario (mit Objektzuständen)
     const l2A2 = svg(690,770, lane(10,8,670,754,[[10,210,'Kunde'],[220,230,'Lager'],[450,230,'Buchhaltung']])
-      + start(115,56) + ar(115,64,115,84,'open') + act(115,100,'Retoure anmelden',150) + ar(115,116,115,136,'open') + act(115,152,'Paket senden',120) + ar(115,168,115,187,'open',{d:true}) + onode(115,206,'Paket','[versendet]',110)
-      + par([[170,206],[335,206],[335,232]],'open',{d:true}) + dec(335,245) + ar(335,258,335,272,'open') + act(335,288,'Ware prüfen',120) + ar(335,304,335,322,'open') + dec(335,335)
+      + start(115,56) + ar(115,64,115,84,'open') + act(115,100,'Retoure anmelden',150) + ar(115,116,115,136,'open') + act(115,152,'Paket senden',120) + ar(115,168,115,187,'open') + onode(115,206,'Paket','[versendet]',110)
+      + par([[170,206],[335,206],[335,232]]) + dec(335,245) + ar(335,258,335,272,'open') + act(335,288,'Ware prüfen',120) + ar(335,304,335,322,'open') + dec(335,335)
       + ar(322,335,175,335,'open') + tx(250,327,'[unvollständig]',{fs:10.5}) + act(115,335,'Teile nachsenden',120) + par([[115,319],[115,245],[322,245]])
       + ar(348,335,500,335,'open') + tx(422,327,'[beschädigt]',{fs:10.5}) + act(565,335,'Retoure ablehnen',130)
       + ar(335,348,335,376,'open') + tx(343,368,'[ok]',{a:'start',fs:10.5}) + bar(280,376,280)
       + ar(320,381,320,410,'open') + act(320,426,'Ware einlagern',120) + ar(320,442,320,600,'open')
-      + ar(540,381,540,410,'open') + act(540,426,'Gutschrift erstellen',150) + ar(540,442,540,462,'open',{d:true}) + onode(540,481,'Gutschrift','[erstellt]',120) + ar(540,500,540,520,'open',{d:true}) + act(540,536,'Betrag erstatten',130) + ar(540,552,540,600,'open')
+      + ar(540,381,540,410,'open') + act(540,426,'Gutschrift erstellen',150) + ar(540,442,540,462,'open') + onode(540,481,'Gutschrift','[erstellt]',120) + ar(540,500,540,520,'open') + act(540,536,'Betrag erstatten',130) + ar(540,552,540,600,'open')
       + bar(280,600,280) + ar(335,605,335,628,'open') + dec(335,641) + par([[630,335],[655,335],[655,641],[348,641]])
       + ar(335,654,335,676,'open') + act(335,692,'Kunde benachrichtigen',170) + ar(335,708,335,728,'open') + end(335,740)
       + co(44,206,1) + co(364,250,2) + co(364,314,3) + co(578,378,4) + co(618,470,5) + co(578,602,6) + co(306,641,7));
@@ -2829,14 +2829,14 @@ class Component extends DCLogic {
           ['② Entscheidung','Nach Auftrag prüfen geht es mit [akzeptiert] oder [nicht akzeptiert] weiter. Zusammen decken beide alle Fälle ab und schließen sich aus.'],
           ['Ablauf 1: nicht akzeptiert','Der linke Pfeil führt direkt zur Raute vor Auftrag abschließen, danach Ende.'],
           ['③ Aufspalten','Bei [akzeptiert] folgt Auftrag bearbeiten, dann der Balken: Ab hier laufen zwei Stränge parallel.'],
-          ['④ Objektfluss','Rechnung versenden erzeugt das Objekt Rechnung. Es geht an den Kunden, der zahlt. Danach prüft das Rechnungswesen den Zahlungseingang. Ein Zustand ist hier nicht angegeben, er wäre optional als [Zustand] möglich. Die Vorlage von Blatt 7 zeichnet die Linien zum Objekt durchgezogen; in der Praktikumslösung zur Sauce Hollandaise ist der Objektfluss gestrichelt.'],
+          ['④ Objektfluss','Rechnung versenden erzeugt das Objekt Rechnung. Es geht an den Kunden, der zahlt. Danach prüft das Rechnungswesen den Zahlungseingang. Ein Zustand ist hier nicht angegeben, er wäre optional als [Zustand] möglich.'],
           ['⑤ Synchronisation','Erst wenn Lieferung durchführen und Zahlungseingang prüfen fertig sind, geht es weiter (logisches UND).'],
           ['⑥ Zusammenführung','Die Raute vereint beide Abläufe (logisches ODER). Es kommt immer nur einer an, deshalb Raute statt Balken.'],
           ['⑦ Notiz','Die Notiz an Zahlungseingang prüfen ist ein Kommentar und ändert den Ablauf nicht.'],
           ['Ergebnis','Genau zwei Abläufe. Im akzeptierten Ablauf ist die Reihenfolge zwischen Lieferung und Rechnungsstrang offen, beide laufen parallel.']
         ]),
         L2('Retoure mit Objektzuständen', 'eigenes Szenario', 'Ein Kunde schickt Ware zurück. Das Lager prüft, die Buchhaltung erstattet.', l2A2, [
-          ['① Objekt mit Zustand','Paket [versendet] ist ein Objektknoten. Der Zustand steht in eckigen Klammern und sagt, in welchem Zustand das Objekt die Aktion verlässt (S. 288). Die Kanten zum und vom Objekt sind gestrichelt (Objektfluss).'],
+          ['① Objekt mit Zustand','Paket [versendet] ist ein Objektknoten. Der Zustand steht in eckigen Klammern und sagt, in welchem Zustand das Objekt die Aktion verlässt (S. 288).'],
           ['② Zusammenführung vor der Prüfung','Die Raute vor Ware prüfen hat zwei Eingänge: das Paket und nachgesendete Teile. So entsteht eine Schleife, ohne dass zwei Pfeile direkt in die Aktion laufen.'],
           ['③ Entscheidung mit drei Ausgängen','[ok], [unvollständig], [beschädigt]: Sie schließen sich aus. Vollständig sind sie nur, wenn es kein viertes Prüfergebnis gibt.'],
           ['Schleife','[unvollständig] führt über Teile nachsenden zurück zur Raute. Die Prüfung kann sich beliebig oft wiederholen.'],
