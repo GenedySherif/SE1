@@ -47,6 +47,7 @@
       .site-hdr > div { padding-top:6px !important; padding-bottom:6px !important; flex-wrap:nowrap !important; gap:10px 16px !important; }
       .hdr-sub, .hdr-streak { display:none !important; }
     }
+    .sf-img svg { max-width:500px !important; width:100% !important; margin:0 auto; }
     @media (max-width: 640px) {
       .tabnav { position:fixed !important; top:auto !important; bottom:0; left:0; right:0; margin:0 !important; padding:8px 10px calc(8px + env(safe-area-inset-bottom)) !important; border-top:1px solid var(--color-divider); background:color-mix(in srgb, var(--color-bg) 95%, transparent) !important; z-index:40 !important; }
       .tabnav button { padding:8px 12px !important; font-size:13px !important; }
@@ -405,13 +406,19 @@
                     <li style="display:flex; gap:8px; align-items:flex-start; font-size:12.5px; line-height:1.4;"><span style="width:20px; height:20px; flex:none; display:grid; place-items:center; border-radius:50%; background:var(--color-accent); color:var(--color-bg); font-size:11px; font-weight:800;">{{ lg.n }}</span><span><b>{{ lg.t }}</b> · {{ lg.d }}</span></li>
                   </sc-for>
                 </ol>
+                <sc-if value="{{ sh.hasTips }}"><div style="display:flex; flex-direction:column; gap:6px; padding:12px 14px; border-radius:var(--radius-md); border-left:3px solid {{ sh.c }}; background:color-mix(in srgb, var(--color-text) 4%, transparent);">
+                  <span style="font-size:11px; letter-spacing:0.08em; text-transform:uppercase; font-weight:700; color:{{ sh.ink }};">Worauf achten</span>
+                  <ul style="margin:0; padding-left:18px; display:flex; flex-direction:column; gap:4px; font-size:13px; line-height:1.45;">
+                    <sc-for list="{{ sh.tips }}" as="tp" hint-placeholder-count="5"><li style="margin:0; text-wrap:pretty;">{{ tp.v }} <span style="font-size:11px; white-space:nowrap; color:color-mix(in srgb, var(--color-text) 55%, transparent);">{{ tp.r }}</span></li></sc-for>
+                  </ul>
+                </div></sc-if>
                 <button onClick="{{ sh.sfToggle }}" aria-expanded="{{ sh.sfOpen }}" style="align-self:flex-start; display:flex; align-items:center; gap:8px; padding:8px 14px; border-radius:var(--radius-md); border:1.5px solid {{ sh.c }}; background:{{ sh.sfBg }}; color:{{ sh.ink }}; font-family:var(--font-body); font-size:13px; font-weight:700; cursor:pointer;">{{ sh.sfLabel }}</button>
                 <sc-if value="{{ sh.sfOpen }}">
                   <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 250px), 1fr)); gap:10px;">
                     <sc-for list="{{ sh.sf }}" as="sf" hint-placeholder-count="4">
                       <div style="display:flex; flex-direction:column; gap:8px; padding:12px; border-radius:var(--radius-md); background:var(--color-bg); border:1px solid var(--color-divider);">
                         <div style="display:flex; justify-content:space-between; align-items:baseline; gap:8px;"><span style="font-size:13px; font-weight:800;">{{ sf.t }}</span><span style="flex:none; font-size:10.5px; color:color-mix(in srgb, var(--color-text) 62%, transparent);">S. {{ sf.ref }}</span></div>
-                        <div style="padding:4px 0;">{{ sf.img }}</div>
+                        <div class="sf-img" style="padding:14px; border-radius:var(--radius-md); background:color-mix(in srgb, var(--color-text) 3%, transparent);">{{ sf.img }}</div>
                         <span style="font-size:12.5px; line-height:1.45; color:color-mix(in srgb, var(--color-text) 84%, transparent); text-wrap:pretty;">{{ sf.d }}</span>
                       </div>
                     </sc-for>
@@ -445,7 +452,7 @@
         <div style="flex:999 1 560px; min-width:0; display:flex; flex-direction:column; gap:20px;">
           <div style="display:flex; flex-direction:column; gap:6px;">
             <h2 style="margin:0; font-size:30px;">Pflichtenheft</h2>
-            <p style="margin:0; max-width:680px; font-size:14px; line-height:1.55; color:color-mix(in srgb, var(--color-text) 72%, transparent); text-wrap:pretty;">Alles zur Studienarbeit an einer Stelle: Auftrag, Checkliste, Abgabe-Check und deine Pflichtenheft-Schritte aus dem Lernplan. Bewusst ohne Lösungsinhalte.</p>
+            <p style="margin:0; max-width:680px; font-size:14px; line-height:1.55; color:color-mix(in srgb, var(--color-text) 72%, transparent); text-wrap:pretty;">Alles zur Studienarbeit an einer Stelle: Auftrag, Checkliste, Abgabe-Check und die Schritte, am Muster erklärt. Bewusst ohne Lösungsinhalte fürs Hotel.</p>
           </div>
           <section aria-label="Worum es beim Pflichtenheft geht" style="flex:none; display:flex; flex-direction:column; gap:12px; padding:18px 22px; border-radius:var(--radius-lg); background:var(--color-surface); box-shadow:var(--shadow-sm); border-left:4px solid var(--p4); font-size:14px; line-height:1.6;">
             <h2 style="margin:0; font-family:var(--font-heading); font-weight:var(--font-heading-weight); font-size:21px; line-height:1.2;">Worum geht es beim Pflichtenheft?</h2>
@@ -486,20 +493,51 @@
 
           <div style="display:flex; flex-direction:column; gap:10px; padding:18px 20px; border-radius:var(--radius-lg); background:var(--color-surface); box-shadow:var(--shadow-sm);">
             <div style="display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:4px 12px;">
-              <h3 style="margin:0; font-family:var(--font-heading); font-weight:var(--font-heading-weight); font-size:18px;">Deine Schritte aus dem Lernplan</h3>
+              <h3 style="margin:0; font-family:var(--font-heading); font-weight:var(--font-heading-weight); font-size:18px;">Schritt für Schritt am Muster</h3>
               <span style="font-size:13px; font-weight:700; font-variant-numeric:tabular-nums;">{{ pflTasksDone }} / {{ pflTasksTotal }}</span>
             </div>
+            <p style="margin:0; max-width:720px; font-size:13px; line-height:1.55; color:color-mix(in srgb, var(--color-text) 72%, transparent); text-wrap:pretty;">Muster: Fallstudie Lagerverwaltung (Lastenheft, Glossar, Pflichtenheft, OOA-Modell). Pro Schritt erst ansehen, wie das Muster es macht, dann für dein Hotel umsetzen. Die Hotel-Punkte sind nur Leitfragen, keine Lösung.</p>
+            
             <sc-for list="{{ pflTasks }}" as="t" hint-placeholder-count="8">
-              <div style="display:flex; gap:12px; align-items:flex-start; padding:8px 0; border-top:1px solid var(--color-divider);">
+              <div style="display:flex; gap:12px; align-items:flex-start; padding:10px 0; border-top:1px solid var(--color-divider);">
                 <button onClick="{{ t.toggle }}" aria-pressed="{{ t.checked }}" aria-label="{{ t.text }}" style="width:22px; height:22px; flex:none; margin-top:1px; padding:0; display:grid; place-items:center; border-radius:7px; border:2px solid {{ t.checkBorder }}; background:{{ t.checkBg }}; color:{{ t.checkFg }}; font-size:13px; font-weight:800; line-height:1; cursor:pointer;">{{ t.checkMark }}</button>
-                <div style="flex:1; min-width:0; display:flex; flex-direction:column; gap:5px;">
-                  <span style="font-size:14px; line-height:1.45; text-wrap:pretty; opacity:{{ t.opacity }}; text-decoration:{{ t.deco }};">{{ t.text }}</span>
+                <div style="flex:1; min-width:0; display:flex; flex-direction:column; gap:6px;">
+                  <div style="display:flex; flex-direction:column; gap:1px; opacity:{{ t.opacity }};">
+                    <span style="font-size:11px; letter-spacing:0.06em; text-transform:uppercase; font-weight:700; color:color-mix(in srgb, var(--p4) 70%, var(--color-text));">Schritt {{ t.step }}</span>
+                    <span style="font-size:14.5px; line-height:1.4; font-weight:600; text-wrap:pretty; text-decoration:{{ t.deco }};">{{ t.text }}</span>
+                  </div>
                   <div style="display:flex; flex-wrap:wrap; gap:6px 10px; align-items:center;">
                     <span style="font-size:11px; font-weight:700; padding:2px 9px; border-radius:999px; background:{{ t.phSoft }}; color:{{ t.phInk }};">Phase {{ t.num }} · {{ t.range }}</span>
                     <span style="font-size:12px; color:color-mix(in srgb, var(--color-text) 62%, transparent);">{{ t.hLabel }}</span>
-                    <sc-if value="{{ t.hasDetail }}"><button onClick="{{ t.toggleDetail }}" style="padding:2px 8px; border:none; border-radius:6px; background:transparent; color:var(--color-accent); font-family:var(--font-body); font-size:12px; font-weight:700; cursor:pointer;">{{ t.detailLabel }}</button></sc-if>
+                    <sc-if value="{{ t.hasPg }}"><span style="font-size:12px; color:color-mix(in srgb, var(--color-text) 62%, transparent);">{{ t.pg }}</span></sc-if>
+                    <sc-if value="{{ t.hasDetail }}"><button onClick="{{ t.toggleDetail }}" style="padding:3px 10px; border:1.5px solid color-mix(in srgb, var(--color-accent) 45%, transparent); border-radius:999px; background:transparent; color:var(--color-accent); font-family:var(--font-body); font-size:12px; font-weight:700; cursor:pointer;">{{ t.detailLabel }}</button></sc-if>
                   </div>
-                  <sc-if value="{{ t.expanded }}"><p style="margin:0; max-width:680px; font-size:13px; line-height:1.6; color:color-mix(in srgb, var(--color-text) 88%, transparent); text-wrap:pretty;">{{ t.detail }}</p></sc-if>
+                  <sc-if value="{{ t.noBsp }}"><p style="margin:0; max-width:680px; font-size:13px; line-height:1.6; color:color-mix(in srgb, var(--color-text) 88%, transparent); text-wrap:pretty;">{{ t.detail }}</p></sc-if>
+                  <sc-if value="{{ t.hasBsp }}">
+                    <div style="display:flex; flex-direction:column; gap:12px; padding:14px 16px; margin-top:2px; border-radius:var(--radius-md, 12px); background:color-mix(in srgb, var(--color-text) 4%, transparent); font-size:13.5px; line-height:1.55;">
+                      <div style="display:flex; flex-direction:column; gap:4px;">
+                        <span style="font-size:11px; letter-spacing:0.08em; text-transform:uppercase; font-weight:700; color:var(--color-accent);">So macht es das Muster · {{ t.pg }}</span>
+                        <ul style="margin:0; padding-left:18px; display:flex; flex-direction:column; gap:3px;"><sc-for list="{{ t.im }}" as="b"><li style="margin:0; text-wrap:pretty;">{{ b.v }}</li></sc-for></ul>
+                      </div>
+                      <sc-if value="{{ t.hasFig }}"><div class="dg-scroll" style="overflow-x:auto; padding:4px 0;">{{ t.fig }}</div></sc-if>
+                      <div style="display:flex; flex-direction:column; gap:2px;">
+                        <span style="font-size:11px; letter-spacing:0.08em; text-transform:uppercase; font-weight:700; color:color-mix(in srgb, var(--color-text) 62%, transparent);">Warum so</span>
+                        <span style="text-wrap:pretty;">{{ t.why }}</span>
+                      </div>
+                      <sc-if value="{{ t.hasWarn }}"><div style="display:flex; flex-direction:column; gap:2px; padding:8px 12px; border-left:3px solid var(--p3); border-radius:6px; background:color-mix(in srgb, var(--p3) 10%, transparent);">
+                        <span style="font-size:11px; letter-spacing:0.08em; text-transform:uppercase; font-weight:700; color:color-mix(in srgb, var(--p3) 75%, var(--color-text));">Achtung</span>
+                        <span style="text-wrap:pretty;">{{ t.warn }}</span>
+                      </div></sc-if>
+                      <div style="display:flex; flex-direction:column; gap:2px;">
+                        <span style="font-size:11px; letter-spacing:0.08em; text-transform:uppercase; font-weight:700; color:color-mix(in srgb, var(--color-text) 62%, transparent);">Typischer Fehler</span>
+                        <span style="text-wrap:pretty;">{{ t.err }}</span>
+                      </div>
+                      <div style="display:flex; flex-direction:column; gap:4px; padding:10px 12px; border-radius:8px; border:1.5px solid color-mix(in srgb, var(--p4) 55%, transparent); background:color-mix(in srgb, var(--p4) 9%, transparent);">
+                        <span style="font-size:11px; letter-spacing:0.08em; text-transform:uppercase; font-weight:700; color:color-mix(in srgb, var(--p4) 70%, var(--color-text));">Jetzt für dein Hotel</span>
+                        <ul style="margin:0; padding-left:18px; display:flex; flex-direction:column; gap:3px;"><sc-for list="{{ t.hotel }}" as="b"><li style="margin:0; text-wrap:pretty;">{{ b.v }}</li></sc-for></ul>
+                      </div>
+                    </div>
+                  </sc-if>
                 </div>
               </div>
             </sc-for>
@@ -1415,14 +1453,68 @@ class Component extends DCLogic {
         checks:['Vererbungshierarchie komplett in einem Paket', 'Bestellung und Bestellposition im selben Paket', 'Pakete als verständliche Themenbereiche benannt', 'Abhängigkeiten gestrichelt mit offener Spitze', 'Wenige Beziehungen über Paketgrenzen'] }
     ];
 
+    // ---------- Muster Pflichtenheft: Schaubilder ----------
+    const pfMap = (() => { const L = [['1 Zielbestimmung',''],['2 Produkteinsatz',''],['3 Produktübersicht',''],['4 Produktfunktionen','/LF10/–/LF70/'],['5 Produktdaten','/LD10/–/LD60/'],['6 Produktleistungen','/LL10/–/LL20/'],['7 Qualitätsanforderungen',''],['8 Ergänzungen','']];
+      const P = [['1 Zielbestimmung','Muss · Wunsch · Abgrenzung',0],['2 Produkteinsatz','Bereiche · Zielgruppen',0],['3 Produktübersicht','Anwendungsfalldiagramm',0],['4 Produktfunktionen','/F10/ (/LF10/) …',0],['5 Produktdaten','/D10/ (/LD10/) …',0],['6 Produktleistungen','/L10/ (/LL10/) …',0],['7 Qualitätsanforderungen','Tabelle',0],['8 Benutzungsoberfläche','/B10/ … · neu',1],['9 Nichtfunktionale Anf.','neu',1],['10 Techn. Produktumgebung','neu',1],['11 Entwicklungsumgebung','neu',1],['12 Gliederung in Teilprodukte','neu',1],['13 Ergänzungen','',0]];
+      const yl = i => 62 + i*22, yp = i => 62 + i*20;
+      let b = tx(14,24,'Lastenheft V1.0 · Muster S. 1–3',{a:'start',fs:12,w:700}) + tx(404,24,'Pflichtenheft V1.0 · Muster S. 7–15',{a:'start',fs:12,w:700})
+        + rc(8,38,272,L.length*22+10,{r:6}) + rc(398,38,294,P.length*20+12,{r:6});
+      L.forEach((r,i) => { b += tx(18,yl(i),r[0],{a:'start',fs:11}) + (r[1] ? tx(272,yl(i),r[1],{a:'end',fs:10,c:C.a}) : ''); });
+      P.forEach((r,i) => { b += tx(408,yp(i),r[0],{a:'start',fs:11,w:r[2]?600:400,c:r[2]?C.a:C.t}) + (r[1] ? tx(684,yp(i),r[1],{a:'end',fs:9.5,c:r[2]?C.a:C.m}) : ''); });
+      for (let i = 0; i < 7; i++) b += ln(280,yl(i)-4,398,yp(i)-4,{c:C.m,sw:1});
+      b += ln(280,yl(7)-4,398,yp(12)-4,{c:C.m,sw:1});
+      b += tx(350,346,'Dazu im Muster: Anhang zur Technik (S. 3–6) · Glossar (S. 6–7) · OOA-Modell (S. 16)',{fs:10.5,c:C.m});
+      return svg(700,352,b); })();
+
+    const pfUc = (() => { const ys = [62,114,166,218,270,322,374], cx = 300;
+      const L = ['Automatisches|Einlagern','Automatisches|Auslagern','Manuelles|Einlagern','Manuelles|Auslagern','Sperren setzen|und aufheben','Überblick über|Lagerbestand','Statistiken|ermitteln'];
+      const ue = (i,px,py) => { const dx = px-cx, dy = py-ys[i], t = 1/Math.sqrt(dx*dx/(92*92) + dy*dy/(22*22)); return [Math.round(cx+dx*t), Math.round(ys[i]+dy*t)]; };
+      const to = (px,py,i) => { const e = ue(i,px,py); return ln(px,py,e[0],e[1]); };
+      let b = rc(180,8,240,396,{f:'transparent'}) + tx(190,30,'Lagerverwaltung',{a:'start',fs:11,w:500});
+      ys.forEach((y,i) => { b += uc(cx,y,92,22,L[i]); });
+      b += actor(80,40,'Produktion') + to(94,61,0);
+      b += actor(80,120,'QS') + to(94,141,1) + ln(94,141,208,322);
+      b += actor(520,60,'Testmaschinen') + to(506,81,1);
+      b += actor(520,190,'Instandhaltung') + to(506,211,2) + to(506,211,3) + to(506,211,4);
+      b += actor(80,330,'Werksleitung') + to(94,351,6);
+      return svg(600,412,b); })();
+
+    const pfTpl = '<div style="width:100%;max-width:640px;display:grid;grid-template-columns:minmax(120px,auto) 1fr;gap:0;font-size:13px;line-height:1.45;border:1px solid var(--color-divider);border-radius:10px;overflow:hidden;text-align:left">'
+      + [['Nummer','/F10/ (/LF10/) · Rückverweis aufs Lastenheft'],['Geschäftsprozess','Automatisches Einlagern'],['Ziel','Reifen erhält einen Lagerplatz und wird eingelagert'],['Kategorie','primär'],['Vorbedingung','Barcode erfolgreich gescannt, sonst direkt in den Überlauf'],['Nachbedingung Erfolg','physikalisch eingelagert und in der Datenbank verbucht'],['Nachbedingung Fehlschlag','Reifen liegt im Überlauf oder Fehler »Platz belegt«'],['Akteure','Produktion'],['Auslösendes Ereignis','SPS meldet: Reifen X vom Typ Y am Scanner'],['Beschreibung','1 Reifentyp ermitteln · 2 Module ermitteln · 3 Platz bestimmen · 4 Reifen fördern · 5 Einlagerbefehl'],['Erweiterung','2a, 3a: optionale Verbesserungen zu Schritt 2 bzw. 3'],['Alternativen','2a: kein Platz gefunden → Reifen in den Überlauf']]
+        .map((r,i) => '<div style="padding:6px 10px;font-weight:700;background:color-mix(in srgb, var(--color-accent) ' + (i%2?8:14) + '%, transparent)">' + r[0] + '</div><div style="padding:6px 10px;background:color-mix(in srgb, var(--color-text) ' + (i%2?2:5) + '%, transparent)">' + r[1] + '</div>').join('') + '</div>';
+
+    const pfAct = svg(460,366, start(150,14) + ar(150,22,150,40,'open') + act(150,56,'Reifentyp ermitteln',200) + ar(150,72,150,90,'open') + act(150,106,'Module ermitteln',200) + ar(150,122,150,139,'open')
+      + dec(150,152) + ar(150,165,150,186,'open') + tx(158,181,'[Platz gefunden]',{a:'start',fs:10.5}) + ar(163,152,290,152,'open') + tx(226,145,'[kein Platz]',{fs:10.5})
+      + act(150,202,'Lagerplatz bestimmen',200) + ar(150,218,150,236,'open') + act(150,252,'Reifen auf Einlagerstich fördern',236) + ar(150,268,150,286,'open') + act(150,302,'Einlagerbefehl ans Modul',200)
+      + ar(150,318,150,340,'open') + end(150,352) + act(370,152,'Reifen in den Überlauf',160) + ar(370,168,370,340,'open') + end(370,352));
+
+    const pfSeq = svg(520,250, life(110,10,':SPS',236,{w:90}) + life(400,10,':Lagerverwaltung',236,{w:150})
+      + msg(110,400,74,'Telegramm 01-AB1234','open') + tx(255,90,'Reifen AB1234 am Scanner',{fs:10,c:C.m})
+      + msg(400,110,124,'Telegramm 01-AB1234-2','open') + tx(255,140,'zu Modul 2 transportieren',{fs:10,c:C.m})
+      + msg(110,400,174,'Bereitmeldung','open') + tx(255,190,'Reifen steht vor Modul 2',{fs:10,c:C.m})
+      + msg(400,110,220,'Transportauftrag','open') + tx(255,236,'zum endgültigen Lagerplatz',{fs:10,c:C.m}));
+
     // ---------- Lernplan ----------
     const phases = [
       { num:'01', title:'Start & Struktur', start:'2026-11-19', end:'2026-11-29', weeks:1.5, tasks:[
-        { id:'p1a', tag:'Orga', h:0.25, text:'Anmeldung zur Studienarbeit im ZPA prüfen', detail:'Ohne ZPA-Anmeldung kein Schein, ohne Schein keine Klausurzulassung.', ref:'85' },
-        { id:'p1b', tag:'Pflichtenheft', h:0.5, text:'Aufgabenblatt lesen und Mindestanforderungen markieren', detail:'Einzelabgabe: mind. 8 funktionale und 8 nicht-funktionale Anforderungen, Stamm- und Bewegungsdaten (muss), Customizing (kann), mind. 1 statisches und 2 dynamische Produktmodelle in unterschiedlichen Modellierungssprachen, Docker-Projekt (kann, gibt Bonus). Die Zähler im Reiter Pflichtenheft helfen beim Mitzählen.', ref:'82–85' },
-        { id:'p1c', tag:'Pflichtenheft', h:0.25, text:'Pflichtenheft-Muster (sews2026-pflichtenheft.pdf) besorgen', detail:'Wird laut Vorlesung bereitgestellt. Falls du es nicht findest: im Praktikum nachfragen.', ref:'164' },
-        { id:'p1d', tag:'Pflichtenheft', h:0.5, text:'Dokument mit der Balzert-Gliederung anlegen', detail:'1 Zielbestimmung (Muss-, Wunsch-, Abgrenzungskriterien) · 2 Produkteinsatz · 3 Produktübersicht · 4 Produktfunktionen · 5 Produktdaten · 6 Produktleistungen · 7 Qualitätsanforderungen · 8 Benutzungsoberfläche · 9 Nicht-funktionale Anforderungen · 10 Technische Produktumgebung · 11 Entwicklungsumgebung · 12 Gliederung in Teilprodukte · 13 Ergänzungen. Die Punkte 6, 7, 10 und 11 dürfen unter 9 zusammengefasst werden.', ref:'163–164' },
-        { id:'p1e', tag:'Pflichtenheft', h:1, text:'Ausgangssituation durcharbeiten: Substantive, Verben und Restriktionen markieren', detail:'Substantive sind Kandidaten für Klassen und Produktdaten, Verben für Anwendungsfälle. Restriktionen getrennt sammeln: Aus ihnen werden später Kardinalitäten und Ausnahmen.', ref:'82–83' },
+        { id:'p1e', tag:'Pflichtenheft', h:1, text:'Ausgangssituation wie ein Lastenheft lesen und Gerüst mit 13 Kapiteln anlegen', detail:'Verben sind Kandidaten für Funktionen, Substantive für Daten und Klassen, Zahlen und Regeln für Restriktionen. Danach ein Dokument mit den 13 Kapiteln nach Balzert anlegen.', ref:'82–83, 163–164',
+          bsp:{ pg:'1–3, 6–7', fig:pfMap,
+            im:['Das Lastenheft kommt vom Auftraggeber und bleibt grob: 8 Kapitel, insgesamt etwa 3 Seiten.','Jeder Geschäftsprozess hat nur Nummer, Akteur und 1–3 Sätze Beschreibung (/LF10/ Automatisches Einlagern, Akteur Produktion).','Daten nur mit Höchstmengen (/LD10/ Lagerplätze, max. 5.000), Leistungen als Zahl (/LL10/ max. 5 s).','Anhang erklärt die Technik, das Glossar die Fachbegriffe.'],
+            why:'Das Pflichtenheft verfeinert genau diese Punkte. Jede Nummer verweist zurück (/F10/ (/LF10/)), so sieht man, woher eine Anforderung kommt.',
+            err:'Restriktionen überlesen oder Anforderungen erfinden, die mit der Ausgangssituation nichts zu tun haben.',
+            hotel:['Deine Ausgangssituation spielt die Rolle des Lastenhefts: Verben, Substantive, Zahlen und Regeln getrennt markieren.','Dokument mit den 13 Kapiteln anlegen, Kopf mit Versionstabelle (Version, Autor, Datum, Status).'] } },
+        { id:'pfz', tag:'Pflichtenheft', h:0.75, text:'Kap. 1 Zielbestimmung: Muss-, Wunsch- und Abgrenzungskriterien', detail:'Einleitungssatz mit Problem und Aufgabe der Software, dann drei Listen: was das System können muss, was schön wäre und was es ausdrücklich nicht tut.', ref:'163',
+          bsp:{ pg:'7–8',
+            im:['Einleitungssatz: Problem (Herstellung beschleunigen) und Aufgabe der Software, fast wörtlich aus dem Lastenheft.','1.1 Musskriterien: 7 Punkte, z. B. »Automatisches Ein- und Auslagern«, dazu konkrete Abfragen (»Wie viele Reifen vom Typ X sind eingelagert?«).','1.2 Wunschkriterien: verzichtbar, z. B. Statistiken, Zugriff übers Intranet.','1.3 Abgrenzungskriterien: was das System bewusst nicht tut, z. B. »Keine Überwachung der Mitarbeiter«.'],
+            why:'Das Pflichtenheft ist Vertragsbestandteil und Basis der Abnahme (Folie S. 161). Die Abgrenzung verhindert Streit darüber, was geliefert werden muss.',
+            err:'Abgrenzung leer lassen oder Muss und Wunsch vermischen.',
+            hotel:['Was muss die Migration zwingend leisten?','Was wäre nur wünschenswert?','Was gehört ausdrücklich nicht dazu?'] } },
+        { id:'pfe', tag:'Pflichtenheft', h:0.75, text:'Kap. 2 Produkteinsatz und Glossar anlegen', detail:'Anwendungsbereiche, Zielgruppen mit ihren Tätigkeiten, Betriebsbedingungen. Parallel ein Glossar für alle Fachbegriffe beginnen.', ref:'123, 163',
+          bsp:{ pg:'6–8',
+            im:['2.1 Anwendungsbereiche: ein Satz reicht (»Technischer Anwendungsbereich«).','2.2 Zielgruppen nach Funktionsgruppen, je mit dem, was sie tun (Instandhaltung: wartet, setzt Sperren).','2.3 Betriebsbedingungen: Umgebung und Störquellen (staubgeschützte Geräte, Signale mehrfach empfangen).','Glossar als eigenes Dokument, alphabetisch, Verweise mit →.'],
+            why:'Die Zielgruppen werden später zu Akteuren. Das Glossar sorgt für einheitliche Begriffe (Folie S. 123).',
+            err:'Zielgruppen nur aufzählen, ohne ihre Tätigkeit zu nennen.',
+            hotel:['Wer arbeitet mit dem System und was tut diese Gruppe?','Unter welchen Bedingungen läuft das System (Last, Betrieb, Verfügbarkeit)?','Welche Begriffe brauchen eine eindeutige Definition?'] } },
         { id:'p1f', tag:'Theorie', h:0.75, text:'Lastenheft vs. Pflichtenheft', detail:'Lastenheft: vom Auftraggeber, Ergebnis der Planung, beschreibt das Was und Wofür ohne Details (DIN 69905). Pflichtenheft: Ergebnis der Analyse, beschreibt Funktionen, Leistungen und Schnittstellen so genau, dass Auftraggeber und Auftragnehmer die Erfüllung prüfen können. Es ist Vertragsbestandteil und Basis der Abnahme; Änderungen müssen zwischen AG und AN abgestimmt werden.', ref:'120–122, 161–162' },
         { id:'p1g', tag:'UML', h:1, text:'Blatt 5 (Anwendungsfalldiagramm) ohne Lösung neu zeichnen und vergleichen', detail:'«include» = unbedingte Einbindung, Pfeil vom einbindenden zum eingebundenen Anwendungsfall. «extend» = bedingte Einbindung, Pfeil von der Erweiterung zum erweiterten Anwendungsfall, mit Bedingung und Extension Point. Akteure stehen immer außerhalb der Systemgrenze.', ref:'171–184' }
       ]},
@@ -1435,36 +1527,89 @@ class Component extends DCLogic {
         { id:'p2f', tag:'UML', h:0.75, text:'Übung 02: Klassendiagramm (Fahrradverleih)', go:'ex2' }
       ]},
       { num:'03', title:'Produktdaten & Anwendungsfälle', start:'2026-12-07', end:'2026-12-13', weeks:1, tasks:[
-        { id:'p3a', tag:'Pflichtenheft', h:1, text:'Produktdaten abgrenzen: Stamm-, Bewegungs- und Customizing-Daten', detail:'Stammdaten sind langlebig und werden selten geändert. Bewegungsdaten entstehen durch Vorgänge, haben einen Status und verweisen auf Stammdaten. Customizing-Daten legen Domänen, Typen und Nummernkreise fest, auf die Stammdaten verweisen. Die Löschregeln aus der Ausgangssituation mit aufnehmen.', ref:'82–83' },
-        { id:'p3b', tag:'Pflichtenheft', h:1.5, text:'Statisches Produktmodell erstellen, z. B. Klassendiagramm', detail:'Einzelabgabe: mind. 1. Prüfe, ob jede Restriktion aus der Ausgangssituation als Kardinalität oder Constraint im Modell steht. Zeichnen z. B. mit app.diagrams.net.', ref:'84' },
+        { id:'pfu', tag:'Pflichtenheft', h:0.75, text:'Kap. 3 Produktübersicht: Anwendungsfalldiagramm', detail:'Ein Anwendungsfalldiagramm mit allen funktionalen Anforderungen. Jeder Anwendungsfall entspricht genau einer FA aus Kapitel 4.', ref:'163, 171–192',
+          bsp:{ pg:'8–9', fig:pfUc,
+            im:['Kapitel 3 besteht nur aus dem Übersichtsdiagramm (Abb. B-8).','Systemgrenze »Lagerverwaltung«, 7 Anwendungsfälle, 5 Akteure außerhalb.','Auch Maschinen sind Akteure (Testmaschinen).','Jeder Anwendungsfall entspricht genau einer Funktion /F10/–/F70/.'],
+            why:'Der Leser sieht auf einen Blick alle Funktionen, bevor Kapitel 4 ins Detail geht.',
+            err:'Namen im Diagramm weichen von Kapitel 4 ab oder ein Fall fehlt auf einer der beiden Seiten.',
+            hotel:['Ein Anwendungsfalldiagramm mit allen deinen FAs, Namen identisch zu Kapitel 4.','«include» und «extend» nur, wo es wirklich passt (Notation aus dem Reiter UML-Überblick).'] } },
         { id:'p3c', tag:'Theorie', h:0.5, text:'Schablone für Anwendungsfallbeschreibungen', detail:'Name, Kurzbeschreibung, Akteure, Auslöser, Ergebnisse, eingehende Daten, Vor- und Nachbedingungen, essenzielle Schritte, offene Punkte, Änderungshistorie. Dazu Ausnahmen und Fehlersituationen, Regeln, Alternativen. Sekundäre Anwendungsfälle (Teilabläufe, die in mehreren vorkommen) bekommen «secondary».', ref:'175–190' },
-        { id:'p3d', tag:'Pflichtenheft', h:1.5, text:'FA-01 bis FA-04 als Anwendungsfälle beschreiben', detail:'Jede Anforderung nummerieren und Reaktionen auf Ausnahmen dokumentieren, z. B. keine Verfügbarkeit oder eine verletzte Restriktion. Das Aufgabenblatt fordert ausdrücklich die Schablonen für primäre und sekundäre Anwendungsfälle.', ref:'84' }
+        { id:'p3d', tag:'Pflichtenheft', h:1.5, text:'Kap. 4 FA-01 bis FA-04 mit der Schablone beschreiben', detail:'Jede Anforderung nummeriert, mit Vor- und Nachbedingungen, Schritten und Reaktionen auf Ausnahmen. Das Aufgabenblatt fordert die Schablonen für primäre und sekundäre Anwendungsfälle.', ref:'84, 186–189',
+          bsp:{ pg:'8–12', fig:pfTpl,
+            im:['Jede Funktion bekommt dieselbe Schablone (unten /F10/ verkürzt).','Erweiterung und Alternative tragen die Nummer des Schritts, an dem sie ansetzen: 2a gehört zu Schritt 2.','Leere Felder werden mit »–« markiert, nicht weggelassen (/F50/).','Kategorie: /F10/–/F60/ sind primär, nur /F70/ Statistiken ist sekundär.'],
+            why:'Nachbedingung Fehlschlag und Alternativen sind die geforderten »Reaktionen auf Ausnahmen«.',
+            warn:'Die Vorlesung zeigt eine Schablone nach Oestereich (S. 186: Kurzbeschreibung, Ergebnisse, eingehende Daten, offene Punkte, Änderungshistorie). Das Muster nutzt die Balzert-Form. Was »primär« und »sekundär« genau heißt, definiert das Muster nicht. Welche Schablone erwartet wird, im Praktikum kurz klären.',
+            err:'Nur den Erfolgsfall beschreiben, Kategorie oder Fehlschlag fehlen.',
+            hotel:['FA-01 bis FA-04 mit allen Feldern der Schablone.','Pro FA mindestens eine Ausnahme mit Reaktion, z. B. wenn eine Restriktion verletzt wird.'] } },
+        { id:'p3a', tag:'Pflichtenheft', h:1, text:'Kap. 5 Produktdaten: Stamm-, Bewegungs- und Customizing-Daten', detail:'Stammdaten sind langlebig und werden selten geändert. Bewegungsdaten entstehen durch Vorgänge, haben einen Status und verweisen auf Stammdaten. Customizing-Daten legen Domänen, Typen und Nummernkreise fest (bei Einzelabgabe optional). Löschregeln mit aufnehmen.', ref:'82–83',
+          bsp:{ pg:'13',
+            im:['Nach Themen gruppiert (5.1 Lagerdaten … 5.4 Mitarbeiterdaten), jede Gruppe mit Nummer, Rückverweis und Höchstmenge: /D10/ (/LD10/) max. 5.000.','Alle Attribute werden aufgezählt.','Statuswerte stehen als Liste: Reifenstatus 0 = frei, 1 = reserviert für Einlagerung, 2 = belegt, 3 = reserviert für Auslagerung.','Redundanz wird begründet (»aus Geschwindigkeitsgründen redundant mitgeführt«).'],
+            why:'Mengen braucht man später für Leistungsanforderungen, Statuslisten machen Abläufe prüfbar.',
+            warn:'Das Muster teilt nicht in Stamm-, Bewegungs- und Customizing-Daten ein, dein Aufgabenblatt fordert das. Im Muster wären etwa Reifentypen Stammdaten und Auslagerchargen (mit Status und Datum) Bewegungsdaten. Diese Zuordnung ist meine Lesart, im Muster steht sie nicht.',
+            err:'Daten ohne Attribute, Mengen oder Statuswerte.',
+            hotel:['Jede Datengruppe einer der drei Arten zuordnen.','Pro Gruppe: Nummer, Attribute, Statuswerte, Löschregeln aus der Ausgangssituation.'] } },
+        { id:'p3b', tag:'Pflichtenheft', h:1.5, text:'Statisches Produktmodell: Klassendiagramm', detail:'Einzelabgabe: mind. 1. Jede Restriktion aus der Ausgangssituation als Kardinalität oder Constraint. Zeichnen z. B. mit app.diagrams.net.', ref:'84, 164',
+          bsp:{ pg:'16',
+            im:['Das OOA-Modell (Abb. B-9) steht hinter den 13 Kapiteln, Folie S. 164 nennt dafür Kapitel 13 »Ergänzungen, z. B. Produktmodell«.','Klassen kommen aus den Produktdaten (Modul, Lagerplatz, Reifen, ReifenTyp) und aus der Technik (Gabel, Förderer).','Restriktionen werden zu Kardinalitäten: jeder Reifen hat genau einen ReifenTyp.'],
+            why:'Das Modell zeigt die statische Sicht, die das Aufgabenblatt verlangt.',
+            warn:'Das Muster nutzt ältere Tool-Notation (0..n, Symbole vor Attributen). In deiner Arbeit die Notation von Prof. Zimmer verwenden: * statt 0..n, keine Symbole.',
+            err:'Klassen im Modell, die in Kapitel 5 nicht vorkommen, oder Restriktionen ohne Kardinalität.',
+            hotel:['Klassen aus deinen Produktdaten (Kapitel 5) ableiten.','Jede Restriktion als Kardinalität prüfen.'] } }
       ]},
       { num:'04', title:'Dynamische Sicht: Aktivitäten', start:'2026-12-14', end:'2026-12-20', weeks:1, tasks:[
-        { id:'p4a', tag:'Pflichtenheft', h:1.5, text:'FA-05 bis FA-08 ergänzen (Einzelabgabe: mind. 8)' },
+        { id:'p4a', tag:'Pflichtenheft', h:1.5, text:'Kap. 4 FA-05 bis FA-08 ergänzen, inkl. Abfragen und Listen', detail:'Einzelabgabe: mind. 8 FAs. Abfragen und Ausgaben aus der Ausgangssituation sind eigene Anforderungen.', ref:'84',
+          bsp:{ pg:'11–13',
+            im:['Einfache Funktionen dürfen kurz sein: /F50/ Sperren hat nur 2 Schritte.','4.2 Listen: Ausgaben wie die Reifen-Bestandsliste stehen als eigene Nummern mit ihren Feldern.','Verweise zwischen Kapiteln über Nummern (/L10/ nennt /F60/, /B40/ nennt /F30/).'],
+            why:'Abfragen gehören zum Funktionsumfang und werden bei der Abnahme genauso geprüft.',
+            warn:'Das Muster hat selbst Fehler: /F60/ und /F70/ sind in 4.1 und 4.2 doppelt vergeben, in /F20/ fehlt Schritt 4. Nicht übernehmen, »nummeriert« ist ein Bewertungskriterium.',
+            err:'Nummern doppelt vergeben oder Schritte überspringen.',
+            hotel:['Bis mindestens FA-08 ergänzen.','Abfragen aus der Ausgangssituation nicht vergessen.','Nummern einmal prüfen: eindeutig und lückenlos.'] } },
         { id:'p4b', tag:'Theorie', h:0.5, text:'Aktivitätsdiagramm: Knoten und Kanten', detail:'Startknoten (mind. 1). Der Endknoten beendet alle Aktionen sofort, das Ablaufende (Kreis mit X) nur den eigenen Fluss. Entscheidung: Raute, Bedingungen in [ ], dürfen sich nicht überlappen. Aufspalten und Synchronisation: Balken (logisches UND). Objektfluss: Objekt [Zustand]. Partitionen zeigen Verantwortungsbereiche.', ref:'281–289' },
         { id:'p4c', tag:'UML', h:1.25, text:'Blatt 7 (Sauce Hollandaise, If-else, Maximum von 3 Werten)', detail:'Bei 7a sind mehrere Startknoten erlaubt. Bei 7c zuerst alle Notationselemente benennen, dann jeden möglichen Ablauf durchspielen.' },
         { id:'p4d', tag:'UML', h:0.5, text:'Übung 03: Aktivitätsdiagramm (Online-Bestellung)', go:'ex3' },
-        { id:'p4e', tag:'Pflichtenheft', h:1, text:'1. dynamisches Modell: Aktivitätsdiagramm', detail:'Das Aufgabenblatt schlägt Aktivitätsdiagramme für Varianten von Abläufen vor. Konkrete Instanzen dieser Abläufe lassen sich anschließend als Sequenzdiagramme modellieren.', ref:'84' }
+        { id:'p4e', tag:'Pflichtenheft', h:1, text:'1. dynamisches Modell: Aktivitätsdiagramm', detail:'Das Aufgabenblatt schlägt Aktivitätsdiagramme für Varianten von Abläufen vor. Konkrete Instanzen dieser Abläufe lassen sich anschließend als Sequenzdiagramme modellieren.', ref:'84',
+          bsp:{ pg:'8–9', fig:pfAct,
+            im:['Das Muster enthält kein dynamisches Modell.','Die Schritte einer FA lassen sich aber direkt übersetzen: Schritte werden Aktionen, Alternativen werden Entscheidungen. Unten /F10/ mit Alternative 2a als Beispiel.'],
+            why:'Ein Aktivitätsdiagramm zeigt alle Varianten eines Ablaufs auf einen Blick.',
+            err:'Diagramm und Textschritte widersprechen sich.',
+            hotel:['Eine FA mit mehreren Varianten wählen.','Schritte und Alternativen als Aktivitätsdiagramm zeichnen, Bedingungen in [ ].'] } }
       ]},
       { num:'05', title:'Ferien: Pflichtenheft fertig + Docker', start:'2026-12-21', end:'2027-01-10', weeks:3, holiday:true, note:'Hier entsteht der Großteil des Pflichtenhefts. Plane feste Lernblöcke ein und lass die Tage um Weihnachten frei.', tasks:[
         { id:'p5a', tag:'Theorie', h:0.5, text:'Zustandsdiagramm', detail:'Zeigt die Zustände eines einzelnen Objekts über seine Lebenszeit (endlicher Automat), im Gegensatz zu Interaktionsdiagrammen mit mehreren Objekten. Transition: ereignis(argumente) [bedingung] /aktion. Zeitereignisse: after(Dauer), at(Zeitpunkt). Im Zustand: entry / do / exit.', ref:'292–296' },
         { id:'p5b', tag:'UML', h:0.5, text:'Übung 04: Zustandsdiagramm (Buchexemplar)', go:'ex4' },
         { id:'p5c', tag:'Theorie', h:0.5, text:'Sequenzdiagramm', detail:'Zeigt ein Szenario mit Betonung der zeitlichen Reihenfolge. Lebenslinie gestrichelt, Aktivierungsbalken = Steuerungsfokus. Synchrone Nachricht: gefüllte Spitze. Asynchron: offene Spitze. Antwort und Objekterzeugung: gestrichelt mit offener Spitze.', ref:'302–307' },
         { id:'p5d', tag:'UML', h:0.75, text:'Übung 05: Sequenzdiagramm (Bestellung anlegen)', go:'ex5' },
-        { id:'p5e', tag:'Pflichtenheft', h:2, text:'2. dynamisches Modell, z. B. Sequenzdiagramm', detail:'Gefordert sind mind. 2 dynamische Modelle »unterschiedlicher Modellierungssprachen«. Ob zwei UML-Diagrammarten reichen oder z. B. BPMN dazu muss, kurz im Praktikum klären.', ref:'84' },
-        { id:'p5f', tag:'Pflichtenheft', h:3, text:'NFA-01 bis NFA-08 ausführlich und priorisiert formulieren', detail:'Nummeriert, begründet und nicht nur als Tabelle. Kategorien aus der Vorlesung: Benutzbarkeit, Performance, Zuverlässigkeit, Sicherheit, Wartbarkeit, Administrierbarkeit, Rahmenbedingungen. Die Ausgangssituation (schwankende Last, Skalierung, Microservices, Private Cloud) gibt Anknüpfungspunkte.', ref:'162, 84–85' },
-        { id:'p5g', tag:'Pflichtenheft', h:2.5, text:'Übrige Kapitel füllen: Zielbestimmung, Produkteinsatz, Produktumgebung, Glossar', detail:'Zielbestimmung mit Muss-, Wunsch- und Abgrenzungskriterien. Produkteinsatz: Anwendungsbereiche, Zielgruppen, Betriebsbedingungen. Technische Produktumgebung: Hardware, Software, Schnittstellen. Ein Glossar sorgt für einheitliche Begriffe.', ref:'123, 163–164' },
-        { id:'p5h', tag:'Pflichtenheft', h:1, text:'Customizing-Daten definieren (bei Einzelabgabe optional)' },
+        { id:'p5e', tag:'Pflichtenheft', h:2, text:'2. dynamisches Modell: Sequenzdiagramm', detail:'Gefordert sind mind. 2 dynamische Modelle »unterschiedlicher Modellierungssprachen«. Ob zwei UML-Diagrammarten reichen oder z. B. BPMN dazu muss, kurz im Praktikum klären.', ref:'84',
+          bsp:{ pg:'6–7', fig:pfSeq,
+            im:['Auch hier kein Diagramm im Muster.','Das Glossar beschreibt unter »Telegramm« aber einen konkreten Ablauf zwischen SPS und Lagerrechner. Das ist eine Instanz von /F10/ und passt genau als Sequenzdiagramm.','Telegramme sind asynchron, daher offene Pfeilspitzen.'],
+            why:'Das Sequenzdiagramm zeigt einen konkreten Durchlauf mit zeitlicher Reihenfolge, das Aktivitätsdiagramm alle Varianten.',
+            err:'Ein Sequenzdiagramm mit allen Varianten überladen, statt ein Szenario zu zeigen.',
+            hotel:['Ein konkretes Szenario einer FA wählen.','Beteiligte Objekte, Nachrichten und Antworten in zeitlicher Reihenfolge darstellen.'] } },
+        { id:'p5f', tag:'Pflichtenheft', h:3, text:'Kap. 6–9 NFA-01 bis NFA-08 ausführlich und priorisiert', detail:'Nummeriert, begründet und nicht nur als Tabelle. Kategorien aus der Vorlesung: Benutzbarkeit, Performance, Zuverlässigkeit, Sicherheit, Wartbarkeit, Administrierbarkeit, Rahmenbedingungen.', ref:'162, 84–85',
+          bsp:{ pg:'14–15',
+            im:['Kap. 6 Produktleistungen mit messbarem Wert und Grund: /L30/ Platzwahl in höchstens 3 s, sonst kann die SPS die Lieferung nicht garantieren.','Kap. 7 Qualität als Tabelle: Merkmale mit sehr gut, gut, normal, nicht relevant.','Kap. 8 Benutzungsoberfläche /B10/–/B40/, inkl. Tabelle, welche Rolle welche Funktion nutzen darf.','Kap. 9 ist nur ein kurzer Absatz.'],
+            why:'Messbare Werte machen eine NFA bei der Abnahme prüfbar.',
+            warn:'Für deine Abgabe reicht das Muster hier nicht: mind. 8 NFAs, ausführlich, verbal und individuell priorisiert, nicht nur als Tabelle. Vorbild ist die Form von /L30/ (Nummer, messbarer Wert, Begründung), nicht die Tabelle aus Kapitel 7.',
+            err:'Nur eine Kreuzchen-Tabelle ohne Begründung und Priorität.',
+            hotel:['Je NFA: Nummer, Kategorie (S. 162), messbare Aussage, Begründung aus der Ausgangssituation.','Priorität je NFA und warum.'] } },
+        { id:'p5g', tag:'Pflichtenheft', h:2, text:'Kap. 10–13 Produktumgebung, Entwicklungsumgebung, Teilprodukte, Ergänzungen', detail:'Technische Produktumgebung: Software, Hardware, Orgware, Schnittstellen. Teilprodukte als Realisierungsreihenfolge. Ergänzungen: Produktmodelle, Verweise, offene Punkte.', ref:'164',
+          bsp:{ pg:'15',
+            im:['10 Technische Produktumgebung in vier Teilen: Software, Hardware, Orgware, Produkt-Schnittstellen.','11 Entwicklungsumgebung: ein Satz reicht (»Keine Abweichungen von der Produktumgebung«).','12 Teilprodukte: Version 1 Kernfunktionen ohne Statistik, Version 2 mit Statistik und neuen Geräten.','13 Ergänzungen: Termin und Konventionalstrafe von 5 % – das zeigt den Vertragscharakter.'],
+            why:'Diese Kapitel legen den Rahmen fest, den die Abnahme voraussetzt.',
+            err:'Kapitel weglassen statt kurz »keine Abweichungen« zu schreiben.',
+            hotel:['Zielumgebung und Schnittstellen aus der Ausgangssituation beschreiben.','Prüfen, ob eine Realisierungsreihenfolge sinnvoll ist.','Produktmodelle und offene Punkte in Kapitel 13 oder im Anhang.'] } },
         { id:'p5i', tag:'Docker', h:4, text:'Docker-Projekt: eine eigene funktionale Anforderung umsetzen', detail:'Vorschläge aus dem Aufgabenblatt: Gesamtpreis aus Belegpositionen oder Kapazitätsprüfung mit festen Werten. Abgabe: Dockerfile plus Quelldateien (Java oder Python). Ablauf wie in Blatt 2: mvn package → Dockerfile mit FROM, COPY, ENTRYPOINT → docker build -t name . → docker run --name c name.', ref:'84–85' },
         { id:'p5j', tag:'Theorie', h:1, text:'Function-Point-Methode', detail:'1) UFP: Eingaben, Ausgaben, Abfragen, interne und externe Datenbestände nach Komplexität gewichten (Eingaben 3/4/6, Ausgaben 4/5/7, Abfragen 3/4/6, interne Datenbestände 7/10/15, externe 5/7/10). 2) 14 Einflussfaktoren mit je 0–5 bewerten: TCF = 0,65 + 0,01 · ΣDI, liegt zwischen 0,65 und 1,35. 3) FP = UFP · TCF. 4) Über Referenzdaten in Personenmonate umrechnen, dann Risikofaktoren aufschlagen.', ref:'133–144' },
         { id:'p5k', tag:'UML', h:1.25, text:'Übung 06 + 07: Kommunikations- und Paketdiagramm', go:'ex6', detail:'Kommunikationsdiagramm: Links wie im Objektdiagramm, Reihenfolge über Nummern 1, 1.1, 1.2. Paketkriterien: Vererbung nicht schneiden, keine Aggregation trennen, wenige Assoziationen über Paketgrenzen.', ref:'274–277, 308–312' }
       ]},
       { num:'06', title:'Prüfen & abgeben', start:'2027-01-11', end:'2027-01-17', weeks:1, note:'Abgabe spätestens So 17.01.2027, 22:00 Uhr. Nicht auf den letzten Abend legen.', tasks:[
-        { id:'p6a', tag:'Pflichtenheft', h:1.5, text:'Jede Anforderung gegen die Bewertungskriterien prüfen', detail:'Eindeutig, korrekt, vollständig, plausibel, verständlich, nummeriert und gegen die Realwelt validierbar, als Vorbereitung für einen späteren Funktionstest. NFAs ausführlich, nicht nur als Tabelle mit Prioritäten.', ref:'85' },
-        { id:'p6b', tag:'Pflichtenheft', h:1, text:'Modelle gegen die Ausgangssituation prüfen: Ist jede Restriktion abgebildet?' },
-        { id:'p6c', tag:'Orga', h:0.25, text:'Deckblatt mit Name und Matrikelnummer, unterschriebene Erklärung beilegen', ref:'85', detail:'Die Erklärung mit dem vorgegebenen Wortlaut steht im Aufgabenblatt.' },
-        { id:'p6d', tag:'Orga', h:0.25, text:'Abgabe per Mail an zimmer@hm.edu', detail:'Das Docker-Projekt kann alternativ über GitHub oder Docker Hub abgegeben werden.', ref:'85' }
+        { id:'p6a', tag:'Pflichtenheft', h:1.5, text:'Abschluss-Check: Anforderungen, Nummern und Modelle prüfen', detail:'Eindeutig, korrekt, vollständig, plausibel, verständlich, nummeriert und gegen die Realwelt validierbar. Jede Restriktion im Modell abgebildet, Diagramme passen zu Kapitel 4.', ref:'85',
+          bsp:{ pg:'1, 7',
+            im:['Jedes Dokument im Muster beginnt mit einer Versionstabelle: Version, Autor, QS, Datum, Status, Kommentar.','Querverweise laufen über Nummern, das macht Lücken sichtbar.'],
+            why:'Genau diese Punkte stehen in den Bewertungskriterien.',
+            err:'Doppelte Nummern (wie im Muster), Diagramme mit anderen Namen als im Text.',
+            hotel:['Jede FA und NFA gegen die sieben Kriterien lesen.','Jede Restriktion: Wo steht sie im Modell?','Namen in Diagrammen und Kapitel 4 abgleichen.'] } },
+        { id:'p6d', tag:'Orga', h:0.5, text:'Abgabe: Deckblatt, unterschriebene Erklärung, Mail an zimmer@hm.edu', detail:'Deckblatt mit Name und Matrikelnummer, Erklärung im vorgegebenen Wortlaut (steht im Aufgabenblatt). Das Docker-Projekt kann alternativ über GitHub oder Docker Hub abgegeben werden.', ref:'85' }
       ]},
       { num:'07', title:'Klausur-Endspurt', start:'2027-01-18', end:null, tasks:[
         { id:'p7a', tag:'Theorie', h:0.75, text:'Prozessmodelle: eindimensional vs. zweidimensional', detail:'Balzert: keine Unterscheidung von Phase und Disziplin, eindimensional (z. B. Wasserfall, V-Modell XT). Unified Process (RUP, OEP): Phase ≠ Disziplin, zweidimensional, Basis für iterativ-inkrementelle Modelle. Agile Verfahren nutzen meist das zweidimensionale Modell; ein Scrum-Sprint dauert ca. 10–15 Arbeitstage.', ref:'7–10, 106–109' },
@@ -2152,7 +2297,7 @@ class Component extends DCLogic {
           'Eine Klasse erbt von mehreren Oberklassen gleichzeitig, hier von Digital- und Analog-Anzeige.', '272')
       ],
       objekt: [
-        SF('Drei Schreibweisen für Objekte', svg(320,80, O(6,20,90,':Klasse') + O(110,20,90,'einObjekt') + O(206,20,112,'einObjekt: Klasse') + tx(51,74,'anonym',{fs:10,c:C.m}) + tx(155,74,'nur Name',{fs:10,c:C.m}) + tx(262,74,'Name + Klasse',{fs:10,c:C.m})),
+        SF('Drei Schreibweisen für Objekte', svg(340,80, O(4,20,84,':Klasse') + O(98,20,90,'einObjekt') + O(198,20,138,'einObjekt: Klasse') + tx(46,74,'anonym',{fs:10,c:C.m}) + tx(143,74,'nur Name',{fs:10,c:C.m}) + tx(267,74,'Name + Klasse',{fs:10,c:C.m})),
           'Immer unterstrichen. Ohne Name heißt das Objekt anonym, ohne Klasse ist nur der Objektname bekannt.', '301'),
         SF('Mehrere Links mit Rollen', svg(320,120, O(100,8,110,':Dozent') + O(100,84,120,':Veranstaltung') + ln(130,38,130,84) + ln(185,38,185,84)
           + tx(124,64,'Referent',{a:'end',fs:10.5,c:C.m}) + tx(191,64,'Seminarleiter',{a:'start',fs:10.5,c:C.m})),
@@ -2236,11 +2381,22 @@ class Component extends DCLogic {
       ]
     };
     sheets.forEach(sh => { sh.sf = SFS[sh.k] || []; });
+    const TIPS = {
+      anwendungsfall: [['Systemgrenze als Rahmen mit Systemnamen, Akteure immer außerhalb.','191'],['Akteur und Anwendungsfall nur mit einfacher Linie verbinden, ohne Pfeilspitze. Kardinalitäten sind erlaubt.','191–192'],['«include»: Fall wird immer eingebunden, Pfeil zum eingebundenen Fall. «extend»: nur unter Bedingung, Pfeil zum erweiterten Fall.','181–184'],['Bei «extend» Extension Points unter einem Trennstrich im erweiterten Fall, Bedingung neben die Beziehung.','183'],['Generalisierung: geschlossene Spitze, vom speziellen zum allgemeinen Element.','180'],['Akteure untereinander nur über Generalisierung verbinden, nie mit einer Linie.',''],['Keine Reihenfolge einzeichnen: Das Diagramm zeigt was, nicht wann.','']],
+      klasse: [['Klassenname: Substantiv im Singular, Großbuchstabe am Anfang.','234'],['Attribute (deutsch) groß, Operationen klein mit Verb: berechnePreis().','235–236'],['Jede Assoziation mit Kardinalität an beiden Enden, Name mit Leserichtung ▶.','245–247'],['In der Analyse keine Navigationspfeile, Assoziationen sind bidirektional.','240'],['Komposition: Kardinalität am Ganzen höchstens 1.','258'],['Generalisierung ohne Kardinalität: Sie verbindet Klassen, nicht Objekte.','240'],['Abstrakte Klasse kursiv oder {abstract}, abgeleitetes Attribut mit /.','207, 268'],['Aufzählungstyp mit Endung ET und «Enumeration».','235']],
+      objekt: [['Keine Kardinalitäten: Ein Link verbindet genau zwei konkrete Objekte.',''],['Name unterstrichen: einKunde: Kunde oder anonym :Kunde.','227, 234'],['Objektnamen beginnen klein.','234'],['Attribute mit konkreten Werten (Name = »Anna«), ohne Typ.','225'],['Keine Operationen, die stehen nur in der Klasse.','230'],['Keine Generalisierung zwischen Objekten, jedes Objekt gehört direkt zu seiner Klasse.','']],
+      paket: [['Vererbungsstrukturen nicht schneiden: Oberklassen ins Paket der Unterklasse.','277'],['Keine Aggregation oder Komposition durchtrennen.','277'],['Möglichst wenige Assoziationen über Paketgrenzen.','277'],['Abhängigkeit gestrichelt mit offener Spitze zum genutzten Paket.','275'],['Pakete dürfen selbst Pakete enthalten.','274']],
+      aktivitaet: [['Mindestens ein Startknoten und ein Endknoten.','283'],['Endknoten beendet alle Aktionen sofort, Ablaufende (Kreis mit X) nur den eigenen Fluss.','283'],['Bedingungen in [ ], sie dürfen sich nicht überlappen.','285'],['Alternative Pfade über eine Raute zusammenführen.','285'],['Parallelität mit Balken: Aufspalten und Synchronisation.','286'],['Aktion abgerundet, Objekt eckig mit [Zustand].','284, 288'],['Nicht für die Zusammenarbeit von Objekten (Interaktionsdiagramm) oder den Lebenslauf eines Objekts (Zustandsdiagramm).','282']],
+      zustand: [['Zeigt ein einzelnes Objekt über seine Lebenszeit, nicht mehrere Objekte.','292'],['Transition: ereignis(argumente) [bedingung] / operation(argumente).','295'],['Zeitereignisse mit after(Dauer) oder at(Zeitpunkt).','293, 295'],['Interne Aktionen im Zustand: entry /, do /, exit /.','294'],['Ein Pfeil darf auf denselben Zustand zurückführen.','295'],['Zustände sind Situationen (Ausgebucht), keine Tätigkeiten.','']],
+      sequenz: [['Zeigt ein Szenario, nicht alle möglichen Ablaufpfade.','302'],['Synchron: gefüllte Spitze. Asynchron: offene Spitze. Antwort (optional): gestrichelt, offene Spitze.','304'],['Objekt erzeugen: gestrichelter Pfeil mit offener Spitze zum neuen Objekt.','304'],['Steuerungsfokus als Balken auf der Lebenslinie.','304'],['Nachrichten in der Form nachricht(argumente).','304'],['Keine Nummern nötig, die Zeit läuft von oben nach unten.','']],
+      kommunikation: [['Objekte mit Links wie im Objektdiagramm, keine Lebenslinien.','308–309'],['Reihenfolge nur über hierarchische Nummern 1, 1.1, 1.2.','309–310'],['Bedingung: 1.2 [Bedingung]: nachricht(). Iteration: 1.1*: nachricht().','310'],['Antwort speichern: antw = nachricht(argumente).','310'],['{new} und {transient} stehen im Objektkasten.','309'],['Keine Kardinalitäten an den Links, es sind Objekte.','']]
+    };
+    sheets.forEach(sh => { sh.tips = TIPS[sh.k] || []; });
 
 
     const uml = { sheets, compares };
 
-    return { phases, quiz, cats, exercises, cards, cardTopics, sorts, fpTypes, fpFactors, fpSlide, themes, pfc, uml };
+    return { phases, quiz, cats, exercises, cards, cardTopics, sorts, fpTypes, fpFactors, fpSlide, themes, pfc, uml, pfMap };
   }
 
 
@@ -2486,7 +2642,7 @@ class Component extends DCLogic {
       '04':'<circle cx="5" cy="5" r="2" fill="currentColor"/><path d="M5 7v3"/><rect x="2" y="10" width="11" height="5" rx="2.5"/><path d="M13 12.5h3"/><path d="M19 9.5l3 3-3 3-3-3z"/>',
       '05':'<rect x="3" y="7" width="18" height="12" rx="1"/><path d="M7 7v12M11 7v12M15 7v12M3 7l3-3h12l3 3"/>', '06':'<path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/>',
       '07':'<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8.5 8l1.5 1.5L12.5 7M8.5 14l1.5 1.5 2.5-2.5M14.5 8.5h1.5M14.5 14.5h1.5"/>' };
-    const PKEYS = { '01':['Aufgabenblatt und Muster','Balzert-Gliederung anlegen','Anwendungsfälle (Blatt 5)'], '02':['Kardinalitäten','Aggregation vs. Komposition','Objektdiagramm'],
+    const PKEYS = { '01':['Lastenheft lesen, Gerüst anlegen','Ziel und Einsatz','Anwendungsfälle (Blatt 5)'], '02':['Kardinalitäten','Aggregation vs. Komposition','Objektdiagramm'],
       '03':['Stamm- und Bewegungsdaten','Statisches Produktmodell','FA-01 bis FA-04'], '04':['FA-05 bis FA-08','Aktivitätsdiagramm','1. dynamisches Modell'],
       '05':['Zustand und Sequenz','NFA-01 bis NFA-08','Docker-Projekt'], '06':['Bewertungskriterien prüfen','Deckblatt und Erklärung','Abgabe 17.01.'], '07':['Theorie wiederholen','Alle Übungen mit Timer','Probeklausur'] };
     const PGRP = [['Studienarbeit',['Pflichtenheft','Docker','Orga'],'p4'],['UML üben',['UML'],'p1'],['Theorie',['Theorie'],'p5']];
@@ -2513,6 +2669,7 @@ class Component extends DCLogic {
       { label:'Interaktionsdiagramme', sub:'dynamisch: Objekte im Zusammenspiel', ck:'p5', items:[MI('Sequenzdiagramm','sequenz','Nachrichten in zeitlicher Reihenfolge'), MI('Kommunikationsdiagramm','kommunikation','Wer spricht mit wem?'), MI('Timing-Diagramm'), MI('Interaktionsübersichtsdiagramm')] }
     ].map(g => { const c = col(g.ck); return { ...g, c, soft:soft(c, 7), ink:ink(c) }; });
     const umlSheets = D.uml.sheets.map(sh => { const c = col(SHC[sh.k] || 'color-accent'); const op = !!(s.umlSf || {})[sh.k], n = (sh.sf || []).length; return { anchor:'sheet-' + sh.k, title:sh.title, q:sh.q, ref:sh.ref, c, ink:ink(c), img:this.el(sh.img), legend:sh.legend,
+      tips:(sh.tips || []).map(([v, r]) => ({ v, r: r ? 'S. ' + r : 'UML-Standard' })), hasTips:(sh.tips || []).length > 0,
       sfOpen:op, sfBg: op ? soft(c, 18) : 'transparent', sfLabel: (op ? 'Sonderfälle ausblenden' : 'Sonderfälle anzeigen') + ' (' + n + ')', sfToggle:() => this.setState(st => ({ umlSf: { ...(st.umlSf || {}), [sh.k]: !(st.umlSf || {})[sh.k] } })),
       sf: op ? sh.sf.map(x => ({ t:x.t, d:x.d, ref:x.ref, img:this.el(x.img) })) : [] }; });
     const umlCmp = D.uml.compares.map(cp => ({ title:cp.title, l:this.el(cp.l), r:this.el(cp.r), lt:cp.lt, rt:cp.rt, note:cp.note }));
@@ -2663,7 +2820,10 @@ class Component extends DCLogic {
       ph.tasks.filter(t => t.tag === 'Pflichtenheft' || t.tag === 'Orga').forEach(t => { const checked = !!done[t.id], ex = !!t.detail && !!opened[t.id]; if (checked) pflTasksDone++;
         pflTasks.push({ text:t.text, num:ph.num, range: ph.end ? dd(st) + '–' + dd(new Date(ph.end + 'T00:00:00')) : 'ab ' + dd(st), phSoft:soft(c, 18), phInk:ink(c), hLabel:'≈ ' + n1(t.h) + ' h', checked,
           toggle:() => this.toggleDone(t.id), checkBg: checked ? soft(c, 28) : 'transparent', checkBorder: checked ? c : 'color-mix(in srgb, var(--color-text) 35%, transparent)', checkFg:ink(c), checkMark: checked ? '✓' : '',
-          opacity: checked ? 0.55 : 1, deco: checked ? 'line-through' : 'none', hasDetail: !!t.detail, expanded:ex, detailLabel: ex ? 'Weniger' : 'Details', toggleDetail:() => this.toggleOpen(t.id, ex), detail:t.detail || '' }); }); });
+          opacity: checked ? 0.55 : 1, deco: checked ? 'line-through' : 'none', hasDetail: !!(t.detail || t.bsp), expanded:ex, detailLabel: ex ? 'Zuklappen' : (t.bsp ? 'Am Muster erklären' : 'Details'), toggleDetail:() => this.toggleOpen(t.id, ex), detail:t.detail || '',
+          step: pflTasks.length + 1, hasBsp: ex && !!t.bsp, noBsp: ex && !t.bsp, pg: t.bsp ? 'Muster S. ' + t.bsp.pg : '', hasPg: !!t.bsp,
+          im: t.bsp ? t.bsp.im.map(v => ({ v })) : [], why: t.bsp ? t.bsp.why : '', warn: t.bsp && t.bsp.warn || '', hasWarn: !!(t.bsp && t.bsp.warn), err: t.bsp ? t.bsp.err : '', hotel: t.bsp ? t.bsp.hotel.map(v => ({ v })) : [],
+          hasFig: !!(ex && t.bsp && t.bsp.fig), fig: ex && t.bsp && t.bsp.fig ? this.el(t.bsp.fig) : null }); }); });
 
     // ----- Pflichtenheft-Checkliste -----
     const pfcS = s.pfc || {}; let pfcDone = 0, pfcTotal = 0;
