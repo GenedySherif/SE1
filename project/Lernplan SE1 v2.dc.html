@@ -2486,6 +2486,9 @@ class Component extends DCLogic {
         SF('Entscheidung mit mehreren Ausgängen', svg(320,120, ar(20,60,77,60,'open') + dec(90,60) + par([[90,47],[90,20],[150,20]]) + ar(103,60,150,60,'open') + par([[90,73],[90,100],[150,100]])
           + tx(160,24,'[x<0]',{a:'start',fs:10.5}) + tx(160,64,'[x=0]',{a:'start',fs:10.5}) + tx(160,104,'[x>0]',{a:'start',fs:10.5})),
           'Beliebig viele Ausgänge sind erlaubt, solange die Bedingungen alle Fälle abdecken und sich nicht überlappen.', '285'),
+        SF('Zustand als Verweis', svg(400,130, onode(45,30,'Butter','[fest]',80) + ar(85,30,125,30,'open',{d:true}) + act(190,30,'Butter erhitzen',130) + ar(255,30,280,30,'open',{d:true}) + onode(335,30,'Butter','[geschmolzen]',110)
+          + ar(190,46,190,90,'open') + act(190,106,'Butter zugeben',130)),
+          'Der Zustand eines Objekts steht als Verweis an der Aktion: gestrichelter Pfeil hin (Zustand vorher) und weg (Zustand nachher). Der Kontrollfluss zwischen den Aktionen bleibt durchgezogen. Liegt das Objekt dagegen im Fluss zwischen zwei Aktionen, sind die Pfeile durchgezogen.', '284, 288 · Praktikum Blatt 7'),
         SF('Hierarchische Verfeinerung', svg(330,178, start(12,22) + ar(20,22,34,22,'open') + act(70,22,'Schritt 1',72) + ar(106,22,124,22,'open') + act(160,22,'Schritt 2',72) + ar(196,22,214,22,'open') + act(250,22,'Schritt 3',72) + ar(286,22,300,22,'open') + end(313,22)
           + ln(160,29,160,36) + ln(156,32,164,32) + ln(156,32,156,36) + ln(164,32,164,36)
           + ln(124,38,30,62,{d:true,c:C.m}) + ln(196,38,300,62,{d:true,c:C.m}) + rc(12,62,306,110,{r:12,f:'transparent'}) + tx(22,78,'Schritt 2',{a:'start',fs:10.5})
@@ -2624,10 +2627,11 @@ class Component extends DCLogic {
     };
     const frZg = g => svg(240,148, state(8,74,84,36,'Ohne Res.') + state(140,74,94,36,'Teilweise') + ar(140,98,92,98,'open') + tx(116,124,'stornieren()',{fs:9.5}) + (g[1] ? tx(116,138,g[1],{fs:9.5,c:C.a}) : '')
       + par([[165,74],[165,46],[210,46],[210,74]]) + tx(187,20,'stornieren()',{fs:9.5}) + (g[0] ? tx(187,33,g[0],{fs:9.5,c:C.a}) : ''));
-    const frAo = ok => svg(240,145, act(120,20,'Butter erhitzen',140) + ar(120,36,120,53,'open') + (ok ? onode(120,72,'Butter','[geschmolzen]',120) : act(120,72,'geschmolzen',120)) + ar(120,91,120,106,'open') + act(120,122,'Butter zugeben',140));
+    const frAo = ok => ok ? svg(280,145, act(80,24,'Butter erhitzen',140) + ar(80,40,80,104,'open') + act(80,120,'Butter zugeben',140) + par([[150,24],[210,24],[210,53]],'open',{d:true}) + onode(210,72,'Butter','[geschmolzen]',120))
+      : svg(280,145, act(120,20,'Butter erhitzen',140) + ar(120,36,120,53,'open') + act(120,72,'geschmolzen',120) + ar(120,88,120,106,'open') + act(120,122,'Butter zugeben',140));
     FR.zustand.unshift(FRp('Gleiches Ereignis ohne Bedingung', frZg(['','']), frZg(['[reserviert>1]','[reserviert=1]']), 'Führt dasselbe Ereignis über zwei Pfeile aus einem Zustand, muss eine Bedingung entscheiden, welcher schaltet. Ohne Bedingung ist das Verhalten nicht eindeutig.', '293, 296'),
       FRp('Bedingungen überschneiden sich', frZg(['[reserviert>=1]','[reserviert=1]']), frZg(['[reserviert>1]','[reserviert=1]']), 'Bei genau einem reservierten Platz wären links beide Bedingungen wahr. Die Bedingungen müssen sich ausschließen und zusammen alle Fälle abdecken.', '296'));
-    FR.aktivitaet.push(FRp('Objektzustand als Aktion gezeichnet', frAo(false), frAo(true), 'Ein Zustand ist keine Tätigkeit. Er steht als [Zustand] in einem eckigen Objektknoten, die Aktionen davor und danach bleiben abgerundet.', '288'));
+    FR.aktivitaet.push(FRp('Objektzustand als Aktion gezeichnet', frAo(false), frAo(true), 'Ein Zustand ist keine Tätigkeit. Er steht als [Zustand] in einem eckigen Objektknoten. Rechts als Verweis mit gestricheltem Pfeil an der Aktion (Praktikumslösung), der Kontrollfluss zwischen den Aktionen bleibt durchgezogen. Ebenso richtig: das Objekt im Fluss zwischen den Aktionen mit durchgezogenen Pfeilen (S. 284, 288).', '284, 288 · Praktikum Blatt 7'));
     sheets.forEach(sh => { sh.fr = FR[sh.k] || []; });
     // ---------- Level 2: Klausurniveau ----------
     const L2 = (t, src, desc, img, steps) => ({ t, src, desc, img, steps: steps.map(([h, v]) => ({ h, v })) });
