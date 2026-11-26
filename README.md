@@ -22,3 +22,4 @@ Sicherungen des Lernplans „Klausurvorbereitung UML-Diagramme“ (Software Engi
 | v12 | 25.11.2026 | 6 neue Übungen im Aufbau der Übungsblätter 5–7 (Kreditvergabe, Kfz-Werkstatt, Werkzeugverleih, Pfannkuchen, Notenberechnung, Arztpraxis interpretieren) |
 | v13 | 25.11.2026 | Objektfluss wieder durchgezogen, gestrichelt nur bei Verweis auf einen Zustand (Anfangszustände) |
 | v14 | 25.11.2026 | Zustand als Verweis an der Aktion (gestrichelter Pfeil) als Sonderfall und im Bildpaar |
+| v15 | 27.11.2026 | Handy: Kopfzeile erscheint erst ganz oben wieder |

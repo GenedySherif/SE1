@@ -3003,7 +3003,6 @@ class Component extends DCLogic {
       const small = window.innerWidth < 900 || window.innerHeight < 560;
       if (!small || this.state.settingsOpen || y < 60) { root.classList.remove('hdr-hidden'); this._lastY = y; return; }
       if (dy > 8) { root.style.setProperty('--hdr-h', (h.offsetHeight + 2) + 'px'); root.classList.add('hdr-hidden'); this._lastY = y; }
-      else if (dy < -8) { root.classList.remove('hdr-hidden'); this._lastY = y; }
     };
     window.addEventListener('scroll', this._onScroll, { passive:true });
     window.addEventListener('resize', this._onScroll);
